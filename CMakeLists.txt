@@ -12,4 +12,5 @@ endif()
 project ("a-mini-dictionary-v3")
 
 # Include sub-projects.
-add_subdirectory ("src")
+add_subdirectory ("dependency")
+add_subdirectory ("source")
