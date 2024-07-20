@@ -20,7 +20,7 @@ target_link_libraries(dictionary PRIVATE wx::base wx::core)
 
 add_custom_command(TARGET dictionary POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
-	${CMAKE_SOURCE_DIR}/data
+	${CMAKE_SOURCE_DIR}/resources
 	${CMAKE_CURRENT_BINARY_DIR}
 )
 
