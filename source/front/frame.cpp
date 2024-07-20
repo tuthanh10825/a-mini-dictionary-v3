@@ -2,7 +2,7 @@
 #include "frame.h"
 mainFrame::mainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title)
 {
-	storing.loadAll("ee.csv"); //insert filename here. 
+	storing.loadAll("data/ee/data.csv"); //insert filename here. 
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
 	wxBoxSizer* topSizer = new wxBoxSizer(wxHORIZONTAL);

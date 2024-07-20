@@ -1,0 +1,6 @@
+Each folder contains 3 files:
+- Backup file: To reset the dictionary to its original state.
+- Main dictionary file: Store the current data state of a data set  
+- History file: Store the words that user search
+
+
