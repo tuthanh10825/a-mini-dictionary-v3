@@ -5,15 +5,15 @@
 #define WHITE *wxWHITE
 #define BLACK wxColour(26, 26, 26)
 
-#define HEADER_IMG wxT("Resources/Assets/Header.png")
-#define FOOTER_IMG wxT("Resources/Assets/Footer.png")
-#define NAVIGATION_IMG wxT("Resources/Assets/Navigation.png")
+#define HEADER_IMG wxT("assets/Header.png")
+#define FOOTER_IMG wxT("assets/Footer.png")
+#define NAVIGATION_IMG wxT("assets/Navigation.png")
 
-#define HOMEICON_IMG "Resources/Assets/Icons/HomeIcon.png"
-#define SEARCHICON_IMG "Resources/Assets/Icons/SearchIcon.png"
-#define GAMEICON_IMG "Resources/Assets/Icons/GameIcon.png"
-#define HISTORYICON_IMG "Resources/Assets/Icons/HistoryIcon.png"
-#define FAVORITEICON_IMG "Resources/Assets/Icons/FavouriteIcon.png"
-#define MOREICON_IMG "Resources/Assets/Icons/MoreIcon.png"
+#define HOMEICON_IMG "assets/icons/HomeIcon.png"
+#define SEARCHICON_IMG "assets/icons/SearchIcon.png"
+#define GAMEICON_IMG "assets/icons/GameIcon.png"
+#define HISTORYICON_IMG "assets/icons/HistoryIcon.png"
+#define FAVORITEICON_IMG "assets/icons/FavouriteIcon.png"
+#define MOREICON_IMG "assets/icons/MoreIcon.png"
 
 
