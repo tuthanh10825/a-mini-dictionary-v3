@@ -1,0 +1,2 @@
+Each files represent a Favorite lists of user of each dataset (I think).
+Format: Each word on a separate line

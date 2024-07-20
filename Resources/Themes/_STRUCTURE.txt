@@ -1,0 +1,27 @@
+Just for addition function!
+Each file should have these information:
+
+- Primary text color
+- Secondary text color
+
+- Primary font
+- Secondary font
+
+- Primary text size
+- Secondary text size
+
+- Accent color
+
+- Background color primary
+- Background color secondary
+
+- Primary border color
+- Secondary border color
+
+- Primary button color
+- Secondary button color
+
+- Primary button background color
+- Secondary button background color
+
+- Button border 

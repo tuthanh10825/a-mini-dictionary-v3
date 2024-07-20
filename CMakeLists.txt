@@ -13,4 +13,4 @@ project ("a-mini-dictionary-v3")
 
 # Include sub-projects.
 add_subdirectory ("dependency")
-add_subdirectory ("source")
+add_subdirectory ("source")"
