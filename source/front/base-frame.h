@@ -5,10 +5,9 @@
 #include <wx/statbmp.h>
 #include "properties.h"
 
-
 class BaseFrame : public wxFrame {
 public:
-    BaseFrame(const wxString& title);
+    BaseFrame(const wxString& title = wxString(""));
     wxWindow* workingWindow;
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL); 
 
