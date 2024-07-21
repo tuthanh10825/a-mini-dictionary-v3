@@ -1,7 +1,7 @@
 ﻿// a-mini-dictionary-v3.cpp : Defines the entry point for the application.
 
-#include "MainFrame.h"
-#include "HomeFrame.h"
+#include "main-frame.h"
+#include "home-frame.h"
 class myApp : public wxApp
 {
 	virtual bool OnInit()
