@@ -1,30 +1,56 @@
 #include "base-frame.h"
 
-BaseFrame::BaseFrame(const wxString& title, const wxSize& size)
-    : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, size, wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX)) {
-    SetSize(wxSize(WIDTH, HEIGHT));
+BaseFrame::BaseFrame(const wxString& title)
+    : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition) {
 
-    mainPanel = new wxPanel(this);
-    mainPanel->SetBackgroundColour(WHITE);
     wxInitAllImageHandlers();
 
-    LoadNavigation(mainPanel);
-    LoadHeaderFooter(mainPanel);
-   
-    mainPanel->Layout();
+    LoadHeader();
+    LoadNavigation();
 
+    
+    workingWindow = new wxWindow(this, wxID_ANY, wxDefaultPosition); 
+
+    mainSizer->Add(workingWindow, 1, wxEXPAND); 
+
+    loadFooter();
+  
+    this->SetSizerAndFit(mainSizer); 
     // 155 x 37
 }
 
-void BaseFrame::LoadHeaderFooter(wxPanel* panel) {
-    LoadImage(HEADER_IMG, wxPoint(0, 0), panel);
-    LoadImage(FOOTER_IMG, wxPoint(0, 811), panel);  // Adjust Y-coordinate as needed
-
-
-}
-
-void BaseFrame::LoadNavigation(wxPanel* panel)
+void BaseFrame::LoadHeader()
 {
+
+    wxPanel* leftHeaderPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 0), wxSize(1156.5, 154.5));
+    LoadImage(NAME_IMG, leftHeaderPanel);
+    leftHeaderPanel->SetBackgroundColour(BLUEBLACK);
+
+    wxPanel* rightHeaderPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 1156.5), wxSize(1451.25 - 1156.5, 154.5));
+    LoadImage(LOGO_IMG, rightHeaderPanel);
+    rightHeaderPanel->SetBackgroundColour(WHITE);
+
+    wxBoxSizer* headerSizer = new wxBoxSizer(wxHORIZONTAL);
+
+    headerSizer->Add(leftHeaderPanel, 1, wxEXPAND | wxALL);
+    headerSizer->Add(rightHeaderPanel, 0, wxEXPAND | wxALL);
+ 
+    mainSizer->Add(headerSizer, 0, wxALL | wxEXPAND);
+}
+void BaseFrame::loadFooter()
+{
+    wxPanel* footer = new wxPanel(this, wxID_ANY, wxPoint(0, 849.75), wxSize(1451.25, 30));
+    footer->SetBackgroundColour(BLUEBLACK);
+    LoadImage(FOOTER_IMG, footer);
+
+    mainSizer->Add(footer, 0, wxALL | wxEXPAND); 
+}
+void BaseFrame::LoadNavigation()
+{
+    wxPanel* naviPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 156), wxSize(1451.25, 63.13));
+    naviPanel->SetBackgroundColour(WHITE); 
+
+    
     wxBitmap homeBtnBitmap(HOMEICON_IMG, wxBITMAP_TYPE_PNG);
     wxBitmap dictionaryBtnBitmap(SEARCHICON_IMG, wxBITMAP_TYPE_PNG);
     wxBitmap gameBtnBitmap(GAMEICON_IMG, wxBITMAP_TYPE_PNG);
@@ -38,26 +64,56 @@ void BaseFrame::LoadNavigation(wxPanel* panel)
 
     //wxBitmapButton* homeBtn = new wxBitmapButton(parent, wxID_ANY, homeBtnBitmap, wxDefaultPosition, wxSize(width, height));
 
-    wxBitmapButton* homeBtn = new wxBitmapButton(panel, wxID_ANY, homeBtnBitmap, wxPoint(25, 170), wxSize(155, 45));
-    wxBitmapButton* dictionaryBtn = new wxBitmapButton(panel, wxID_ANY, dictionaryBtnBitmap, wxPoint(260, 170));
-    wxBitmapButton* gameBtn = new wxBitmapButton(panel, wxID_ANY, gameBtnBitmap, wxPoint(560, 170));
-    wxBitmapButton* historyBtn = new wxBitmapButton(panel, wxID_ANY, historyBtnBitmap, wxPoint(805, 170));
-    wxBitmapButton* favoriteBtn = new wxBitmapButton(panel, wxID_ANY, favoriteBtnBitmap, wxPoint(1022, 170), wxSize(180, 45));
-    wxBitmapButton* moreBtn = new wxBitmapButton(panel, wxID_ANY, moreBtnBitmap, wxPoint(1275, 170), wxSize(155, 45));
+    
+    double distance = (1451.25 / 6); 
+    wxBitmapButton* homeBtn = new wxBitmapButton(naviPanel, wxID_ANY, homeBtnBitmap, wxDefaultPosition, wxSize((1451.25 / 6), 63.13));
+    wxBitmapButton* dictionaryBtn = new wxBitmapButton(naviPanel, wxID_ANY, dictionaryBtnBitmap, wxPoint(distance,0), wxSize((1451.25 / 6), 63.13));
+    wxBitmapButton* gameBtn = new wxBitmapButton(naviPanel, wxID_ANY, gameBtnBitmap, wxPoint(2 * distance, 0), wxSize(1451.25 /6, 63.13));
+    wxBitmapButton* historyBtn = new wxBitmapButton(naviPanel, wxID_ANY, historyBtnBitmap, wxPoint(3 * distance, 0), wxSize(1451.25 / 6, 63.13));
+    wxBitmapButton* favoriteBtn = new wxBitmapButton(naviPanel, wxID_ANY, favoriteBtnBitmap, wxPoint(4 * distance, 0), wxSize(1451.25 / 6, 63.13));
+    wxBitmapButton* moreBtn = new wxBitmapButton(naviPanel, wxID_ANY, moreBtnBitmap, wxPoint(5 * distance, 0), wxSize(1451.25 / 6, 63.13));
+
+    wxBoxSizer* horiNaviPanel = new wxBoxSizer(wxHORIZONTAL);
+
+    horiNaviPanel->Add(homeBtn, 1);
+    horiNaviPanel->Add(dictionaryBtn,1);
+    horiNaviPanel->Add(gameBtn,1);
+    horiNaviPanel->Add(historyBtn, 1);
+    horiNaviPanel->Add(favoriteBtn, 1);
+    horiNaviPanel->Add(moreBtn, 1);
+    
+    naviPanel->SetSizerAndFit(horiNaviPanel);
+    wxPanel* upperLine = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(1451.25, 1));
+    upperLine->SetBackgroundColour(BLACK); 
+
+    wxPanel* lowerLine = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(1451.25, 1));
+    lowerLine->SetBackgroundColour(BLACK);
+    wxBoxSizer* vertNaviPanel = new wxBoxSizer(wxVERTICAL);
+    vertNaviPanel->Add(horiNaviPanel, 0); 
+   
+    mainSizer->Add(upperLine, 0, wxALL | wxEXPAND);
+    mainSizer->Add(naviPanel, 0, wxALL | wxEXPAND);
+    mainSizer->Add(lowerLine, 0, wxALL | wxEXPAND);
 
 
     // Bind the click event to the handler
     homeBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnHomeBtnClicked, this);
 
-    LoadImage(LINE_IMG, wxPoint(0, 220), panel);
+   
 }
 
-void BaseFrame::LoadImage(const wxString& imagePath, const wxPoint& position, wxPanel* panel) {
+void BaseFrame::LoadImage(const wxString& imagePath, wxPanel* panel) {
     wxImage image(imagePath, wxBITMAP_TYPE_PNG);
     if (image.IsOk()) {
         wxBitmap bitmap(image);
         wxStaticBitmap* imageCtrl = new wxStaticBitmap(panel, wxID_ANY, bitmap);
-        imageCtrl->SetPosition(position);
+
+        wxBoxSizer* vertSizer = new wxBoxSizer(wxVERTICAL); 
+        vertSizer->Add(imageCtrl, 0, wxALIGN_CENTER); 
+
+        wxBoxSizer* horiSizer = new wxBoxSizer(wxHORIZONTAL); 
+        horiSizer->Add(vertSizer, 1, wxALIGN_CENTER); 
+        panel->SetSizerAndFit(horiSizer); 
     }
     else {
         wxLogError("Failed to load image: %s", imagePath);

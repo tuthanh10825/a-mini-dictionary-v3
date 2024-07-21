@@ -1,21 +1,24 @@
 #ifndef BASEFRAME_H
 #define BASEFRAME_H
+#include <wx/wx.h>
 
 #include <wx/statbmp.h>
 #include "properties.h"
-#include "main-frame.h"
+
 
 class BaseFrame : public wxFrame {
 public:
-    BaseFrame(const wxString& title, const wxSize& size);
-    wxPanel* mainPanel;
+    BaseFrame(const wxString& title);
+    wxWindow* workingWindow;
+    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL); 
 
 private:
 
-    void LoadHeaderFooter(wxPanel* panel);
-    void LoadNavigation(wxPanel* panel);
+    void LoadHeader();
+    void loadFooter(); 
+    void LoadNavigation();
 
-    void LoadImage(const wxString& imagePath, const wxPoint& position, wxPanel* panel);
+    void LoadImage(const wxString& imagePath, wxPanel* panel);
 
     void OnHomeBtnClicked(wxCommandEvent& event);
 };
