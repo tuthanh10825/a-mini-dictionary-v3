@@ -1,17 +1,19 @@
 #include "base-frame.h"
+#include "home-page.h"
 
 BaseFrame::BaseFrame(const wxString& title)
     : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition) {
 
     wxInitAllImageHandlers();
-
     LoadHeader();
-    LoadNavigation();
-
     
-    workingWindow = new wxWindow(this, wxID_ANY, wxDefaultPosition); 
+    workingPage = new wxSimplebook(this, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT));
+    homePage = new HomePage(workingPage); 
+    workingPage->AddPage(homePage, wxString("Homepage")); 
+    
+    LoadNavigation(); 
+    mainSizer->Add(workingPage, 1, wxEXPAND); 
 
-    mainSizer->Add(workingWindow, 1, wxEXPAND); 
 
     loadFooter();
   
@@ -37,6 +39,7 @@ void BaseFrame::LoadHeader()
  
     mainSizer->Add(headerSizer, 0, wxALL | wxEXPAND);
 }
+
 void BaseFrame::loadFooter()
 {
     wxPanel* footer = new wxPanel(this, wxID_ANY, wxPoint(0, 849.75), wxSize(1451.25, 30));
@@ -47,7 +50,7 @@ void BaseFrame::loadFooter()
 }
 void BaseFrame::LoadNavigation()
 {
-    wxPanel* naviPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 156), wxSize(1451.25, 63.13));
+    wxPanel* naviPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 156), wxSize(1451.25, 63.13), wxBORDER_SIMPLE);
     naviPanel->SetBackgroundColour(WHITE); 
 
     
@@ -81,26 +84,27 @@ void BaseFrame::LoadNavigation()
     horiNaviPanel->Add(historyBtn, 1);
     horiNaviPanel->Add(favoriteBtn, 1);
     horiNaviPanel->Add(moreBtn, 1);
-    
+   
     naviPanel->SetSizerAndFit(horiNaviPanel);
-    wxPanel* upperLine = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(1451.25, 1));
+    /*wxPanel* upperLine = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(1451.25, 1));
     upperLine->SetBackgroundColour(BLACK); 
 
     wxPanel* lowerLine = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(1451.25, 1));
     lowerLine->SetBackgroundColour(BLACK);
     wxBoxSizer* vertNaviPanel = new wxBoxSizer(wxVERTICAL);
     vertNaviPanel->Add(horiNaviPanel, 0); 
-   
-    mainSizer->Add(upperLine, 0, wxALL | wxEXPAND);
+   */
+    //mainSizer->Add(upperLine, 0, wxALL | wxEXPAND);
     mainSizer->Add(naviPanel, 0, wxALL | wxEXPAND);
-    mainSizer->Add(lowerLine, 0, wxALL | wxEXPAND);
+    //mainSizer->Add(lowerLine, 0, wxALL | wxEXPAND);
 
 
     // Bind the click event to the handler
-    homeBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnHomeBtnClicked, this);
+    homeBtn -> Bind(wxEVT_BUTTON, &BaseFrame::OnHomeBtnClicked, this);
 
    
 }
+
 
 void BaseFrame::LoadImage(const wxString& imagePath, wxPanel* panel) {
     wxImage image(imagePath, wxBITMAP_TYPE_PNG);
@@ -122,10 +126,6 @@ void BaseFrame::LoadImage(const wxString& imagePath, wxPanel* panel) {
 
 void BaseFrame::OnHomeBtnClicked(wxCommandEvent& event)
 {
-    //mainFrame* newFrame = new mainFrame("New Frame Title");
-    //newFrame->Show();
-
-    //// Optionally, hide the current frame
-    //this->Hide();
+    workingPage->ChangeSelection(0); 
 }
 
