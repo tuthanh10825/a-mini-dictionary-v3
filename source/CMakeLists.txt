@@ -19,7 +19,7 @@ endif()
 target_link_libraries(dictionary PRIVATE wx::base wx::core wx::aui)
 
 add_custom_command(TARGET dictionary POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
 	${CMAKE_SOURCE_DIR}/resources
 	${CMAKE_CURRENT_BINARY_DIR}
 )

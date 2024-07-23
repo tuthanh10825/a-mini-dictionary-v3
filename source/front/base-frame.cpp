@@ -1,5 +1,5 @@
 #include "base-frame.h"
-#include "home-page.h"
+
 
 BaseFrame::BaseFrame(const wxString& title)
     : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition) {
@@ -11,6 +11,26 @@ BaseFrame::BaseFrame(const wxString& title)
     homePage = new HomePage(workingPage); 
     workingPage->AddPage(homePage, wxString("Homepage")); 
     
+    searchPage = new wxWindow(workingPage, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT)); 
+
+    wxPanel* searchPanel = new wxPanel(searchPage, wxID_ANY); 
+    wxBoxSizer* searchBarSizer = new wxBoxSizer(wxHORIZONTAL); 
+
+    searchPanel->SetBackgroundColour(BLUEBLACK); 
+    searchBox* box = new searchBox(searchPanel);
+    searchBarSizer->Add(box, 1, wxEXPAND | wxALL, 15); 
+    searchPanel->SetSizerAndFit(searchBarSizer); 
+
+    resPage* res = new resPage(searchPage); 
+    res->addingString(wxString("Hello\n\tnoun\n\ttesting"));
+    wxBoxSizer* searchSizer = new wxBoxSizer(wxVERTICAL); 
+
+    searchSizer->Add(searchPanel, 0, wxEXPAND); 
+    searchSizer->Add(res, 1, wxEXPAND); 
+
+    searchPage->SetSizerAndFit(searchSizer); 
+    workingPage->AddPage(searchPage, wxString("Searchpage"));
+
     LoadNavigation(); 
     mainSizer->Add(workingPage, 1, wxEXPAND); 
 
@@ -101,6 +121,7 @@ void BaseFrame::LoadNavigation()
 
     // Bind the click event to the handler
     homeBtn -> Bind(wxEVT_BUTTON, &BaseFrame::OnHomeBtnClicked, this);
+    dictionaryBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnDictionaryBtnClicked, this);
 
    
 }
@@ -127,5 +148,10 @@ void BaseFrame::LoadImage(const wxString& imagePath, wxPanel* panel) {
 void BaseFrame::OnHomeBtnClicked(wxCommandEvent& event)
 {
     workingPage->ChangeSelection(0); 
+}
+
+void BaseFrame::OnDictionaryBtnClicked(wxCommandEvent&)
+{
+    workingPage->ChangeSelection(1); 
 }
 
