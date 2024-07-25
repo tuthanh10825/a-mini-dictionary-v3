@@ -6,35 +6,37 @@ BaseFrame::BaseFrame(const wxString& title)
 
     wxInitAllImageHandlers();
     LoadHeader();
-    
     workingPage = new wxSimplebook(this, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT));
+    
+    
+    
+    
     homePage = new HomePage(workingPage); 
     workingPage->AddPage(homePage, wxString("Homepage")); 
     
-    searchPage = new wxWindow(workingPage, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT)); 
 
+    searchPage = new wxWindow(workingPage, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT)); 
     wxPanel* searchPanel = new wxPanel(searchPage, wxID_ANY); 
     wxBoxSizer* searchBarSizer = new wxBoxSizer(wxHORIZONTAL); 
-
     searchPanel->SetBackgroundColour(BLUEBLACK); 
     searchBox* box = new searchBox(searchPanel);
     searchBarSizer->Add(box, 1, wxEXPAND | wxALL, 15); 
     searchPanel->SetSizerAndFit(searchBarSizer); 
-
     resPage* res = new resPage(searchPage); 
     res->addingString(wxString("Hello\n\tnoun\n\ttesting"));
     wxBoxSizer* searchSizer = new wxBoxSizer(wxVERTICAL); 
-
     searchSizer->Add(searchPanel, 0, wxEXPAND); 
     searchSizer->Add(res, 1, wxEXPAND); 
-
     searchPage->SetSizerAndFit(searchSizer); 
     workingPage->AddPage(searchPage, wxString("Searchpage"));
 
+    gameSettingPage = new GameSettingPage(workingPage); 
+    workingPage->AddPage(gameSettingPage, wxString("GameSettingpage"));
+
+
+
     LoadNavigation(); 
     mainSizer->Add(workingPage, 1, wxEXPAND); 
-
-
     loadFooter();
   
     this->SetSizerAndFit(mainSizer); 
@@ -122,7 +124,7 @@ void BaseFrame::LoadNavigation()
     // Bind the click event to the handler
     homeBtn -> Bind(wxEVT_BUTTON, &BaseFrame::OnHomeBtnClicked, this);
     dictionaryBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnDictionaryBtnClicked, this);
-
+    gameBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnGameBtnClicked, this); 
    
 }
 
@@ -153,5 +155,10 @@ void BaseFrame::OnHomeBtnClicked(wxCommandEvent& event)
 void BaseFrame::OnDictionaryBtnClicked(wxCommandEvent&)
 {
     workingPage->ChangeSelection(1); 
+}
+
+void BaseFrame::OnGameBtnClicked(wxCommandEvent&)
+{
+    workingPage->ChangeSelection(2); 
 }
 

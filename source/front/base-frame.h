@@ -6,6 +6,7 @@
 #include "properties.h"
 #include "home-page.h"
 #include "search-page.h"
+#include "game-setting-page.h"
 class BaseFrame : public wxFrame {
 public:
     BaseFrame(const wxString& title);
@@ -13,7 +14,7 @@ public:
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL); 
     HomePage* homePage;
     wxWindow* searchPage;
-
+    GameSettingPage* gameSettingPage; 
 private:
 
     void LoadHeader();
@@ -23,6 +24,7 @@ private:
 
     void OnHomeBtnClicked(wxCommandEvent& event);
     void OnDictionaryBtnClicked(wxCommandEvent&); 
+    void OnGameBtnClicked(wxCommandEvent&); 
 };
 
 #endif // BASEFRAME_H

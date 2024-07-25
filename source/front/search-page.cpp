@@ -46,8 +46,10 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 
 resPage::resPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
-	cas.SetNativeFontInfoUserDesc("Cascadia Mono 30 WINDOWS-1252"); 
+	cas.SetNativeFontInfoUserDesc("Cascadia Code 30 WINDOWS-1252"); 
 	resWord->SetFont(cas); 
+
+
 	editButton = new wxBitmapButton(this, wxID_ANY, wxBitmap(wxString("assets/result/edit-button.png"), wxBITMAP_TYPE_PNG));
 	favorButton = new wxBitmapButton(this, wxID_ANY, wxBitmap(wxString("assets/result/favorite-button.png"), wxBITMAP_TYPE_PNG));
 	removeButton = new wxBitmapButton(this, wxID_ANY, wxBitmap(wxString("assets/result/remove-button.png"), wxBITMAP_TYPE_PNG));

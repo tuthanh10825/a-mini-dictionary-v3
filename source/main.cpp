@@ -9,12 +9,12 @@ class myApp : public wxApp
 
 
 		BaseFrame* mainFrame = new BaseFrame("Dictonary");
-		mainFrame->SetClientSize(WIDTH, HEIGHT); 
+		mainFrame->SetClientSize(WIDTH, HEIGHT);
 		mainFrame->Show();
-		
 
 
-		return true; 
+
+		return true;
 	}
 };
-wxIMPLEMENT_APP(myApp);
+	wxIMPLEMENT_APP(myApp);
