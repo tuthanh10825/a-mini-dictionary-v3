@@ -18,7 +18,7 @@ GameSettingPage::GameSettingPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	
 	
 	wxBoxSizer* centerChooseGameHori = new wxBoxSizer(wxHORIZONTAL); 
-	centerChooseGameHori->Add(chooseGameText, 1, wxALIGN_BOTTOM);
+	centerChooseGameHori->Add(chooseGameText, 0, wxALL, 20);
 	wxBoxSizer* centerChooseGameVert = new wxBoxSizer(wxVERTICAL); 
 	centerChooseGameVert->Add(centerChooseGameHori, 0, wxALIGN_LEFT);
 	chooseGamePanel->SetSizerAndFit(centerChooseGameVert);
@@ -58,7 +58,7 @@ GameSettingPage::GameSettingPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	chooseLangPanel->SetBackgroundColour(WHITE); 
 	wxStaticBitmap* chooseLangText = new wxStaticBitmap(chooseLangPanel, wxID_ANY, wxBitmap("assets/game/setting/choose-lang-text.png", wxBITMAP_TYPE_PNG));
 	wxBoxSizer* centerChooseLangHori = new wxBoxSizer(wxHORIZONTAL);
-	centerChooseLangHori->Add(chooseLangText, 0);
+	centerChooseLangHori->Add(chooseLangText, 0, wxALL, 20);
 	wxBoxSizer* centerChooseLangVert = new wxBoxSizer(wxVERTICAL);
 	centerChooseLangVert->Add(centerChooseLangHori, 0, wxALIGN_LEFT);
 	chooseLangPanel->SetSizerAndFit(centerChooseLangVert);

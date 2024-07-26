@@ -30,10 +30,12 @@ BaseFrame::BaseFrame(const wxString& title)
     searchPage->SetSizerAndFit(searchSizer); 
     workingPage->AddPage(searchPage, wxString("Searchpage"));
 
+
     gameSettingPage = new GameSettingPage(workingPage); 
     workingPage->AddPage(gameSettingPage, wxString("GameSettingpage"));
 
-
+    moreWindow = new MoreWindow(workingPage);
+    workingPage->AddPage(moreWindow, wxString("more")); 
 
     LoadNavigation(); 
     mainSizer->Add(workingPage, 1, wxEXPAND); 
@@ -125,7 +127,7 @@ void BaseFrame::LoadNavigation()
     homeBtn -> Bind(wxEVT_BUTTON, &BaseFrame::OnHomeBtnClicked, this);
     dictionaryBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnDictionaryBtnClicked, this);
     gameBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnGameBtnClicked, this); 
-   
+    moreBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnMoreBtnClicked, this); 
 }
 
 
@@ -160,5 +162,10 @@ void BaseFrame::OnDictionaryBtnClicked(wxCommandEvent&)
 void BaseFrame::OnGameBtnClicked(wxCommandEvent&)
 {
     workingPage->ChangeSelection(2); 
+}
+
+void BaseFrame::OnMoreBtnClicked(wxCommandEvent&)
+{
+    workingPage->ChangeSelection(3); 
 }
 
