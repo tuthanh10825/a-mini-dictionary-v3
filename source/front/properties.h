@@ -8,7 +8,10 @@
 #define HEADER_IMG wxT("assets/header.png")
 #define FOOTER_IMG wxT("assets/footer.png")
 #define NAVIGATION_IMG wxT("assets/navigation.png")
+#define NAVIGATIONBAR_IMG wxT("assets/navigationbar.png")
 
+#define USERMANUAL_IMG wxT("assets/icons/usermanual-icon.png")
+#define DARKMODE_IMG wxT("assets/icons/darkmode-icon.png")
 #define HOMEICON_IMG "assets/icons/home-icon.png"
 #define SEARCHICON_IMG "assets/icons/search-icon.png"
 #define GAMEICON_IMG "assets/icons/game-icon.png"
