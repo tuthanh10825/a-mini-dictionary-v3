@@ -3,6 +3,7 @@
 #include "frame.h"
 #include "properties.h"
 #include "more-page.h"
+#include "game-definition-page.h"
 class myApp : public wxApp
 {
 	virtual bool OnInit()
@@ -10,10 +11,14 @@ class myApp : public wxApp
 		//mainFrame* MainFrame = new mainFrame(wxT("dictionary"));
 		//MainFrame->SetClientSize(WIDTH, HEIGHT);
 		//MainFrame->Show(true); 
-		MoreWindow* morewindow = new MoreWindow("More Page"); 
-		morewindow->SetClientSize(WIDTH, HEIGHT);
-		morewindow->Show(true);
+		DefGameWindow* defgamewindow = new DefGameWindow("Definition Game Page");
+		defgamewindow->SetClientSize(1451, 631);
+		defgamewindow->SetBackgroundColour(wxColor(255, 255, 255));
+		defgamewindow->Show(true);
 		return true; 
 	}
 };
 wxIMPLEMENT_APP(myApp);
+wxBEGIN_EVENT_TABLE(DefGameWindow, wxFrame)
+EVT_RADIOBUTTON(wxID_ANY, DefGameWindow::OnRadioButton)
+wxEND_EVENT_TABLE()
