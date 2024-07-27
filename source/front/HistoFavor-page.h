@@ -1,8 +1,10 @@
 #pragma once
 
 #include <wx/wx.h>
+#include <wx/grid.h>
+#include <wx/scrolwin.h>
 
-class HistoFavorWindow : public wxWindow {
+class HistoFavorWindow : public wxScrolledWindow {
 public:
-	HistoFavorWindow(wxWindow*);
+	HistoFavorWindow(wxWindow* parent);
 };

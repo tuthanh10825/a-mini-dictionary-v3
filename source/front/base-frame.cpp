@@ -37,11 +37,11 @@ BaseFrame::BaseFrame(const wxString& title)
     moreWindow = new MoreWindow(workingPage);
     workingPage->AddPage(moreWindow, wxString("more")); 
 
-    //historyPage = new HistoFavorWindow(workingPage);
-    //workingPage->AddPage(historyPage, wxString("History"));
+    historyPage = new HistoFavorWindow(workingPage);
+    workingPage->AddPage(historyPage, wxString("History"));
 
-    //favouritePage = new HistoFavorWindow(workingPage);
-    //workingPage->AddPage(favouritePage, wxString("Favourite"));
+    favouritePage = new HistoFavorWindow(workingPage);
+    workingPage->AddPage(favouritePage, wxString("Favourite"));
 
     LoadNavigation(); 
     mainSizer->Add(workingPage, 1, wxEXPAND); 
