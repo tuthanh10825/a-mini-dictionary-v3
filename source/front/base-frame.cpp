@@ -37,6 +37,12 @@ BaseFrame::BaseFrame(const wxString& title)
     moreWindow = new MoreWindow(workingPage);
     workingPage->AddPage(moreWindow, wxString("more")); 
 
+    //historyPage = new HistoFavorWindow(workingPage);
+    //workingPage->AddPage(historyPage, wxString("History"));
+
+    //favouritePage = new HistoFavorWindow(workingPage);
+    //workingPage->AddPage(favouritePage, wxString("Favourite"));
+
     LoadNavigation(); 
     mainSizer->Add(workingPage, 1, wxEXPAND); 
     loadFooter();
@@ -128,6 +134,8 @@ void BaseFrame::LoadNavigation()
     dictionaryBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnDictionaryBtnClicked, this);
     gameBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnGameBtnClicked, this); 
     moreBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnMoreBtnClicked, this); 
+    historyBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnHistoryBtnClicked, this); 
+    favoriteBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnFavouriteBtnClicked, this);
 }
 
 
@@ -169,3 +177,10 @@ void BaseFrame::OnMoreBtnClicked(wxCommandEvent&)
     workingPage->ChangeSelection(3); 
 }
 
+void BaseFrame::OnHistoryBtnClicked(wxCommandEvent&) {
+    workingPage->ChangeSelection(4);
+}
+
+void BaseFrame::OnFavouriteBtnClicked(wxCommandEvent&) {
+    workingPage->ChangeSelection(5);
+}
