@@ -9,25 +9,27 @@ BaseFrame::BaseFrame(const wxString& title)
     workingPage = new wxSimplebook(this, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT));
     
     
-    
-    
     homePage = new HomePage(workingPage); 
     workingPage->AddPage(homePage, wxString("Homepage")); 
     
 
     searchPage = new wxWindow(workingPage, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT)); 
     wxPanel* searchPanel = new wxPanel(searchPage, wxID_ANY); 
+
     wxBoxSizer* searchBarSizer = new wxBoxSizer(wxHORIZONTAL); 
     searchPanel->SetBackgroundColour(BLUEBLACK); 
+
     searchBox* box = new searchBox(searchPanel);
     searchBarSizer->Add(box, 1, wxEXPAND | wxALL, 15); 
     searchPanel->SetSizerAndFit(searchBarSizer); 
+
     resPage* res = new resPage(searchPage); 
     res->addingString(wxString("Hello\n\tnoun\n\ttesting"));
     wxBoxSizer* searchSizer = new wxBoxSizer(wxVERTICAL); 
     searchSizer->Add(searchPanel, 0, wxEXPAND); 
     searchSizer->Add(res, 1, wxEXPAND); 
     searchPage->SetSizerAndFit(searchSizer); 
+
     workingPage->AddPage(searchPage, wxString("Searchpage"));
 
 
