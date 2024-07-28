@@ -16,7 +16,7 @@ endif()
 
 
 # TODO: Add tests and install targets if needed.
-target_link_libraries(dictionary PRIVATE wx::base wx::core wx::aui)
+target_link_libraries(dictionary PRIVATE wx::base wx::core wx::aui wx::stc)
 
 add_custom_command(TARGET dictionary POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory

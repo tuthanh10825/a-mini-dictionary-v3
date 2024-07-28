@@ -1,5 +1,6 @@
 #include "game-setting-page.h"
 #include "properties.h"
+#include "gameplay-page.h"
 #include <wx/spinctrl.h>
 GameSettingPage::GameSettingPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
@@ -187,6 +188,8 @@ GameSettingPage::GameSettingPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	mainSizer->Add(selectPlayPanel, 1, wxEXPAND); 
 
 	this->SetSizerAndFit(mainSizer); 
+
+	selectPlay->Bind(wxEVT_BUTTON, &GameSettingPage::OnPlayButtonClicked, this); 
 }
 
 void GameSettingPage::OnChooseWordClicked(wxCommandEvent&)
@@ -247,4 +250,22 @@ void GameSettingPage::OnFiniteClicked(wxCommandEvent&)
 void GameSettingPage::OnInfiniteClicked(wxCommandEvent&)
 {
 	finite->SetValue(false); 
+}
+
+void GameSettingPage::OnPlayButtonClicked(wxCommandEvent&)
+{
+	wxFrame* gameFrame = new wxFrame(this, wxID_ANY, wxString("Play!"), wxDefaultPosition, wxDefaultSize);
+	gameFrame->SetSizeHints(wxSize(WIDTH, -1));
+	DefiGameWindow* gamePlay = new DefiGameWindow(gameFrame, wxString("test"), 
+		{
+			wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
+			wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
+			wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
+			wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
+
+		});
+
+	gameFrame->SetClientSize(WIDTH, HEIGHT);
+	gameFrame->Show(true); 
+	return; 
 }
