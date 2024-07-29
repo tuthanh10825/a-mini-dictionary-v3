@@ -11,6 +11,8 @@
 #define NAVIGATIONBAR_IMG wxT("assets/navigationbar.png")
 #define GUESSDEFINITION wxT("assets/guessdefinition.png")
 
+#define MARK_IMG wxT("assets/icons/mark-icon.png")
+#define GUESSWORD_IMG wxT("assets/icons/guessword-icon.png")
 #define LINE_IMG wxT("assets/icons/line-icon.png")
 #define MOREQUIZ_IMG wxT("assets/icons/morequiz-icon.png")
 #define USERMANUAL_IMG wxT("assets/icons/usermanual-icon.png")
