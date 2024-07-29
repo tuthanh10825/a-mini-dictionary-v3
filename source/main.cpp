@@ -4,6 +4,7 @@
 #include "properties.h"
 #include "more-page.h"
 #include "game-definition-page.h"
+#include "game-word-page.h"
 class myApp : public wxApp
 {
 	virtual bool OnInit()
@@ -11,10 +12,10 @@ class myApp : public wxApp
 		//mainFrame* MainFrame = new mainFrame(wxT("dictionary"));
 		//MainFrame->SetClientSize(WIDTH, HEIGHT);
 		//MainFrame->Show(true); 
-		DefGameWindow* defgamewindow = new DefGameWindow("Definition Game Page");
-		defgamewindow->SetClientSize(1451, 631);
-		defgamewindow->SetBackgroundColour(wxColor(255, 255, 255));
-		defgamewindow->Show(true);
+		Wgamewindow* wordgamewindow = new Wgamewindow("Word Game Page");
+		wordgamewindow->SetClientSize(1451, 631);
+		wordgamewindow->SetBackgroundColour(wxColor(255, 255, 255));
+		wordgamewindow->Show(true);
 		return true; 
 	}
 };
