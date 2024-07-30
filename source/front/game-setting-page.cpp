@@ -255,17 +255,47 @@ void GameSettingPage::OnInfiniteClicked(wxCommandEvent&)
 void GameSettingPage::OnPlayButtonClicked(wxCommandEvent&)
 {
 	wxFrame* gameFrame = new wxFrame(this, wxID_ANY, wxString("Play!"), wxDefaultPosition, wxDefaultSize);
-	gameFrame->SetSizeHints(wxSize(WIDTH, -1));
-	DefiGameWindow* gamePlay = new DefiGameWindow(gameFrame, wxString("test"), 
+	int count = 10; 
+	if (chooseDefi->IsChecked())
+	{
+		
+		DefiGameWindow* gamePlay = new DefiGameWindow(gameFrame, wxString("test"),
+			{
+				wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
+				wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
+				wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
+				wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
+
+			});
+		
+	}
+	else
+	{
+	
+		wordGameWindow* gamePlay = new wordGameWindow(gameFrame, wxString("a way of discovering, by questions or practical activities, what someone knows, or what someone or something can do or is like"),
+			{
+				wxString("test"),
+				wxString("practice"),
+				wxString("trial"),
+				wxString("verification")
+			});
+		
+	}
+	gameFrame->SetClientSize(wxSize(WIDTH, HEIGHT));
+	gameFrame->SetSizeHints(wxSize(WIDTH, 700));
+	gameFrame->Show(true);
+	/*gameFrame->Bind(wxEVT_BUTTON, [&count](wxCommandEvent& event)
 		{
-			wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
-			wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
-			wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
-			wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
+			if (ans == true) count--;
+			else
+			{
+				gamePlay = new DefiGame...()
+			}
+			if (count == 0)
+			{
+				wxMessageBox("You win!");
+				gameFrame->Close();
 
-		});
-
-	gameFrame->SetClientSize(WIDTH, HEIGHT);
-	gameFrame->Show(true); 
+			});*/
 	return; 
 }
