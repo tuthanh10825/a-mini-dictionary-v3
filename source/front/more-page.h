@@ -1,10 +1,9 @@
 #include <wx/wx.h>
 
-class MoreWindow : public wxFrame
+class MoreWindow : public wxWindow
 {
 public:
-	MoreWindow(const wxString& title);
-private:
-	void LoadImage(const wxString& imagePath, const wxPoint& position, wxPanel* panel);
-	void LoadHeaderFooter(wxPanel* panel);
+	wxBitmapButton* darkmodeButton; 
+	MoreWindow(wxWindow*);
+	void OnUserManualClicked(wxCommandEvent&); 
 };

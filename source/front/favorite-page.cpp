@@ -49,7 +49,7 @@ ListWindow::ListWindow(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
     m_item_list->SetTextColour(wxColour(60, 60, 60));
     m_item_list->SetBackgroundColour(wxColour(255, 255, 255));
     
-    loadFavListUnFinish();
+    //loadFavListUnFinish();
 
 
     

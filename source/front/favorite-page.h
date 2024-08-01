@@ -12,10 +12,11 @@ class ListWindow : public wxWindow
 {
 public:
     ListWindow(wxWindow* parent);
+    void loadFavListUnFinish();
 private:
     
     wxListCtrl* m_item_list;
-    void loadFavListUnFinish();
+  
     void deleteSelectedRows();
     void SelectAllRows();
     void onDelClick(wxCommandEvent&);

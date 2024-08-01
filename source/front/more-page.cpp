@@ -1,94 +1,57 @@
 #include "more-page.h"
-#include "properties.h" 
-MoreWindow::MoreWindow(const wxString& title) : wxFrame(nullptr, wxID_ANY, title)
+#include "properties.h"
+
+MoreWindow::MoreWindow(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
-    //header
-    wxPanel* topPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 0), wxSize(1451, 155));
-    //bar
-    wxPanel* barPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 0), wxSize(1451, 64));
-    //green
-    wxPanel* greenpanel = new wxPanel(this, wxID_ANY, wxPoint(0, 0), wxSize(1451, 101));
-    //yellow
-    wxPanel* yellowpanel = new wxPanel(this, wxID_ANY, wxPoint(0, 0), wxSize(1451, 631));
-    yellowpanel->SetBackgroundColour(wxColour(255, 250, 230));
+	wxPanel* aboutUsPanel = new wxPanel(this, wxID_ANY);
+	aboutUsPanel->SetBackgroundColour(wxColor(101, 164, 165));
+	wxStaticBitmap* aboutUsText = new wxStaticBitmap(aboutUsPanel, wxID_ANY, wxBitmap("assets/more/about-us-text.png", wxBITMAP_TYPE_PNG));
+	
+	wxBoxSizer* aboutUsTextHoriSizer = new wxBoxSizer(wxHORIZONTAL); 
+	aboutUsTextHoriSizer->Add(aboutUsText, 3, wxALIGN_BOTTOM | wxBOTTOM, 15); 
 
-    wxInitAllImageHandlers();
-    LoadHeaderFooter(topPanel);
-    LoadImage(NAVIGATIONBAR_IMG, wxPoint(0, 0), barPanel);
+	wxBoxSizer* aboutUsTextVertSizer = new wxBoxSizer(wxVERTICAL); 
+	aboutUsTextVertSizer->Add(aboutUsTextHoriSizer, 0, wxLEFT | wxTOP, 60); 
+	
+	aboutUsPanel->SetSizerAndFit(aboutUsTextVertSizer); 
 
-    greenpanel->SetBackgroundColour(wxColor(101, 164, 165));
-    //About us
-    //wxStaticText* aboutus = new wxStaticText(greenpanel, wxID_ANY, "About us", wxPoint(267, 40), wxSize(262, 73));
-    wxTextCtrl* aboutus = new wxTextCtrl(greenpanel, wxID_ANY, "About us", wxPoint(266, 28), wxSize(262, 73), wxTE_READONLY | wxBORDER_NONE);
-    aboutus->SetBackgroundColour(wxColor(101, 164, 165));
-    aboutus->SetOwnForegroundColour(wxColour(255, 255, 255));
-    wxFont aboutus_font = wxFont(33, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
-    aboutus->SetFont(aboutus_font);
+	wxPanel* descriptionPanel = new wxPanel(this, wxID_ANY); 
+	descriptionPanel->SetBackgroundColour(WHITE);
 
-    //first sentence on yellow panel
-    wxTextCtrl* fstsen = new wxTextCtrl(yellowpanel, wxID_ANY, "Our dictionary aims to help people search words in English easily and fast",
-        wxPoint(204, 91), wxSize(1111, 100), wxTE_READONLY | wxBORDER_NONE | wxTE_MULTILINE | wxTE_NO_VSCROLL);
-    wxFont fstsen_font = wxFont(27, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL);
-    fstsen->SetFont(fstsen_font);
-    fstsen->SetBackgroundColour(wxColor(255, 250, 230));
-    fstsen->SetOwnForegroundColour(wxColour(102, 102, 102));
+	wxStaticBitmap* descriptionText = new wxStaticBitmap(descriptionPanel, wxID_ANY, wxBitmap("assets/more/description-text.png", wxBITMAP_TYPE_PNG)); 
+	
+	wxBitmapButton* userManualButton = new wxBitmapButton(descriptionPanel, wxID_ANY, wxBitmap("assets/more/user-manual-button.png", wxBITMAP_TYPE_PNG)); 
+	userManualButton->SetBackgroundColour(WHITE);
+	wxStaticBitmap* userManualText = new wxStaticBitmap(descriptionPanel, wxID_ANY, wxBitmap("assets/more/user-manual-text.png", wxBITMAP_TYPE_PNG));
+	wxBoxSizer* userManualSizer = new wxBoxSizer(wxVERTICAL); 
+	userManualSizer->Add(userManualButton, 0, wxALIGN_CENTER); 
+	userManualSizer->Add(userManualText, 0, wxALIGN_CENTER);
+	userManualButton->Bind(wxEVT_BUTTON, &MoreWindow::OnUserManualClicked, this); 
 
-    //second sentence on yellow panel
-    wxTextCtrl* sndsen = new wxTextCtrl(yellowpanel, wxID_ANY, "This dictionary was created by group 3",
-        wxPoint(204, 200), wxSize(468, 31), wxTE_READONLY | wxBORDER_NONE | wxTE_MULTILINE | wxTE_NO_VSCROLL);
-    wxFont sndsen_font = wxFont(13, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_EXTRALIGHT);
-    sndsen->SetFont(sndsen_font);
-    sndsen->SetBackgroundColour(wxColor(255, 250, 230));
-    sndsen->SetOwnForegroundColour(wxColour(100, 100, 100));
-    //sentence under user button
-    wxTextCtrl* usersen = new wxTextCtrl(yellowpanel, wxID_ANY, "To discover more about our project",
-        wxPoint(164, 421), wxSize(388, 29), wxTE_READONLY | wxBORDER_NONE);
-    wxFont usersen_font = wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_EXTRALIGHT);
-    usersen->SetFont(usersen_font);
-    usersen->SetBackgroundColour(wxColor(255, 250, 230));
-    usersen->SetOwnForegroundColour(wxColour(96, 96, 96));
-    //sentence under dark mode button
-    wxTextCtrl* darksen = new wxTextCtrl(yellowpanel, wxID_ANY, "To turn to dark mode",
-        wxPoint(960, 421), wxSize(388, 29), wxTE_READONLY | wxBORDER_NONE);
-    darksen->SetFont(usersen_font);
-    darksen->SetBackgroundColour(wxColor(255, 250, 230));
-    darksen->SetOwnForegroundColour(wxColour(96, 96, 96));
-    //user button
-    wxBitmap usermanual(USERMANUAL_IMG, wxBITMAP_TYPE_PNG);
-    wxBitmapButton* userbutton = new wxBitmapButton(yellowpanel, wxID_ANY, usermanual, wxPoint(243, 339), wxDefaultSize, wxBORDER_NONE);
-    userbutton->SetBackgroundColour(wxColor(255, 250, 230));
-    //dark mode button
-    wxBitmap darkmode(DARKMODE_IMG, wxBITMAP_TYPE_PNG);
-    wxBitmapButton* darkmode_button = new wxBitmapButton(yellowpanel, wxID_ANY, darkmode, wxPoint(986, 339), wxDefaultSize, wxBORDER_NONE);
-    darkmode_button->SetBackgroundColour(wxColor(255, 250, 230));
+	darkmodeButton = new wxBitmapButton(descriptionPanel, wxID_ANY, wxBitmap("assets/more/dark-mode-button.png", wxBITMAP_TYPE_PNG)); 
+	darkmodeButton->SetBackgroundColour(WHITE);
+	wxStaticBitmap* darkmodeText = new wxStaticBitmap(descriptionPanel, wxID_ANY, wxBitmap("assets/more/dark-mode-text.png", wxBITMAP_TYPE_PNG)); 
+	wxBoxSizer* darkmodeSizer = new wxBoxSizer(wxVERTICAL); 
+	darkmodeSizer->Add(darkmodeButton, 0, wxALIGN_CENTER); 
+	darkmodeSizer->Add(darkmodeText, 0, wxALIGN_CENTER); 
+	
+	wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL); 
+	buttonSizer->Add(userManualSizer, 1, wxALIGN_CENTER); 
+	buttonSizer->Add(darkmodeSizer, 1, wxALIGN_CENTER); 
 
-    wxBoxSizer* mainsizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer* descriptionPanelSizer = new wxBoxSizer(wxVERTICAL);
+	descriptionPanelSizer->Add(descriptionText, 1, wxEXPAND); 
+	descriptionPanelSizer->Add(buttonSizer, 1, wxEXPAND); 
 
-    mainsizer->Add(topPanel, 0, wxEXPAND);
-    mainsizer->Add(barPanel, 0, wxEXPAND);
-    mainsizer->Add(greenpanel, 0, wxEXPAND);
-    mainsizer->Add(yellowpanel, 1, wxEXPAND);
+	descriptionPanel->SetSizerAndFit(descriptionPanelSizer); 
 
-    this->SetSizerAndFit(mainsizer);
+	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL); 
+	mainSizer->Add(aboutUsPanel, 0, wxEXPAND); 
+	mainSizer->Add(descriptionPanel, 1, wxEXPAND);
+	this->SetSizerAndFit(mainSizer); 
 }
-void MoreWindow::LoadImage(const wxString& imagePath, const wxPoint& position, wxPanel* panel)
+
+void MoreWindow::OnUserManualClicked(wxCommandEvent& event)
 {
-    wxImage image(imagePath, wxBITMAP_TYPE_PNG);
-    if (image.IsOk())
-    {
-        //
-        //wxSize panelSize = panel->GetSize();
-        //image.Rescale(panelSize.GetWidth(), panelSize.GetHeight(), wxIMAGE_QUALITY_HIGH);
-        //
-        wxBitmap bitmap(image);
-        wxStaticBitmap* imageCtrl = new wxStaticBitmap(panel, wxID_ANY, bitmap);
-        imageCtrl->SetPosition(position);
-    }
-    else {
-        wxLogError("Failed to load image: %s", imagePath);
-    }
-}
-void MoreWindow::LoadHeaderFooter(wxPanel* panel)
-{
-    LoadImage(HEADER_IMG, wxPoint(0, 0), panel);
+	wxLaunchDefaultBrowser(wxString("https://github.com/tuthanh10825/a-mini-dictionary-v3"));
 }
