@@ -9,6 +9,6 @@ public:
 private:
 	void LoadImage(const wxString& imagePath, const wxPoint& position, wxPanel* panel);
 	void OnRadioButton(wxCommandEvent& event);
-	wxDECLARE_EVENT_TABLE();
+	
 };
 

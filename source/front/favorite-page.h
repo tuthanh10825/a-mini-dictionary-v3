@@ -8,12 +8,12 @@ using namespace std;
 #include <wx/editlbox.h>
 
 
-class FavWindow : public wxFrame
+class ListWindow : public wxWindow
 {
 public:
-    FavWindow(const wxString& title);
+    ListWindow(wxWindow* parent);
 private:
-    void LoadImage(const wxString& imagePath, const wxPoint& position, wxPanel* panel);
+    
     wxListCtrl* m_item_list;
     void loadFavListUnFinish();
     void deleteSelectedRows();
@@ -21,5 +21,5 @@ private:
     void onDelClick(wxCommandEvent&);
     void onSelClick(wxCommandEvent&);
 
-    wxDECLARE_EVENT_TABLE();
+    
 };

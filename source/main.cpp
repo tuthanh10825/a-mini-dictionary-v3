@@ -5,6 +5,7 @@
 #include "more-page.h"
 #include "game-definition-page.h"
 #include "game-word-page.h"
+#include "favorite-page.h"
 class myApp : public wxApp
 {
 	virtual bool OnInit()
@@ -12,14 +13,12 @@ class myApp : public wxApp
 		//mainFrame* MainFrame = new mainFrame(wxT("dictionary"));
 		//MainFrame->SetClientSize(WIDTH, HEIGHT);
 		//MainFrame->Show(true); 
-		Wgamewindow* wordgamewindow = new Wgamewindow("Word Game Page");
-		wordgamewindow->SetClientSize(1451, 631);
-		wordgamewindow->SetBackgroundColour(wxColor(255, 255, 255));
-		wordgamewindow->Show(true);
+		wxFrame* favorWindow = new wxFrame(nullptr, wxID_ANY, "Favorite Window"); 
+
+		ListWindow* listWindow = new ListWindow(favorWindow); 
+		favorWindow->SetClientSize(WIDTH, HEIGHT); 
+		favorWindow->Show(true); 
 		return true; 
 	}
 };
 wxIMPLEMENT_APP(myApp);
-wxBEGIN_EVENT_TABLE(DefGameWindow, wxFrame)
-EVT_RADIOBUTTON(wxID_ANY, DefGameWindow::OnRadioButton)
-wxEND_EVENT_TABLE()
