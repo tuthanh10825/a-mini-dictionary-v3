@@ -24,4 +24,7 @@
 #define FAVORITEICON_IMG "assets/icons/favourite-icon.png"
 #define MOREICON_IMG "assets/icons/more-icon.png"
 
+#define FAVOURITEBAR_IMG "assets/favorite bar.png"
+#define DELETEICON_IMG "assets/icons/delete-icon.png"
+#define SELECTALLICON_IMG "assets/icons/select-icon.png"
 
