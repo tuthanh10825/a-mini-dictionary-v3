@@ -9,7 +9,7 @@
 #define LOGO_IMG wxT("assets/logo.png")
 #define FOOTER_IMG wxT("assets/footer.png")
 #define NAVIGATION_IMG wxT("assets/navigation.png")
-
+ 
 #define HOMEICON_IMG "assets/icons/home-icon.png"
 #define SEARCHICON_IMG "assets/icons/search-icon.png"
 #define GAMEICON_IMG "assets/icons/game-icon.png"

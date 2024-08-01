@@ -13,6 +13,7 @@ BaseFrame::BaseFrame(const wxString& title)
     
     homePage = new HomePage(workingPage); 
     workingPage->AddPage(homePage, wxString("Homepage")); 
+
     
 
     searchPage = new wxWindow(workingPage, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT)); 
@@ -40,7 +41,8 @@ BaseFrame::BaseFrame(const wxString& title)
     LoadNavigation(); 
     mainSizer->Add(workingPage, 1, wxEXPAND); 
     loadFooter();
-  
+    
+    homePage -> quizButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event){ this -> workingPage->ChangeSelection(2); }); 
     this->SetSizerAndFit(mainSizer); 
     // 155 x 37
 }
