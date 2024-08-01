@@ -7,7 +7,7 @@
 
 #define NAME_IMG wxT("assets/name.png")
 #define LOGO_IMG wxT("assets/logo.png")
-#define FOOTER_IMG wxT("assets/footer.png")
+#define FOOTER_IMG wxT("assets/footer3.png")
 #define NAVIGATION_IMG wxT("assets/navigation.png")
  
 #define HOMEICON_IMG "assets/icons/home-icon.png"

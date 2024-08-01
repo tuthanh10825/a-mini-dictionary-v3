@@ -140,7 +140,7 @@ void BaseFrame::LoadImage(const wxString& imagePath, wxPanel* panel) {
         wxStaticBitmap* imageCtrl = new wxStaticBitmap(panel, wxID_ANY, bitmap);
 
         wxBoxSizer* vertSizer = new wxBoxSizer(wxVERTICAL); 
-        vertSizer->Add(imageCtrl, 0, wxALIGN_CENTER); 
+        vertSizer->Add(imageCtrl, 0, wxALIGN_CENTER|wxTOP,4); 
 
         wxBoxSizer* horiSizer = new wxBoxSizer(wxHORIZONTAL); 
         horiSizer->Add(vertSizer, 1, wxALIGN_CENTER); 
