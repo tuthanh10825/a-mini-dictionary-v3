@@ -3,7 +3,7 @@
 #
 
 # Add source to this project's executable.
-add_executable (dictionary "main.cpp" "front/more-page.cpp" "front/more-page.h" "front/game-definition-page.cpp" "front/game-definition-page.h" "front/roundbutton.cpp" "front/roundbutton.h" "front/game-word-page.cpp" "front/game-word-page.h")
+add_executable (dictionary "main.cpp" "front/more-page.cpp" "front/more-page.h" "front/game-definition-page.cpp" "front/game-definition-page.h" "front/roundbutton.cpp" "front/roundbutton.h" "front/game-word-page.cpp" "front/game-word-page.h" "front/favorite-page.cpp" "front/favorite-page.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET dictionary PROPERTY CXX_STANDARD 20)
