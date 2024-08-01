@@ -21,25 +21,25 @@ HomePage::HomePage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	wxBitmap* quizBitmap = new wxBitmap("assets/homepage/quiz-button.png", wxBITMAP_TYPE_PNG); 
 	quizButton = new wxBitmapButton(rightPanel, wxID_ANY, *quizBitmap, wxDefaultPosition, wxDefaultSize, wxBU_LEFT | wxBU_RIGHT | wxBU_BOTTOM | wxBU_TOP);
 	quizSizer->Add(quizButton, 0); 
-	rightSizer->Add(quizSizer, 1); 
+	rightSizer->Add(quizSizer, 1, wxLEFT, 30); 
 	
 	wxBoxSizer* favorSizer = new wxBoxSizer(wxVERTICAL);
 	wxBitmap* favorBitmap = new wxBitmap("assets/homepage/favor-button.png", wxBITMAP_TYPE_PNG); 
 	favorButton = new wxBitmapButton(rightPanel, wxID_ANY, *favorBitmap, wxDefaultPosition, wxDefaultSize, wxBU_LEFT | wxBU_RIGHT | wxBU_BOTTOM | wxBU_TOP);
 	favorSizer->Add(favorButton, 0); 
-	rightSizer->Add(favorSizer, 1, wxALIGN_RIGHT);
+	rightSizer->Add(favorSizer, 1, wxALIGN_RIGHT | wxRIGHT, 60);
 
 	wxBoxSizer* randomSizer = new wxBoxSizer(wxVERTICAL); 
 	wxBitmap* randomBitmap = new wxBitmap("assets/homepage/random-button.png", wxBITMAP_TYPE_PNG);
 	randomButton = new wxBitmapButton(rightPanel, wxID_ANY, *randomBitmap, wxDefaultPosition, wxDefaultSize, wxBU_LEFT | wxBU_RIGHT | wxBU_BOTTOM | wxBU_TOP);
 	randomSizer->Add(randomButton, 0); 
-	rightSizer->Add(randomSizer, 1);
+	rightSizer->Add(randomSizer, 1, wxLEFT, 30);
 
 	wxBoxSizer* editSizer = new wxBoxSizer(wxVERTICAL);
 	wxBitmap* editBitmap = new wxBitmap("assets/homepage/edit-button.png", wxBITMAP_TYPE_PNG); 
 	editButton = new wxBitmapButton(rightPanel, wxID_ANY, *editBitmap, wxDefaultPosition, wxDefaultSize, wxBU_LEFT | wxBU_RIGHT | wxBU_BOTTOM | wxBU_TOP);
 	editSizer->Add(editButton, 0); 
-	rightSizer->Add(editSizer, 1, wxALIGN_RIGHT);
+	rightSizer->Add(editSizer, 1, wxALIGN_RIGHT | wxRIGHT, 60);
 	
 	rightPanel->SetSizerAndFit(rightSizer); 
 	
