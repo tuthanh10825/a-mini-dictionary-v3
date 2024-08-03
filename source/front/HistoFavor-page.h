@@ -19,5 +19,5 @@ public:
 
 	// Need to implement
 	bool loadData(std::string path);
-	~HistoFavorWindow();
+	//~HistoFavorWindow();
 };
