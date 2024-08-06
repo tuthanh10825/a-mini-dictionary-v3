@@ -18,7 +18,7 @@ struct word {
 
 class HistoFavorWindow : public wxWindow {
 	public:
-		HistoFavorWindow(wxWindow* parent);
+		HistoFavorWindow(wxWindow* parent, int mode);
 private:
 	std::vector<word> data;
 	wxGrid* grid;
