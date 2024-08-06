@@ -25,10 +25,9 @@ private:
 
 	// Need to implement
 	bool loadData(std::string path);
-
-
 	void deleteSelectedRows();
 	void SelectAllRows();
 	void onDelClick(wxCommandEvent&);
 	void onSelClick(wxCommandEvent&);
+
 };
