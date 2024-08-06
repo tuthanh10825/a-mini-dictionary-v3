@@ -16,7 +16,7 @@ struct word {
 	std::string definition;
 };
 
-class HistoFavorWindow : public wxScrolledWindow {
+class HistoFavorWindow : public wxWindow {
 	public:
 		HistoFavorWindow(wxWindow* parent);
 private:
@@ -29,5 +29,6 @@ private:
 	void SelectAllRows();
 	void onDelClick(wxCommandEvent&);
 	void onSelClick(wxCommandEvent&);
+	void OnSizeChange(wxSizeEvent&);
 
 };

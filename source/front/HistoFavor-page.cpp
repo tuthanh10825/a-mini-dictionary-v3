@@ -8,7 +8,7 @@ enum butID {
 
 
 
-HistoFavorWindow::HistoFavorWindow(wxWindow* parent) : wxScrolledWindow(parent, wxID_ANY) {
+HistoFavorWindow::HistoFavorWindow(wxWindow* parent) : wxWindow(parent, wxID_ANY) {
 
     
     
@@ -26,17 +26,17 @@ HistoFavorWindow::HistoFavorWindow(wxWindow* parent) : wxScrolledWindow(parent, 
     cellFont.SetNativeFontInfoUserDesc("Palatino Linotype 20 WINDOWS-1252");
     int colWidth = 700;
 
-    grid = new wxGrid(subPanel, wxID_ANY, wxDefaultPosition, wxSize(1090, 1200));
+    grid = new wxGrid(subPanel, wxID_ANY, wxDefaultPosition, wxSize(-1, -1));
     grid->CreateGrid(20, 2, wxGrid::wxGridSelectRows);
 
     //Grid Properties
     grid->EnableEditing(false);
     grid->SetSelectionBackground(wxColour(150, 150, 150));
-    grid->EnableDragGridSize(false);
+    grid->DisableDragColSize();
     grid->SetDefaultCellFont(cellFont);
     grid->SetDefaultCellTextColour(wxColour(0, 0, 0)); 
     grid->SetDefaultCellAlignment(wxALIGN_LEFT, wxALIGN_CENTER);
-
+    
 
     // Set column labels
     grid->SetColLabelValue(0, "Word");
@@ -88,20 +88,26 @@ HistoFavorWindow::HistoFavorWindow(wxWindow* parent) : wxScrolledWindow(parent, 
     // Set row height
     //int rowHeight = 50; // Desired row height in pixels
 
+   
+
     for (int i = 0; i < 20; ++i) {
         //grid->SetRowSize(i, rowHeight);
         grid->SetCellValue(i, 0, "  " + words[i] + " (" + types[i] + ")");
         grid->SetCellValue(i, 1, " " + definitions[i]);
 
         grid->SetCellRenderer(i, 1, new wxGridCellAutoWrapStringRenderer());
+        
         grid->SetCellBackgroundColour(i, 0, wxColour(255, 255, 200)); 
         grid->SetCellTextColour(i, 0, wxColour(4, 73, 153));
+      
 
     }
-
+    
+    grid->SetMargins(0 - wxSYS_VSCROLL_X, 0 - wxSYS_HSCROLL_Y);
     grid->AutoSizeColumn(0);
-    grid->SetColSize(1, colWidth);
+    grid->SetColSize(1, 810);
     grid->AutoSizeRows();
+   
 
     wxBitmapButton* delbutton = new wxBitmapButton(subPanel, del_id, wxBitmap(DELETEICON_IMG, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(79, 107));
     delbutton->SetBackgroundColour(wxColor(255, 255, 255));
@@ -124,19 +130,23 @@ HistoFavorWindow::HistoFavorWindow(wxWindow* parent) : wxScrolledWindow(parent, 
     rightControlSizer->Add(buttonCentering1, 1, wxEXPAND);
     rightControlSizer->Add(buttonCentering2, 1, wxEXPAND);
 
+
+
     wxBoxSizer* leftControlSizer = new wxBoxSizer(wxHORIZONTAL);
-    leftControlSizer->Add(grid, wxSizerFlags().Proportion(1).Center().Border(wxALL, 30));
+    leftControlSizer->Add(grid, 1, wxEXPAND | wxTOP | wxBOTTOM, 30);
+
     wxBoxSizer* totalSubPanelSizer = new wxBoxSizer(wxHORIZONTAL);
     totalSubPanelSizer->Add(leftControlSizer, 1, wxEXPAND | wxLEFT, 100);
-    totalSubPanelSizer->Add(rightControlSizer, 1, wxEXPAND | wxLEFT | wxRIGHT, 30);
-    subPanel->SetSizer(totalSubPanelSizer);
-    totalSubPanelSizer->SetSizeHints(this);
+    totalSubPanelSizer->Add(rightControlSizer, 0, wxEXPAND | wxLEFT | wxRIGHT, 30);
+    grid->Bind(wxEVT_SIZE, &HistoFavorWindow::OnSizeChange, this);
+    subPanel->SetSizerAndFit(totalSubPanelSizer);
+   
 
     wxBoxSizer* mainsizer = new wxBoxSizer(wxVERTICAL);
-    mainsizer->Add(subPanel, 1, wxALIGN_CENTER);
+    mainsizer->Add(subPanel, 1, wxEXPAND);
 
     this->SetSizerAndFit(mainsizer);
-    
+   
 
 
     //this->SetScrollRate(5, 5);
@@ -170,4 +180,12 @@ void HistoFavorWindow::onDelClick(wxCommandEvent&) {
 
 void HistoFavorWindow::onSelClick(wxCommandEvent&) {
     SelectAllRows();
+}
+
+void HistoFavorWindow::OnSizeChange(wxSizeEvent&)
+{
+    int trueSize = grid->GetVirtualSize().x - grid->GetColSize(0) - 85;
+    grid->SetColSize(1, trueSize);
+    grid->Refresh();
+    return;
 }
