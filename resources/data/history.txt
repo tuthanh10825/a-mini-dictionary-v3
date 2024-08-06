@@ -1,0 +1,10 @@
+3:] (Verb) 	Pet smiley.
+4AYN (Verb) 	For all you know
+4COL (Verb) 	For crying out loud
+4SALE (Verb) 	For sale
+4U (Verb) 	For you
+8 (Verb)  :-)	User is a wizard.
+8 (Verb)  :-I	Net.unix-wizards
+8-) (Verb) 	User is wearing sunglasses.
+8:-) (Verb) 	User is a little girl.
+:'-( (Verb) 	User is crying.
