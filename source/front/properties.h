@@ -21,4 +21,8 @@
 
 #define LINE_IMG wxT("assets/line.png")
 
+
+#define DELETEICON_IMG "assets/icons/delete-icon.png"
+#define SELECTALLICON_IMG "assets/icons/select-icon.png"
+
 #define BLUEBLACK wxColour(33, 38, 79)

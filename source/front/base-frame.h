@@ -8,6 +8,7 @@
 #include "search-page.h"
 #include "game-setting-page.h"
 #include "more-page.h"
+#include "HistoFavor-page.h"
 class BaseFrame : public wxFrame {
 public:
     BaseFrame(const wxString& title);
@@ -17,6 +18,8 @@ public:
     wxWindow* searchPage;
     MoreWindow* moreWindow; 
     GameSettingPage* gameSettingPage; 
+    HistoFavorWindow* historyPage;
+    HistoFavorWindow* favouritePage;
 private:
 
     void LoadHeader();
@@ -27,7 +30,10 @@ private:
     void OnHomeBtnClicked(wxCommandEvent& event);
     void OnDictionaryBtnClicked(wxCommandEvent&); 
     void OnGameBtnClicked(wxCommandEvent&); 
-    void OnMoreBtnClicked(wxCommandEvent&); 
+    void OnMoreBtnClicked(wxCommandEvent&);
+
+    void OnHistoryBtnClicked(wxCommandEvent&);
+    void OnFavouriteBtnClicked(wxCommandEvent&);
 };
 
 #endif // BASEFRAME_H
