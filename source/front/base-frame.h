@@ -8,8 +8,8 @@
 #include "search-page.h"
 #include "game-setting-page.h"
 #include "more-page.h"
-#include "HistoFavor-page.h"
-#include "favorite-page.h"
+#include "list-window.h"
+
 class BaseFrame : public wxFrame {
 public:
     BaseFrame(const wxString& title);
@@ -19,8 +19,8 @@ public:
     SearchPage* searchPage;
     MoreWindow* moreWindow; 
     GameSettingPage* gameSettingPage; 
-    HistoFavorWindow* historyPage;
-    HistoFavorWindow* favouritePage;
+    ListWindow* historyPage;
+    ListWindow* favouritePage;
 private:
 
     void LoadHeader();
