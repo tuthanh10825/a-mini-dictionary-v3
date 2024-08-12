@@ -2,184 +2,161 @@
 #include <fstream>
 #include <wx/wx.h>
 #include <string>
+#include <uni_algo/all.h>
+#include <vector>
+using std::vector;
 class TST
 {
 public:
 	struct TreeNode
 	{
-		char val = 0;
-		TreeNode* low = 0, * mid = 0, * high = 0;
+		char32_t val = 0;
+		TreeNode* left = 0, * mid = 0, * right = 0;
 		bool eow = false;
-		//std::string type;
-		//std::string defi;
 	};
-
 	TreeNode* root = 0;
-
-	TreeNode* search(std::string word)
+	void insert(std::string key)
 	{
-
-		TreeNode* curr = root; std::string::iterator it = word.begin();
-		while (curr)
+		if (key.empty() || !una::is_valid_utf8(key))
+			return; 
+		key = una::cases::to_lowercase_utf8(key); 
+		std::u32string str = una::utf8to32u(key);
+		
+		std::u32string::iterator iter = str.begin(); 
+		
+		TreeNode* curr = root;
+		TreeNode* prev = 0; 
+		bool go_mid = true; 
+		while (iter != str.end())
 		{
-			if (*it < curr->val) curr = curr->low;
-			else if (*it > curr->val) curr = curr->high;
+			if (!curr)
+			{
+				curr = new TreeNode(); 
+				curr->val = *iter; 
+				if (prev)
+				{
+					if (!go_mid)
+					{
+						if (prev->val < *iter) prev->right = curr;
+						else if (prev->val > *iter - 1) prev->left = curr;
+					}
+					else prev->mid = curr; 
+				}
+				else root = curr; 
+			}
+			prev = curr; 
+			if (*iter == curr->val)
+			{
+				curr = curr->mid;
+				go_mid = true;
+				++iter;
+			}
+			else if (*iter < curr->val)
+			{
+				go_mid = false;
+				curr = curr->left;
+			}
 			else
 			{
-				if (++it == word.end()) return (curr->eow) ? curr : 0;
-				curr = curr->mid;
+				go_mid = false;
+				curr = curr->right;
 			}
+			
 		}
-		return 0;
+		prev->eow = true; 
+		return; 
 	}
-	wxArrayString getByPrefix(std::string prefix)
+	vector<wxString> searchByPrefix(std::string prefix)
 	{
-		if (prefix.empty()) return wxArrayString();
-		TreeNode* curr = root; std::string::iterator it = prefix.begin();
-		while (curr)
+		if (prefix.empty() || !una::is_valid_utf8(prefix))
+			return {}; 
+		prefix = una::cases::to_lowercase_utf8(prefix); 
+		std::u32string prefix_str = una::utf8to32u(prefix); 
+		std::u32string::iterator iter = prefix_str.begin(); 
+
+		TreeNode* curr = root; 
+		TreeNode* prev = 0; 
+		while (curr && (iter != prefix_str.end()))
 		{
-			if (*it < curr->val) curr = curr->low;
-			else if (*it > curr->val) curr = curr->high;
-			else
+			prev = curr; 
+			if (*iter == curr->val)
 			{
-				if (++it == prefix.end()) break;
 				curr = curr->mid;
+				++iter;
 			}
+			else if (*iter < curr->val) curr = curr->left;
+			else curr = curr->right;
+			
 		}
-		if (!curr) return wxArrayString();
-		curr = curr->mid;
-		wxArrayString ans;
-		inorder_search(curr, prefix, ans);
+		if (iter != prefix_str.end()) return {}; 
+		vector<wxString> ans; 
+		if (prev->eow) ans.push_back(prefix); 
+		traverse(ans, prefix_str, 5, curr);
 		return ans;
-
+		
+	
 	}
-
-private:
-
-	TreeNode* insert(TreeNode*& curr, std::string::iterator& it, const std::string& word)//, const std::string& type, const std::string defi)
-	{
-		if (it == word.end()) return 0;
-		if (!curr) { curr = new TreeNode(); curr->val = *it; }
-
-		if (*it < curr->val) return insert(curr->low, it, word);//, type, defi);
-		else if (*it > curr->val) return insert(curr->high, it, word);//, type, defi);
-		else
-		{
-			if (++it == word.end())
-			{
-				curr->eow = true; //curr->type = type; curr->defi = defi;
-				return curr;
-			}
-			return insert(curr->mid, it, word);// , type, defi);
-		}
-	}
-	void inorder_search(TreeNode* curr, std::string& word, wxArrayString& ans)
-	{
-		if (!curr) return;
-		inorder_search(curr->low, word, ans);
-
-		word += curr->val;
-		if (curr->eow) ans.Add(wxString(word));
-
-
-		inorder_search(curr->mid, word, ans);
-		word.pop_back();
-		inorder_search(curr->high, word, ans);
-
-	}
-	void clear(TreeNode*& root)
+ 	void clear(TreeNode*& root)
 	{
 		if (!root) return;
-		clear(root->low); clear(root->mid); clear(root->high);
+		clear(root->left); clear(root->mid); clear(root->right);
 		delete(root); root = 0;
 		return;
 	}
 
-	void remove(TreeNode*& curr, std::string::iterator& it, const std::string& word)
-	{
-		if (!curr) return;
-
-		if (*it < curr->val) remove(curr->low, it, word);
-		else if (*it > curr->val) remove(curr->high, it, word);
-		else
-		{
-
-			if (++it == word.end())
-			{
-				curr->eow = false;
-				//curr->defi = curr->type = "";
-			}
-			else remove(curr->mid, it, word);
-
-			if (!curr->mid)
-			{
-				TreeNode* temp = curr;
-				if (!curr->high && !curr->low) curr = 0;
-				else if (!curr->high) curr = curr->low;
-				else if (!curr->low) curr = curr->high;
-				else
-				{
-					TreeNode* prede = curr->low;
-					TreeNode* prev = 0;
-					while (prede->high)
-					{
-						prev = prede;
-						prede = prede->high;
-					}
-					prev->high = 0;
-					prede->low = curr->low;
-					prede->high = curr->high;
-					curr = prede;
-				}
-				delete temp;
-			}
-
-		}
-	}
-
-public:
-
-	TreeNode* insert(std::string word)//, std::string type, std::string defi)
-	{
-		std::string::iterator it = word.begin();
-		return insert(this->root, it, word);//, type, defi);
-	}
-	void clear() { clear(root); }
-	void remove(std::string word)
-	{
-		std::string::iterator it = word.begin();
-		remove(root, it, word);
-	}
-
-
-	void loadAll(std::string filename)
-	{
-		std::ifstream fin;
-
-		fin.open(filename);
-		if (!fin.is_open()) assert("File not found!");
-		std::string firstline; std::getline(fin, firstline);
-
-		for (std::string name, type, def; !fin.eof(); )
-		{
-
-			std::string temp;
-			std::getline(fin, temp);
-			name.assign(temp.begin(), std::find(temp.begin(), temp.end(), ','));
-			temp.erase(temp.begin(), std::find(temp.begin(), temp.end(), ',') + 1);
-			type.assign(temp.begin(), std::find(temp.begin(), temp.end(), ','));
-			temp.erase(temp.begin(), std::find(temp.begin(), temp.end(), ',') + 1);
-			def = temp;
-			name[0] = std::tolower(name[0]);
-			insert(name);// , type, def);
-		}
-		return;
-	}
 	~TST()
 	{
-		clear();
+		clear(root);
 		return;
 	}
+
+private:
+	void traverse(vector<wxString>& ans, std::u32string currStr, int limit, TreeNode *currNode)
+	{
+
+		if (ans.size() >= limit || !currNode) return; 
+		else
+		{
+			if (currNode->eow) ans.push_back(una::utf32to8(currStr + currNode -> val));
+			traverse(ans, currStr, limit, currNode->left); 
+			if (currNode->mid)
+				traverse(ans, currStr + currNode->val, limit, currNode->mid); 
+			traverse(ans, currStr, limit, currNode->right); 
+		}
+	}
+
+	
 };
+
+static TST loadWord(std::string filename)
+{
+	TST ans; 
+
+	std::ifstream fin; fin.open(filename); 
+	if (!fin.is_open()) return ans; 
+	//for (int i = 0; i < 3; ++i) fin.ignore();
+	std::string name; std::getline(fin, name); 
+
+	std::string defi; 
+	while (!fin.eof())
+	{
+		for (std::string tempLine; !fin.eof();)
+		{
+			std::getline(fin, tempLine); 
+			if (fin.eof()) break;
+			if (tempLine[0] == '@')
+			{
+				name.erase(name.begin());
+				ans.insert(name);
+				name = tempLine; 
+				break; 
+			}
+			else
+				defi += '\n' + tempLine; 
+		} 
+	}
+	ans.insert(name); 
+	return ans; 
+}
 
 

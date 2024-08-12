@@ -13,25 +13,10 @@ BaseFrame::BaseFrame(const wxString& title)
     workingPage->AddPage(homePage, wxString("Homepage")); 
     
 
-    searchPage = new wxWindow(workingPage, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT)); 
-    wxPanel* searchPanel = new wxPanel(searchPage, wxID_ANY); 
-
-    wxBoxSizer* searchBarSizer = new wxBoxSizer(wxHORIZONTAL); 
-    searchPanel->SetBackgroundColour(BLUEBLACK); 
-
-    searchBox* box = new searchBox(searchPanel);
-    searchBarSizer->Add(box, 1, wxEXPAND | wxALL, 15); 
-    searchPanel->SetSizerAndFit(searchBarSizer); 
-
-    resPage* res = new resPage(searchPage); 
-    res->addingString(wxString("Hello\n\tnoun\n\ttesting"));
-    wxBoxSizer* searchSizer = new wxBoxSizer(wxVERTICAL); 
-    searchSizer->Add(searchPanel, 0, wxEXPAND); 
-    searchSizer->Add(res, 1, wxEXPAND); 
-    searchPage->SetSizerAndFit(searchSizer); 
-
+    searchPage = new SearchPage(workingPage);
     workingPage->AddPage(searchPage, wxString("Searchpage"));
 
+    
 
     gameSettingPage = new GameSettingPage(workingPage); 
     workingPage->AddPage(gameSettingPage, wxString("GameSettingpage"));
@@ -49,6 +34,8 @@ BaseFrame::BaseFrame(const wxString& title)
     mainSizer->Add(workingPage, 1, wxEXPAND); 
     loadFooter();
   
+    this->homePage->quizButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) {this->workingPage->ChangeSelection(2); });
+    this->homePage->favorButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) {this->workingPage->ChangeSelection(5); });
     this->SetSizerAndFit(mainSizer); 
     // 155 x 37
 }
@@ -70,6 +57,7 @@ void BaseFrame::LoadHeader()
     headerSizer->Add(rightHeaderPanel, 0, wxEXPAND | wxALL);
  
     mainSizer->Add(headerSizer, 0, wxALL | wxEXPAND);
+
 }
 
 void BaseFrame::loadFooter()

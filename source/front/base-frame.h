@@ -15,7 +15,7 @@ public:
     wxSimplebook* workingPage; 
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL); 
     HomePage* homePage;
-    wxWindow* searchPage;
+    SearchPage* searchPage;
     MoreWindow* moreWindow; 
     GameSettingPage* gameSettingPage; 
     HistoFavorWindow* historyPage;

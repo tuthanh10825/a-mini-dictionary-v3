@@ -41,6 +41,8 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	subSizer->Add(resetButton, 1, wxEXPAND);
 	mainSizer->Add(subSizer, 1, wxEXPAND); 
 	this->SetSizerAndFit(mainSizer); 
+
+	
 	return; 
 }
 
@@ -74,4 +76,46 @@ void resPage::addingString(wxString total)
 void resPage::clearScreen()
 {
 	resWord->Clear();
+}
+
+SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT))
+{
+	wxPanel* searchPanel = new wxPanel(this, wxID_ANY);
+
+	wxBoxSizer* searchBarSizer = new wxBoxSizer(wxHORIZONTAL);
+	searchPanel->SetBackgroundColour(BLUEBLACK);
+
+	box = new searchBox(searchPanel);
+	searchBarSizer->Add(box, 1, wxEXPAND | wxALL, 15);
+	searchPanel->SetSizerAndFit(searchBarSizer);
+	box->findBox->Bind(wxEVT_TEXT,&SearchPage::OnFindBoxEnter, this);
+	
+	 res = new resPage(this);
+	res->addingString(wxString("Hello\n\tnoun\n\ttesting"));
+	wxBoxSizer* searchSizer = new wxBoxSizer(wxVERTICAL);
+	searchSizer->Add(searchPanel, 0, wxEXPAND);
+	searchSizer->Add(res, 1, wxEXPAND);
+	this->SetSizerAndFit(searchSizer);
+}
+void SearchPage::OnFindBoxEnter(wxCommandEvent& evt)
+{
+	std::string word = evt.GetString().utf8_string();
+
+	while (!this->box->findBox->IsListEmpty()) this->box->findBox->Delete(0); 
+	if (word.empty())
+	{
+		this->box->findBox->Dismiss();
+	}
+	else
+	{
+		this->box->findBox->Append(list.searchByPrefix(word));
+		this->box->findBox->Popup();
+		this->box->findBox->SelectNone();
+		this->box->findBox->ChangeValue(word);
+		this->box->findBox->SetInsertionPointEnd(); 
+		
+		
+	}
+	this->box->findBox->Refresh(); 
+	
 }
