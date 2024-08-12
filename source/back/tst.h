@@ -150,6 +150,8 @@ public:
 		std::string::iterator it = word.begin();
 		remove(root, it, word);
 	}
+
+
 	void loadAll(std::string filename)
 	{
 		std::ifstream fin;

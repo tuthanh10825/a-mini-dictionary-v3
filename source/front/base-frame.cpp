@@ -9,8 +9,6 @@ BaseFrame::BaseFrame(const wxString& title)
     workingPage = new wxSimplebook(this, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT));
     
     
-    
-    
     homePage = new HomePage(workingPage); 
     workingPage->AddPage(homePage, wxString("Homepage")); 
 
@@ -18,17 +16,21 @@ BaseFrame::BaseFrame(const wxString& title)
 
     searchPage = new wxWindow(workingPage, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT)); 
     wxPanel* searchPanel = new wxPanel(searchPage, wxID_ANY); 
+
     wxBoxSizer* searchBarSizer = new wxBoxSizer(wxHORIZONTAL); 
     searchPanel->SetBackgroundColour(BLUEBLACK); 
+
     searchBox* box = new searchBox(searchPanel);
     searchBarSizer->Add(box, 1, wxEXPAND | wxALL, 15); 
     searchPanel->SetSizerAndFit(searchBarSizer); 
+
     resPage* res = new resPage(searchPage); 
     res->addingString(wxString("Hello\n\tnoun\n\ttesting"));
     wxBoxSizer* searchSizer = new wxBoxSizer(wxVERTICAL); 
     searchSizer->Add(searchPanel, 0, wxEXPAND); 
     searchSizer->Add(res, 1, wxEXPAND); 
     searchPage->SetSizerAndFit(searchSizer); 
+
     workingPage->AddPage(searchPage, wxString("Searchpage"));
 
 
@@ -37,6 +39,12 @@ BaseFrame::BaseFrame(const wxString& title)
 
     moreWindow = new MoreWindow(workingPage);
     workingPage->AddPage(moreWindow, wxString("more")); 
+
+    historyPage = new HistoFavorWindow(workingPage, 0);
+    workingPage->AddPage(historyPage, wxString("History"));
+
+    favouritePage = new HistoFavorWindow(workingPage, 0);
+    workingPage->AddPage(favouritePage, wxString("Favourite"));
 
     LoadNavigation(); 
     mainSizer->Add(workingPage, 1, wxEXPAND); 
@@ -130,6 +138,8 @@ void BaseFrame::LoadNavigation()
     dictionaryBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnDictionaryBtnClicked, this);
     gameBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnGameBtnClicked, this); 
     moreBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnMoreBtnClicked, this); 
+    historyBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnHistoryBtnClicked, this); 
+    favoriteBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnFavouriteBtnClicked, this);
 }
 
 
@@ -171,3 +181,10 @@ void BaseFrame::OnMoreBtnClicked(wxCommandEvent&)
     workingPage->ChangeSelection(3); 
 }
 
+void BaseFrame::OnHistoryBtnClicked(wxCommandEvent&) {
+    workingPage->ChangeSelection(4);
+}
+
+void BaseFrame::OnFavouriteBtnClicked(wxCommandEvent&) {
+    workingPage->ChangeSelection(5);
+}
