@@ -9,6 +9,7 @@
 #include "game-setting-page.h"
 #include "more-page.h"
 #include "HistoFavor-page.h"
+#include "favorite-page.h"
 class BaseFrame : public wxFrame {
 public:
     BaseFrame(const wxString& title);

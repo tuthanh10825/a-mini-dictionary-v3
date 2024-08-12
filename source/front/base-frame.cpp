@@ -24,6 +24,15 @@ BaseFrame::BaseFrame(const wxString& title)
     moreWindow = new MoreWindow(workingPage);
     workingPage->AddPage(moreWindow, wxString("more")); 
 
+
+    favWindow = new ListWindow(workingPage); 
+    favWindow->loadFavListUnFinish();
+    workingPage->AddPage(favWindow, wxString("favorite")); 
+
+    historyWindow = new ListWindow(workingPage); 
+    historyWindow->loadFavListUnFinish();
+    workingPage->AddPage(historyWindow, wxString("history")); 
+
     historyPage = new HistoFavorWindow(workingPage, 0);
     workingPage->AddPage(historyPage, wxString("History"));
 
