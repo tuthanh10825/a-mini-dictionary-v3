@@ -16,15 +16,17 @@ struct word {
 	std::string definition;
 };
 
-class HistoFavorWindow : public wxWindow {
+class ListWindow : public wxWindow {
 	public:
-		HistoFavorWindow(wxWindow* parent, int mode);
+		ListWindow(wxWindow* parent, int mode);
 private:
 	std::vector<word> data;
 	wxGrid* grid;
 
 	// Need to implement
 	bool loadData(std::string path);
+
+	// Finished
 	void deleteSelectedRows();
 	void SelectAllRows();
 	void onDelClick(wxCommandEvent&);

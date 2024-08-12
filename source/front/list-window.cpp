@@ -1,4 +1,4 @@
-#include "HistoFavor-page.h"
+#include "list-window.h"
 
 
 enum butID {
@@ -8,7 +8,7 @@ enum butID {
 
 
 
-HistoFavorWindow::HistoFavorWindow(wxWindow* parent, int mode) : wxWindow(parent, wxID_ANY) {
+ListWindow::ListWindow(wxWindow* parent, int mode) : wxWindow(parent, wxID_ANY) {
 
     wxColour backgroundColour = wxColour(255, 255, 255), textColour = wxColour(0, 0, 0), nountext = wxColour(4, 73, 153), labelColour = wxColour(33, 38, 79), nounColour = wxColour(255, 221, 173), selectionCorlour = wxColour(166, 166, 166);
     if (mode) {
@@ -119,13 +119,13 @@ HistoFavorWindow::HistoFavorWindow(wxWindow* parent, int mode) : wxWindow(parent
 
     wxBitmapButton* delbutton = new wxBitmapButton(subPanel, del_id, wxBitmap(DELETEICON_IMG, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(79, 79), wxBORDER_NONE);
     delbutton->SetBackgroundColour(backgroundColour);
-    delbutton->Bind(wxEVT_BUTTON, &HistoFavorWindow::onDelClick, this);
+    delbutton->Bind(wxEVT_BUTTON, &ListWindow::onDelClick, this);
     wxStaticBitmap* delText = new wxStaticBitmap(subPanel, wxID_ANY, wxBitmap("assets/histofav/delete" + s + ".png", wxBITMAP_TYPE_PNG));
 
 
     wxBitmapButton* selbutton = new wxBitmapButton(subPanel, sel_id, wxBitmap(SELECTALLICON_IMG, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(79, 79), wxBORDER_NONE);
     selbutton->SetBackgroundColour(backgroundColour);
-    selbutton->Bind(wxEVT_BUTTON, &HistoFavorWindow::onSelClick, this);
+    selbutton->Bind(wxEVT_BUTTON, &ListWindow::onSelClick, this);
     wxStaticBitmap* selectText = new wxStaticBitmap(subPanel, wxID_ANY, wxBitmap("assets/histofav/selectall" + s + ".png", wxBITMAP_TYPE_PNG));
 
 
@@ -153,7 +153,7 @@ HistoFavorWindow::HistoFavorWindow(wxWindow* parent, int mode) : wxWindow(parent
     wxBoxSizer* totalSubPanelSizer = new wxBoxSizer(wxHORIZONTAL);
     totalSubPanelSizer->Add(leftControlSizer, 1, wxEXPAND | wxLEFT, 100);
     totalSubPanelSizer->Add(rightControlSizer, 0, wxEXPAND | wxLEFT | wxRIGHT, 30);
-    grid->Bind(wxEVT_SIZE, &HistoFavorWindow::OnSizeChange, this);
+    grid->Bind(wxEVT_SIZE, &ListWindow::OnSizeChange, this);
     subPanel->SetSizerAndFit(totalSubPanelSizer);
    
 
@@ -169,12 +169,12 @@ HistoFavorWindow::HistoFavorWindow(wxWindow* parent, int mode) : wxWindow(parent
 
 
 
-bool HistoFavorWindow::loadData(std::string path)
+bool ListWindow::loadData(std::string path)
 {
     return false;
 }
 
-void HistoFavorWindow::deleteSelectedRows() {
+void ListWindow::deleteSelectedRows() {
     int rows = grid->GetNumberRows();
     for (int i = 0; i < rows; ++i) {
         if (grid->IsInSelection(i, 0)) {
@@ -185,19 +185,19 @@ void HistoFavorWindow::deleteSelectedRows() {
     }
 }
 
-void HistoFavorWindow::SelectAllRows() {
+void ListWindow::SelectAllRows() {
     grid->SelectAll();
 }
 
-void HistoFavorWindow::onDelClick(wxCommandEvent&) {
+void ListWindow::onDelClick(wxCommandEvent&) {
     deleteSelectedRows();
 }
 
-void HistoFavorWindow::onSelClick(wxCommandEvent&) {
+void ListWindow::onSelClick(wxCommandEvent&) {
     SelectAllRows();
 }
 
-void HistoFavorWindow::OnSizeChange(wxSizeEvent&)
+void ListWindow::OnSizeChange(wxSizeEvent&)
 {
     int trueSize = grid->GetVirtualSize().x - grid->GetColSize(0) - 85;
     grid->SetColSize(1, trueSize);

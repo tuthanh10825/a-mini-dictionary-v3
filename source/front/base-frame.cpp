@@ -16,27 +16,16 @@ BaseFrame::BaseFrame(const wxString& title)
     searchPage = new SearchPage(workingPage);
     workingPage->AddPage(searchPage, wxString("Searchpage"));
 
-    
-
     gameSettingPage = new GameSettingPage(workingPage); 
     workingPage->AddPage(gameSettingPage, wxString("GameSettingpage"));
 
     moreWindow = new MoreWindow(workingPage);
     workingPage->AddPage(moreWindow, wxString("more")); 
 
-
-    favWindow = new ListWindow(workingPage); 
-    favWindow->loadFavListUnFinish();
-    workingPage->AddPage(favWindow, wxString("favorite")); 
-
-    historyWindow = new ListWindow(workingPage); 
-    historyWindow->loadFavListUnFinish();
-    workingPage->AddPage(historyWindow, wxString("history")); 
-
-    historyPage = new HistoFavorWindow(workingPage, 0);
+    historyPage = new ListWindow(workingPage, 0);
     workingPage->AddPage(historyPage, wxString("History"));
 
-    favouritePage = new HistoFavorWindow(workingPage, 0);
+    favouritePage = new ListWindow(workingPage, 0);
     workingPage->AddPage(favouritePage, wxString("Favourite"));
 
     LoadNavigation(); 
