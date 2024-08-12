@@ -6,7 +6,7 @@ class myApp : public wxApp
 {
 	virtual bool OnInit()
 	{
-
+	
 
 		BaseFrame* mainFrame = new BaseFrame("Dictonary");
 		mainFrame->SetClientSize(WIDTH, HEIGHT);

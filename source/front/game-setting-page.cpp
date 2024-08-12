@@ -1,5 +1,6 @@
 #include "game-setting-page.h"
 #include "properties.h"
+#include "gameplay-page.h"
 #include <wx/spinctrl.h>
 GameSettingPage::GameSettingPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
@@ -187,6 +188,8 @@ GameSettingPage::GameSettingPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	mainSizer->Add(selectPlayPanel, 1, wxEXPAND); 
 
 	this->SetSizerAndFit(mainSizer); 
+
+	selectPlay->Bind(wxEVT_BUTTON, &GameSettingPage::OnPlayButtonClicked, this); 
 }
 
 void GameSettingPage::OnChooseWordClicked(wxCommandEvent&)
@@ -247,4 +250,52 @@ void GameSettingPage::OnFiniteClicked(wxCommandEvent&)
 void GameSettingPage::OnInfiniteClicked(wxCommandEvent&)
 {
 	finite->SetValue(false); 
+}
+
+void GameSettingPage::OnPlayButtonClicked(wxCommandEvent&)
+{
+	wxFrame* gameFrame = new wxFrame(this, wxID_ANY, wxString("Play!"), wxDefaultPosition, wxDefaultSize);
+	int count = 10; 
+	if (chooseDefi->IsChecked())
+	{
+		
+		DefiGameWindow* gamePlay = new DefiGameWindow(gameFrame, wxString("test"),
+			{
+				wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
+				wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
+				wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
+				wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
+
+			});
+		
+	}
+	else
+	{
+	
+		wordGameWindow* gamePlay = new wordGameWindow(gameFrame, wxString("a way of discovering, by questions or practical activities, what someone knows, or what someone or something can do or is like"),
+			{
+				wxString("test"),
+				wxString("practice"),
+				wxString("trial"),
+				wxString("verification")
+			});
+		
+	}
+	gameFrame->SetClientSize(wxSize(WIDTH, HEIGHT));
+	gameFrame->SetSizeHints(wxSize(WIDTH, 700));
+	gameFrame->Show(true);
+	/*gameFrame->Bind(wxEVT_BUTTON, [&count](wxCommandEvent& event)
+		{
+			if (ans == true) count--;
+			else
+			{
+				gamePlay = new DefiGame...()
+			}
+			if (count == 0)
+			{
+				wxMessageBox("You win!");
+				gameFrame->Close();
+
+			});*/
+	return; 
 }

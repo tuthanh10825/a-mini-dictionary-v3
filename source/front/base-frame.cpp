@@ -24,10 +24,10 @@ BaseFrame::BaseFrame(const wxString& title)
     moreWindow = new MoreWindow(workingPage);
     workingPage->AddPage(moreWindow, wxString("more")); 
 
-    historyPage = new HistoFavorWindow(workingPage);
+    historyPage = new HistoFavorWindow(workingPage, 0);
     workingPage->AddPage(historyPage, wxString("History"));
 
-    favouritePage = new HistoFavorWindow(workingPage);
+    favouritePage = new HistoFavorWindow(workingPage, 0);
     workingPage->AddPage(favouritePage, wxString("Favourite"));
 
     LoadNavigation(); 
@@ -136,7 +136,7 @@ void BaseFrame::LoadImage(const wxString& imagePath, wxPanel* panel) {
         wxStaticBitmap* imageCtrl = new wxStaticBitmap(panel, wxID_ANY, bitmap);
 
         wxBoxSizer* vertSizer = new wxBoxSizer(wxVERTICAL); 
-        vertSizer->Add(imageCtrl, 0, wxALIGN_CENTER); 
+        vertSizer->Add(imageCtrl, 0, wxALIGN_CENTER|wxTOP,4); 
 
         wxBoxSizer* horiSizer = new wxBoxSizer(wxHORIZONTAL); 
         horiSizer->Add(vertSizer, 1, wxALIGN_CENTER); 

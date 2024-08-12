@@ -16,9 +16,9 @@ struct word {
 	std::string definition;
 };
 
-class HistoFavorWindow : public wxScrolledWindow {
+class HistoFavorWindow : public wxWindow {
 	public:
-		HistoFavorWindow(wxWindow* parent);
+		HistoFavorWindow(wxWindow* parent, int mode);
 private:
 	std::vector<word> data;
 	wxGrid* grid;
@@ -29,5 +29,6 @@ private:
 	void SelectAllRows();
 	void onDelClick(wxCommandEvent&);
 	void onSelClick(wxCommandEvent&);
+	void OnSizeChange(wxSizeEvent&);
 
 };
