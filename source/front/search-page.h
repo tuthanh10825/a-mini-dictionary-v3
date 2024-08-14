@@ -42,4 +42,5 @@ private:
 	TST list = loadWord("data/ev/data.txt");
 	void OnFindBoxEnter(wxCommandEvent& evt);
 	void OnSearchBtnClicked(wxCommandEvent&); 
+	void OnRandomBtnClicked(wxCommandEvent&); 
 };

@@ -4,7 +4,12 @@
 #include <string>
 #include <uni_algo/all.h>
 #include <vector>
+#include <xutility>
+#include <stack>
+#include <chrono>
+#include <cstdlib>
 using std::vector;
+using std::pair;
 class TST
 {
 public:
@@ -128,7 +133,41 @@ public:
 		clear(root);
 		return;
 	}
-
+	pair<std::u32string, std::string> random()
+	{
+		std::u32string ans;
+		TreeNode* curr_root = root; 
+		TreeNode* temp_root = 0; 
+		vector<TreeNode*> currChoice; 
+		srand(std::chrono::steady_clock::now().time_since_epoch().count());
+		while (curr_root)
+		{
+			temp_root = curr_root; 
+			currChoice.clear();
+			std::stack<TreeNode*> choice; choice.push(curr_root);
+			while (!choice.empty())
+			{
+				for (TreeNode* curr = choice.top(); curr != 0; curr = curr->left)
+				{
+					choice.push(curr->left);
+				}
+				choice.pop();
+				if (choice.empty()) break; 
+				TreeNode* next = choice.top()->right; 
+				currChoice.push_back(choice.top()); choice.pop(); 
+				choice.push(next); 
+			}
+			TreeNode* wordChoice = currChoice[rand() % currChoice.size()]; 
+			ans += wordChoice->val; 
+			if (wordChoice->eow)
+			{
+				bool isChosen= rand() % 2;
+				if (isChosen || !wordChoice->mid) return { ans, wordChoice->defi }; 
+			}
+			curr_root = curr_root->mid; 
+		}
+		return make_pair(ans, temp_root->defi);
+	}
 private:
 	void traverse(vector<wxString>& ans, std::u32string currStr, int limit, TreeNode *currNode)
 	{
@@ -165,7 +204,10 @@ static TST loadWord(std::string filename)
 			if (fin.eof()) break;
 			if (tempLine[0] == '@')
 			{
+			
 				name.erase(name.begin());
+				if (name[0] == 32)
+					break; 
 				ans.insert(name, defi);
 				name = tempLine; 
 				defi.clear();

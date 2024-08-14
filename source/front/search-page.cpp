@@ -87,6 +87,7 @@ SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultP
 	searchPanel->SetSizerAndFit(searchBarSizer);
 	box->findBox->Bind(wxEVT_TEXT,&SearchPage::OnFindBoxEnter, this);
 	box->searchButton->Bind(wxEVT_BUTTON, &SearchPage::OnSearchBtnClicked, this);
+	box->randomButton->Bind(wxEVT_BUTTON, &SearchPage::OnRandomBtnClicked, this);
 
 	res = new resPage(this);
 	wxBoxSizer* searchSizer = new wxBoxSizer(wxVERTICAL);
@@ -123,4 +124,11 @@ void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 		this->res->addingString(wxString(una::utf8to16(this->box->findBox->GetValue().utf8_string())) + wxString(una::utf8to16(ans->defi)));
 	}
 	
+}
+void SearchPage::OnRandomBtnClicked(wxCommandEvent&)
+{
+	this->res->clearScreen(); 
+	pair<std::u32string, std::string> ans = list.random();
+	this->res->addingString(wxString(una::utf32to16(ans.first)) + wxString(una::utf8to16(ans.second))); 
+	return; 
 }
