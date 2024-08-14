@@ -25,5 +25,6 @@ public:
 	void OnChooseSlangClicked(wxCommandEvent&);
 	void OnFiniteClicked(wxCommandEvent&); 
 	void OnInfiniteClicked(wxCommandEvent&); 
+
 	void OnPlayButtonClicked(wxCommandEvent&); 
 };
