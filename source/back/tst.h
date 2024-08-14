@@ -102,6 +102,7 @@ public:
 
 	TreeNode* search(std::u32string word)
 	{
+		if (word.empty()) return 0; 
 		std::u32string::iterator iter = word.begin();
 
 		TreeNode* curr = root;
@@ -139,7 +140,7 @@ public:
 		TreeNode* curr_root = root; 
 		TreeNode* temp_root = 0; 
 		vector<TreeNode*> currChoice; 
-		srand(std::chrono::steady_clock::now().time_since_epoch().count());
+		
 		while (curr_root)
 		{
 			temp_root = curr_root; 
@@ -157,10 +158,15 @@ public:
 				currChoice.push_back(choice.top()); choice.pop(); 
 				choice.push(next); 
 			}
+
+			srand(std::chrono::steady_clock::now().time_since_epoch().count());
 			TreeNode* wordChoice = currChoice[rand() % currChoice.size()]; 
 			ans += wordChoice->val; 
+			curr_root = wordChoice;
 			if (wordChoice->eow)
 			{
+
+				srand(std::chrono::steady_clock::now().time_since_epoch().count());
 				bool isChosen= rand() % 2;
 				if (isChosen || !wordChoice->mid) return { ans, wordChoice->defi }; 
 			}
@@ -206,8 +212,6 @@ static TST loadWord(std::string filename)
 			{
 			
 				name.erase(name.begin());
-				if (name[0] == 32)
-					break; 
 				ans.insert(name, defi);
 				name = tempLine; 
 				defi.clear();
@@ -217,6 +221,7 @@ static TST loadWord(std::string filename)
 				defi += '\n' + tempLine; 
 		} 
 	}
+	name.erase(name.begin());
 	ans.insert(name, defi); 
 	return ans; 
 }
