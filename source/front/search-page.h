@@ -23,7 +23,7 @@ public:
 	wxBitmapButton* editButton; 
 	wxBitmapButton* favorButton; 
 	wxBitmapButton* removeButton;
-	wxFont cas; 
+	wxFont font; 
 	wxTextCtrl* resWord = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY); 
 	resPage(wxWindow*); 
 
@@ -39,6 +39,7 @@ public:
 	resPage* res;
 	SearchPage(wxWindow *parent);
 private:
-	TST list = loadWord("data/ve/data.txt");
+	TST list = loadWord("data/ev/data.txt");
 	void OnFindBoxEnter(wxCommandEvent& evt);
+	void OnSearchBtnClicked(wxCommandEvent&); 
 };

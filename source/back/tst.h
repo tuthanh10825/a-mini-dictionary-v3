@@ -13,11 +13,12 @@ public:
 		char32_t val = 0;
 		TreeNode* left = 0, * mid = 0, * right = 0;
 		bool eow = false;
+		std::string defi;
 	};
 	TreeNode* root = 0;
-	void insert(std::string key)
+	void insert(std::string key, std::string value)
 	{
-		if (key.empty() || !una::is_valid_utf8(key))
+		if (key.empty() || !una::is_valid_utf8(key) || !una::is_valid_utf8(value))
 			return; 
 		key = una::cases::to_lowercase_utf8(key); 
 		std::u32string str = una::utf8to32u(key);
@@ -64,14 +65,13 @@ public:
 			
 		}
 		prev->eow = true; 
+		prev->defi = value;
 		return; 
 	}
-	vector<wxString> searchByPrefix(std::string prefix)
+	vector<wxString> searchByPrefix(std::u32string prefix)
 	{
-		if (prefix.empty() || !una::is_valid_utf8(prefix))
-			return {}; 
-		prefix = una::cases::to_lowercase_utf8(prefix); 
-		std::u32string prefix_str = una::utf8to32u(prefix); 
+		
+		std::u32string prefix_str = (prefix); 
 		std::u32string::iterator iter = prefix_str.begin(); 
 
 		TreeNode* curr = root; 
@@ -90,11 +90,30 @@ public:
 		}
 		if (iter != prefix_str.end()) return {}; 
 		vector<wxString> ans; 
-		if (prev->eow) ans.push_back(prefix); 
+		if (prev->eow) ans.push_back(wxString(una::utf32to16(prefix))); 
 		traverse(ans, prefix_str, 5, curr);
 		return ans;
-		
-	
+	}
+
+	TreeNode* search(std::u32string word)
+	{
+		std::u32string::iterator iter = word.begin();
+
+		TreeNode* curr = root;
+		TreeNode* prev = 0;
+		while (curr && (iter != word.end()))
+		{
+			prev = curr;
+			if (*iter == curr->val)
+			{
+				curr = curr->mid;
+				++iter;
+			}
+			else if (*iter < curr->val) curr = curr->left;
+			else curr = curr->right;
+		}
+		if (iter != word.end()) return 0; 
+		return (prev -> eow) ? prev : 0; 
 	}
  	void clear(TreeNode*& root)
 	{
@@ -117,7 +136,7 @@ private:
 		if (ans.size() >= limit || !currNode) return; 
 		else
 		{
-			if (currNode->eow) ans.push_back(una::utf32to8(currStr + currNode -> val));
+			if (currNode->eow) ans.push_back(wxString(una::utf32to16(currStr + currNode -> val)));
 			traverse(ans, currStr, limit, currNode->left); 
 			if (currNode->mid)
 				traverse(ans, currStr + currNode->val, limit, currNode->mid); 
@@ -147,15 +166,16 @@ static TST loadWord(std::string filename)
 			if (tempLine[0] == '@')
 			{
 				name.erase(name.begin());
-				ans.insert(name);
+				ans.insert(name, defi);
 				name = tempLine; 
+				defi.clear();
 				break; 
 			}
 			else
 				defi += '\n' + tempLine; 
 		} 
 	}
-	ans.insert(name); 
+	ans.insert(name, defi); 
 	return ans; 
 }
 

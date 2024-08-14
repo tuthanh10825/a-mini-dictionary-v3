@@ -17,10 +17,8 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 
 	
 	 
-	// (!wxFont::AddPrivateFont(wxString("./fonts/pala.ttf"))) throw;
-
-	//some cheating to use palatino linotype
-	wxFont pala; pala.SetNativeFontInfoUserDesc("Palatino Linotype 25 WINDOWS-1252"); 
+	wxFont::AddPrivateFont(wxString("./fonts/pala.ttf"));
+	wxFont pala; pala.SetFaceName("Palatino Linotype"); pala.SetPointSize(24); 
 	findBox->SetFont(pala);
 
 	searchButton = new wxBitmapButton(this, wxID_ANY, wxBitmap("assets/search/search-button.png", wxBITMAP_TYPE_PNG));
@@ -48,10 +46,9 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 
 resPage::resPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
-	cas.SetNativeFontInfoUserDesc("Cascadia Code 30 WINDOWS-1252"); 
-	resWord->SetFont(cas); 
-
-
+	wxFont::AddPrivateFont(wxString("./fonts/pala.ttf"));
+	font.SetFaceName("Palatino Linotype"); font.SetPointSize(20); 
+	resWord->SetFont(font); 
 	editButton = new wxBitmapButton(this, wxID_ANY, wxBitmap(wxString("assets/result/edit-button.png"), wxBITMAP_TYPE_PNG));
 	favorButton = new wxBitmapButton(this, wxID_ANY, wxBitmap(wxString("assets/result/favorite-button.png"), wxBITMAP_TYPE_PNG));
 	removeButton = new wxBitmapButton(this, wxID_ANY, wxBitmap(wxString("assets/result/remove-button.png"), wxBITMAP_TYPE_PNG));
@@ -89,9 +86,9 @@ SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultP
 	searchBarSizer->Add(box, 1, wxEXPAND | wxALL, 15);
 	searchPanel->SetSizerAndFit(searchBarSizer);
 	box->findBox->Bind(wxEVT_TEXT,&SearchPage::OnFindBoxEnter, this);
-	
-	 res = new resPage(this);
-	res->addingString(wxString("Hello\n\tnoun\n\ttesting"));
+	box->searchButton->Bind(wxEVT_BUTTON, &SearchPage::OnSearchBtnClicked, this);
+
+	res = new resPage(this);
 	wxBoxSizer* searchSizer = new wxBoxSizer(wxVERTICAL);
 	searchSizer->Add(searchPanel, 0, wxEXPAND);
 	searchSizer->Add(res, 1, wxEXPAND);
@@ -99,8 +96,7 @@ SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultP
 }
 void SearchPage::OnFindBoxEnter(wxCommandEvent& evt)
 {
-	std::string word = evt.GetString().utf8_string();
-
+	std::u32string word = una::utf8to32u(evt.GetString().utf8_string());
 	while (!this->box->findBox->IsListEmpty()) this->box->findBox->Delete(0); 
 	if (word.empty())
 	{
@@ -108,14 +104,23 @@ void SearchPage::OnFindBoxEnter(wxCommandEvent& evt)
 	}
 	else
 	{
+		this->box->findBox->SelectNone();
 		this->box->findBox->Append(list.searchByPrefix(word));
 		this->box->findBox->Popup();
-		this->box->findBox->SelectNone();
-		this->box->findBox->ChangeValue(word);
+		this->box->findBox->ChangeValue(wxString(una::utf32to16(word)));
 		this->box->findBox->SetInsertionPointEnd(); 
-		
-		
 	}
 	this->box->findBox->Refresh(); 
+	
+}
+
+void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
+{
+	this->res->clearScreen();
+	TST::TreeNode* ans = list.search(una::utf8to32u(this->box->findBox->GetValue().utf8_string()));
+	if (ans)
+	{
+		this->res->addingString(wxString(una::utf8to16(this->box->findBox->GetValue().utf8_string())) + wxString(una::utf8to16(ans->defi)));
+	}
 	
 }
