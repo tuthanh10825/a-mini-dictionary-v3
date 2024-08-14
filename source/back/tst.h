@@ -7,6 +7,7 @@
 #include <xutility>
 #include <stack>
 #include <chrono>
+#include <random>
 #include <cstdlib>
 using std::vector;
 using std::pair;
@@ -20,6 +21,8 @@ public:
 		bool eow = false;
 		std::string defi;
 	};
+
+
 	TreeNode* root = 0;
 	void insert(std::string key, std::string value)
 	{
@@ -134,13 +137,16 @@ public:
 		clear(root);
 		return;
 	}
+
+
 	pair<std::u32string, std::string> random()
 	{
+		std::mt19937 rng(std::chrono::steady_clock::now().time_since_epoch().count());
+		std::uniform_int_distribution<int> dist(0, 256);
 		std::u32string ans;
 		TreeNode* curr_root = root; 
 		TreeNode* temp_root = 0; 
 		vector<TreeNode*> currChoice; 
-		
 		while (curr_root)
 		{
 			temp_root = curr_root; 
@@ -159,16 +165,15 @@ public:
 				choice.push(next); 
 			}
 
-			srand(std::chrono::steady_clock::now().time_since_epoch().count());
-			TreeNode* wordChoice = currChoice[rand() % currChoice.size()]; 
+			
+			TreeNode* wordChoice = currChoice[dist(rng) % currChoice.size()];
 			ans += wordChoice->val; 
 			curr_root = wordChoice;
 			if (wordChoice->eow)
 			{
-
-				srand(std::chrono::steady_clock::now().time_since_epoch().count());
-				bool isChosen= rand() % 2;
-				if (isChosen || !wordChoice->mid) return { ans, wordChoice->defi }; 
+				
+				bool isChosen = dist(rng) % (dist(rng) % 10 + 1); 
+				if ( !isChosen || !wordChoice->mid) return { ans, wordChoice->defi }; 
 			}
 			curr_root = curr_root->mid; 
 		}

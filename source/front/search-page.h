@@ -7,14 +7,16 @@ class searchBox : public wxWindow
 {
 public: 
 	wxFont pala;
-	wxBitmapComboBox* wordOrDefi= new wxBitmapComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
-	wxBitmapComboBox* language = new wxBitmapComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
-	wxComboBox* findBox = new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_DROPDOWN);
+	wxComboBox* wordOrDefi= new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
+	wxComboBox* language = new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
+	wxComboBox* findBox = new wxComboBox(this, wxID_ANY);
 	wxBitmapButton* searchButton; 
 	wxBitmapButton* randomButton; 
 	wxBitmapButton* resetButton; 
 	wxBitmapButton* addButton; 
 	searchBox(wxWindow*); 
+	bool isDropdown = false; 
+private: 
 };
 
 class resPage : public wxWindow
@@ -38,9 +40,10 @@ public:
 	searchBox* box; 
 	resPage* res;
 	SearchPage(wxWindow *parent);
+	void OnRandomBtnClicked(wxCommandEvent&);
+
 private:
 	TST list = loadWord("data/ev/data.txt");
 	void OnFindBoxEnter(wxCommandEvent& evt);
 	void OnSearchBtnClicked(wxCommandEvent&); 
-	void OnRandomBtnClicked(wxCommandEvent&); 
 };

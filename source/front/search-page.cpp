@@ -2,25 +2,23 @@
 
 searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
- 
-	language->Append(wxString(""), wxBitmap("assets/search/ee.png", wxBITMAP_TYPE_PNG));
-	language->Append(wxString(""), wxBitmap("assets/search/ev.png", wxBITMAP_TYPE_PNG));
-	language->Append(wxString(""), wxBitmap("assets/search/ve.png", wxBITMAP_TYPE_PNG));
-	language->Append(wxString(""), wxBitmap("assets/search/emo.png", wxBITMAP_TYPE_PNG));
-	language->Append(wxString(""), wxBitmap("assets/search/sla.png", wxBITMAP_TYPE_PNG));
+	wxFont::AddPrivateFont("fonts/pala.ttf"); 
+	wxFont pala(25, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT, false, "Palatino Linotype");
+	language->SetFont(pala);  wordOrDefi->SetFont(pala); 
+	language->Append(wxString("ENG/ENG")); 
+	language->Append(wxString("ENG/VIE")); 
+	language->Append(wxString("VIE/ENG")); 
+	language->Append(wxString("SLANG"));
+	language->Append(wxString("EMOTICON"));
 	language->SetSelection(0); 
-	
 
-	wordOrDefi->Append(wxString(""), wxBitmap("assets/search/keyword.png", wxBITMAP_TYPE_PNG));
-	wordOrDefi->Append(wxString(""), wxBitmap("assets/search/definition.png", wxBITMAP_TYPE_PNG));
+	wordOrDefi->Append(wxString("KEYWORD")); 
+	wordOrDefi->Append(wxString("DEFINITION")); 
 	wordOrDefi->SetSelection(0); 
 
-	
 	 
-	wxFont::AddPrivateFont(wxString("./fonts/pala.ttf"));
-	wxFont pala; pala.SetFaceName("Palatino Linotype"); pala.SetPointSize(24); 
 	findBox->SetFont(pala);
-
+	
 	searchButton = new wxBitmapButton(this, wxID_ANY, wxBitmap("assets/search/search-button.png", wxBITMAP_TYPE_PNG));
 	randomButton = new wxBitmapButton(this, wxID_ANY, wxBitmap("assets/search/random-button.png", wxBITMAP_TYPE_PNG));
 	addButton = new wxBitmapButton(this, wxID_ANY, wxBitmap("assets/search/add-button.png", wxBITMAP_TYPE_PNG)); 
@@ -43,6 +41,7 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	
 	return; 
 }
+
 
 resPage::resPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
@@ -85,9 +84,30 @@ SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultP
 	box = new searchBox(searchPanel);
 	searchBarSizer->Add(box, 1, wxEXPAND | wxALL, 15);
 	searchPanel->SetSizerAndFit(searchBarSizer);
-	box->findBox->Bind(wxEVT_TEXT,&SearchPage::OnFindBoxEnter, this);
+	box->findBox->Bind(wxEVT_COMBOBOX_DROPDOWN, [this](wxCommandEvent&)
+		{
+			this->box->isDropdown = true;
+		});
+	box->findBox->Bind(wxEVT_COMBOBOX_CLOSEUP, [this](wxCommandEvent&)
+		{
+			this->box->isDropdown = false;
+		});
+	box->findBox->Bind(wxEVT_COMBOBOX, [this](wxCommandEvent& evt)
+		{
+			wxString ans = evt.GetString();
+
+			this->box->findBox->ChangeValue(ans);
+			this->box->findBox->SetInsertionPointEnd();
+			this->box->findBox->SelectNone();
+			this->box->findBox->Dismiss();
+		});
+	box->findBox->Bind(wxEVT_TEXT, &SearchPage::OnFindBoxEnter, this);
+	
+	
+
 	box->searchButton->Bind(wxEVT_BUTTON, &SearchPage::OnSearchBtnClicked, this);
 	box->randomButton->Bind(wxEVT_BUTTON, &SearchPage::OnRandomBtnClicked, this);
+
 
 	res = new resPage(this);
 	wxBoxSizer* searchSizer = new wxBoxSizer(wxVERTICAL);
@@ -97,21 +117,27 @@ SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultP
 }
 void SearchPage::OnFindBoxEnter(wxCommandEvent& evt)
 {
+
 	std::u32string word = una::utf8to32u(evt.GetString().utf8_string());
 	while (!this->box->findBox->IsListEmpty()) this->box->findBox->Delete(0); 
+
+
 	if (word.empty())
 	{
 		this->box->findBox->Dismiss();
 	}
 	else
 	{
-		this->box->findBox->SelectNone();
+		
 		this->box->findBox->Append(list.searchByPrefix(word));
-		this->box->findBox->Popup();
-		this->box->findBox->ChangeValue(wxString(una::utf32to16(word)));
-		this->box->findBox->SetInsertionPointEnd(); 
+		if (!this->box->isDropdown) 
+			this->box->findBox->Popup();
+		
+		this->box->findBox->ChangeValue(wxString(una::utf32to8(word)));
+ 		this->box->findBox->SetInsertionPointEnd(); 
+		this->box->findBox->SelectNone();
+		
 	}
-	this->box->findBox->Refresh(); 
 	
 }
 

@@ -34,6 +34,12 @@ BaseFrame::BaseFrame(const wxString& title)
   
     this->homePage->quizButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) {this->workingPage->ChangeSelection(2); });
     this->homePage->favorButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) {this->workingPage->ChangeSelection(5); });
+    this->homePage->randomButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt)
+        {
+            this->searchPage->OnRandomBtnClicked(evt);
+            this->workingPage->ChangeSelection(1);
+        });
+
     this->SetSizerAndFit(mainSizer); 
     // 155 x 37
 }
@@ -152,7 +158,9 @@ void BaseFrame::OnHomeBtnClicked(wxCommandEvent& event)
 
 void BaseFrame::OnDictionaryBtnClicked(wxCommandEvent&)
 {
+    searchPage->res->clearScreen();
     workingPage->ChangeSelection(1); 
+    
 }
 
 void BaseFrame::OnGameBtnClicked(wxCommandEvent&)
