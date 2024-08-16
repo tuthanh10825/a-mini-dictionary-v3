@@ -169,7 +169,6 @@ void SearchPage::OnChooseLanguage(wxCommandEvent& evt)
 	std::string type = evt.GetString().utf8_string();
 	if (type == currLang) return; 
 	
-	list->clear(list->root); 
 	if (box->wordOrDefi->GetValue() == "KEYWORD")
 	{
 		if (type == "ENG/VIE") {
@@ -202,13 +201,35 @@ void SearchPage::OnChooseWordOrDefi(wxCommandEvent& evt)
 	
 	if (box->language->GetValue() == "ENG/VIE")
 	{
-		if (type == "DEFINTION"); 
-		else list->loadWord("data/ev/data.txt");
+		if (type == "DEFINTION") {
+			if (!EVtree->isLoaded())
+				EVtree->loadWord(EVDATASET);
+
+			list = EVtree;
+		
+		}
+		else {
+			if (!EVtree->isLoaded())
+				EVtree->loadWord(EVDATASET);
+
+			list = EVtree;
+		}
 	}
 	else if (box->language->GetValue() == "VIE/ENG")
 	{
-		if (type == "DEFINTION");
-		else list->loadWord("data/ve/data.txt");
+		if (type == "DEFINTION") {
+			if (!VEtree->isLoaded())
+				VEtree->loadWord(VEDATASET);
+
+			list = VEtree;
+		}
+		else {
+			if (!VEtree->isLoaded())
+				VEtree->loadWord(VEDATASET);
+
+			list = VEtree;
+		}
+
 	}
 	currType = type; 
 	return; 
