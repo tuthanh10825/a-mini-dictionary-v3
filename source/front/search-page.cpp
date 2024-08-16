@@ -76,7 +76,12 @@ void resPage::clearScreen()
 
 SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT))
 {
-	list.loadWord("data/ev/data.txt"); 
+	// Load Eng-Viet dataset
+	if (!EVtree->isLoaded())
+		EVtree->loadWord(EVDATASET);
+
+	list = EVtree;
+
 	wxPanel* searchPanel = new wxPanel(this, wxID_ANY);
 
 	wxBoxSizer* searchBarSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -108,6 +113,7 @@ SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultP
 	box->language->Bind(wxEVT_COMBOBOX, &SearchPage::OnChooseLanguage, this); 
 	box->wordOrDefi->Bind(wxEVT_COMBOBOX, &SearchPage::OnChooseWordOrDefi, this); 
 
+
 	box->searchButton->Bind(wxEVT_BUTTON, &SearchPage::OnSearchBtnClicked, this);
 	box->randomButton->Bind(wxEVT_BUTTON, &SearchPage::OnRandomBtnClicked, this);
 
@@ -133,7 +139,7 @@ void SearchPage::OnFindBoxEnter(wxCommandEvent& evt)
 	else
 	{
 		this->box->findBox->ChangeValue(wxString(una::utf32to16(word)));		
-		this->box->findBox->Append(list.searchByPrefix(word));
+		this->box->findBox->Append(list->searchByPrefix(word));
 		if (!this->box->isDropdown) 
 			this->box->findBox->Popup();
 				
@@ -151,7 +157,7 @@ void SearchPage::OnFindBoxEnter(wxCommandEvent& evt)
 void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 {
 	this->res->clearScreen();
-	TST::TreeNode* ans = list.search(una::utf8to32u(this->box->findBox->GetValue().utf8_string()));
+	TST::TreeNode* ans = list->search(una::utf8to32u(this->box->findBox->GetValue().utf8_string()));
 	if (ans)
 	{
 		this->res->addingString(wxString(una::utf8to16(this->box->findBox->GetValue().utf8_string())) + wxString(una::utf8to16(ans->defi)));
@@ -163,11 +169,22 @@ void SearchPage::OnChooseLanguage(wxCommandEvent& evt)
 	std::string type = evt.GetString().utf8_string();
 	if (type == currLang) return; 
 	
-	list.clear(list.root); 
 	if (box->wordOrDefi->GetValue() == "KEYWORD")
 	{
-		if (type == "ENG/VIE") list.loadWord("data/ev/data.txt");
-		else if (type == "VIE/ENG") list.loadWord("data/ve/data.txt");
+		if (type == "ENG/VIE") {
+			if (!EVtree->isLoaded())
+				EVtree->loadWord(EVDATASET);
+
+			list = EVtree;
+		}
+
+		else 
+			if (type == "VIE/ENG") {
+				if (!VEtree->isLoaded())
+					VEtree->loadWord(VEDATASET);
+
+				list = VEtree;
+			}
 	}
 	else
 	{
@@ -184,13 +201,35 @@ void SearchPage::OnChooseWordOrDefi(wxCommandEvent& evt)
 	
 	if (box->language->GetValue() == "ENG/VIE")
 	{
-		if (type == "DEFINTION"); 
-		else list.loadWord("data/ev/data.txt");
+		if (type == "DEFINTION") {
+			if (!EVtree->isLoaded())
+				EVtree->loadWord(EVDATASET);
+
+			list = EVtree;
+		
+		}
+		else {
+			if (!EVtree->isLoaded())
+				EVtree->loadWord(EVDATASET);
+
+			list = EVtree;
+		}
 	}
 	else if (box->language->GetValue() == "VIE/ENG")
 	{
-		if (type == "DEFINTION");
-		else list.loadWord("data/ve/data.txt");
+		if (type == "DEFINTION") {
+			if (!VEtree->isLoaded())
+				VEtree->loadWord(VEDATASET);
+
+			list = VEtree;
+		}
+		else {
+			if (!VEtree->isLoaded())
+				VEtree->loadWord(VEDATASET);
+
+			list = VEtree;
+		}
+
 	}
 	currType = type; 
 	return; 
@@ -199,7 +238,7 @@ void SearchPage::OnChooseWordOrDefi(wxCommandEvent& evt)
 void SearchPage::OnRandomBtnClicked(wxCommandEvent&)
 {
 	this->res->clearScreen(); 
-	pair<std::u32string, std::string> ans = list.random();
+	pair<std::u32string, std::string> ans = list->random();
 	this->res->addingString(wxString(una::utf32to16(ans.first)) + wxString(una::utf8to16(ans.second))); 
 	return; 
 }

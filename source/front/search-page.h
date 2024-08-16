@@ -2,7 +2,7 @@
 #include <wx/wx.h>
 #include <wx/bmpcbox.h>
 #include <wx/fontutil.h>
-#include "tst.h"
+#include "Globals.h"
 class searchBox : public wxWindow
 {
 public: 
@@ -43,7 +43,7 @@ public:
 	void OnRandomBtnClicked(wxCommandEvent&);
 
 private:
-	TST list; 
+	TST* list = new TST();
 	std::string currLang = "ENG_VIE"; 
 	std::string currType = "KEYWORD"; 
 	
