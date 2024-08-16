@@ -1,7 +1,5 @@
 #include "game-setting-page.h"
-#include "properties.h"
-#include "gameplay-page.h"
-#include <wx/spinctrl.h>
+
 GameSettingPage::GameSettingPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
 	wxPanel* logoPanel = new wxPanel(this, wxID_ANY); //1
@@ -258,7 +256,14 @@ void GameSettingPage::OnPlayButtonClicked(wxCommandEvent&)
 	int count = 10; 
 	if (chooseDefi->IsChecked())
 	{
-		
+		if (chooseEngVie->IsChecked()) {
+			if (!EVtree->isLoaded())
+				EVtree->loadWord(EVDATASET);
+			list = EVtree;
+		}
+
+		// pair<std::u32string, std::string> ans = list->random();
+
 		DefiGameWindow* gamePlay = new DefiGameWindow(gameFrame, wxString("test"),
 			{
 				wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
