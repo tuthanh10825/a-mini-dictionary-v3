@@ -8,7 +8,9 @@ enum butID {
 
 
 
-ListWindow::ListWindow(wxWindow* parent, int mode) : wxWindow(parent, wxID_ANY) {
+ListWindow::ListWindow(wxWindow* parent, int mode, int isFavor) : wxWindow(parent, wxID_ANY) {
+
+   
 
     wxColour backgroundColour = wxColour(255, 255, 255), textColour = wxColour(0, 0, 0), nountext = wxColour(4, 73, 153), labelColour = wxColour(33, 38, 79), nounColour = wxColour(255, 221, 173), selectionCorlour = wxColour(166, 166, 166);
     if (mode) {
@@ -26,13 +28,27 @@ ListWindow::ListWindow(wxWindow* parent, int mode) : wxWindow(parent, wxID_ANY) 
     this->SetBackgroundColour(backgroundColour);
     wxInitAllImageHandlers();
 
-    wxFont cellFont;
-    cellFont.SetNativeFontInfoUserDesc("Palatino Linotype 20 WINDOWS-1252");
+    wxFont::AddPrivateFont("fonts/pala.ttf");
+    wxFont cellFont(25, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT, false, "Palatino Linotype");
     cellFont.Scale(0.85);
     int colWidth = 700;
 
+
+
+    if (isFavor) {
+        if (!loadDataToGrid("data/favorite.txt")) {
+
+        }
+    }
+    else {
+        if (loadDataToGrid("data/history.txt")) {
+
+        }
+    }
+    int numberOfWords = data.size();
+
     grid = new wxGrid(subPanel, wxID_ANY, wxDefaultPosition, wxSize(-1, -1));
-    grid->CreateGrid(20, 2, wxGrid::wxGridSelectRows);
+    grid->CreateGrid(numberOfWords, 2, wxGrid::wxGridSelectRows);
 
     //Grid Properties
     grid->EnableEditing(false);
@@ -55,60 +71,19 @@ ListWindow::ListWindow(wxWindow* parent, int mode) : wxWindow(parent, wxID_ANY) 
     grid->SetLabelFont(cellFont.Bold());
 
     
-
-
-    // Sample data
-    wxString words[20] = {
-        "agree", "bat", "boat", "cat", "cut", "desk", "egg", "food",
-        "grape", "house", "ink", "jump", "kite", "lamp", "mouse", "notebook",
-        "orange", "pencil", "queen", "rabbit"
-    };
-    wxString definitions[20] = {
-        "to have the same opinion as somebody",
-        "an animal like a mouse with wings that flies and feeds at night",
-        "a vehicle (smaller than a ship) that travels on water",
-        "a small animal with soft fur that people often keep as a pet",
-        "to divide something into two or more pieces with a knife, etc",
-        "a piece of furniture like a table, often with drawers",
-        "a bird’s egg",
-        "things that people or animals eat",
-        "a small, round, purple or green fruit that you can eat or make into wine",
-        "a building for human habitation",
-        "a colored fluid used for writing, drawing, printing, or duplicating",
-        "to push yourself off the ground and into the air using your legs",
-        "a toy made of a light frame covered with colored paper or plastic, that you fly in the air at the end of one or more long strings",
-        "a device that produces light",
-        "a small rodent that typically has a pointed snout, relatively large ears and eyes, and a long tail",
-        "a book of blank pages for writing notes in",
-        "a round, sweet, juicy fruit with a tough bright reddish-yellow rind",
-        "an instrument for writing or drawing with ink or a similar substance",
-        "the female ruler of an independent state, especially one who inherits the position by right of birth",
-        "a small herbivorous mammal with long ears, long hind legs, and a short fluffy tail"
-    };
-    wxString types[20] = {
-        "verb", "noun", "noun", "noun", "verb", "noun", "noun", "noun",
-        "noun", "noun", "noun", "verb", "noun", "noun", "noun", "noun",
-        "noun", "noun", "noun", "noun"
-    };
-
-    // Set row height
-    //int rowHeight = 50; // Desired row height in pixels
+    
 
    
-
-    for (int i = 0; i < 20; ++i) {
-        //grid->SetRowSize(i, rowHeight);
-        grid->SetCellValue(i, 0, "  " + words[i] + " (" + types[i] + ")");
-        grid->SetCellValue(i, 1, " " + definitions[i]);
-
+    //Set cell properties
+    for (int i = 0; i < numberOfWords; ++i) {
+        grid->SetCellValue(i, 0, "  " + data[i].word  + " (" + data[i].type + ")");
+        grid->SetCellValue(i, 1, " " + data[i].definition);
         grid->SetCellRenderer(i, 1, new wxGridCellAutoWrapStringRenderer());
-        
         grid->SetCellBackgroundColour(i, 0, nounColour); 
         grid->SetCellTextColour(i, 0, nountext);
-      
-
     }
     
+
     grid->SetMargins(0 - wxSYS_VSCROLL_X, 0 - wxSYS_HSCROLL_Y);
     grid->AutoSizeColumn(0);
     grid->SetColSize(1, 810);
@@ -161,18 +136,9 @@ ListWindow::ListWindow(wxWindow* parent, int mode) : wxWindow(parent, wxID_ANY) 
     mainsizer->Add(subPanel, 1, wxEXPAND);
 
     this->SetSizerAndFit(mainsizer);
-   
-
-
-    //this->SetScrollRate(5, 5);
 }
 
 
-
-bool ListWindow::loadData(std::string path)
-{
-    return false;
-}
 
 void ListWindow::deleteSelectedRows() {
     int rows = grid->GetNumberRows();
@@ -197,10 +163,29 @@ void ListWindow::onSelClick(wxCommandEvent&) {
     SelectAllRows();
 }
 
-void ListWindow::OnSizeChange(wxSizeEvent&)
-{
+void ListWindow::OnSizeChange(wxSizeEvent&) {
     int trueSize = grid->GetVirtualSize().x - grid->GetColSize(0) - 85;
     grid->SetColSize(1, trueSize);
     grid->Refresh();
     return;
+}
+
+
+bool ListWindow::loadDataToGrid(std::string path) {
+    data.clear();
+    std::ifstream fin(path);
+    if (fin.is_open()) {
+        while (!fin.eof()) {
+            word aWord;
+            getline(fin, aWord.word, '(');
+            getline(fin, aWord.type, ')');
+            getline(fin, aWord.definition);
+            while (aWord.definition[0] == ' ') aWord.definition.erase(0, 1);
+            data.push_back(aWord);
+        }
+        fin.close();
+        return true;
+    }
+    fin.close();
+    return false;
 }

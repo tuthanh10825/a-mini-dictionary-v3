@@ -22,10 +22,10 @@ BaseFrame::BaseFrame(const wxString& title)
     moreWindow = new MoreWindow(workingPage);
     workingPage->AddPage(moreWindow, wxString("more")); 
 
-    historyPage = new ListWindow(workingPage, 0);
+    historyPage = new ListWindow(workingPage, 0, 0);
     workingPage->AddPage(historyPage, wxString("History"));
 
-    favouritePage = new ListWindow(workingPage, 0);
+    favouritePage = new ListWindow(workingPage, 0, 1);
     workingPage->AddPage(favouritePage, wxString("Favourite"));
 
     LoadNavigation(); 
