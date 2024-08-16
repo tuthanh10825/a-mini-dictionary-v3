@@ -10,7 +10,6 @@ enum butID {
 
 ListWindow::ListWindow(wxWindow* parent, int mode, int isFavor) : wxWindow(parent, wxID_ANY) {
 
-   
 
     wxColour backgroundColour = wxColour(255, 255, 255), textColour = wxColour(0, 0, 0), nountext = wxColour(4, 73, 153), labelColour = wxColour(33, 38, 79), nounColour = wxColour(255, 221, 173), selectionCorlour = wxColour(166, 166, 166);
     if (mode) {
@@ -33,19 +32,20 @@ ListWindow::ListWindow(wxWindow* parent, int mode, int isFavor) : wxWindow(paren
     cellFont.Scale(0.85);
     int colWidth = 700;
 
-
+    int numberOfWords = 0;
 
     if (isFavor) {
-        if (!loadDataToGrid("data/favorite.txt")) {
-
+        if (dataFav.empty()) {
+            loadDataToGrid("data/favorite.txt", 1);
+            numberOfWords = dataFav.size();
         }
     }
     else {
-        if (loadDataToGrid("data/history.txt")) {
-
+        if (dataHisto.empty()) {
+            loadDataToGrid("data/history.txt", 0);
         }
+        numberOfWords = dataHisto.size();
     }
-    int numberOfWords = data.size();
 
     grid = new wxGrid(subPanel, wxID_ANY, wxDefaultPosition, wxSize(-1, -1));
     grid->CreateGrid(numberOfWords, 2, wxGrid::wxGridSelectRows);
@@ -70,14 +70,18 @@ ListWindow::ListWindow(wxWindow* parent, int mode, int isFavor) : wxWindow(paren
     grid->SetLabelBackgroundColour(labelColour);
     grid->SetLabelFont(cellFont.Bold());
 
-    
-    
 
    
     //Set cell properties
     for (int i = 0; i < numberOfWords; ++i) {
-        grid->SetCellValue(i, 0, "  " + data[i].word  + " (" + data[i].type + ")");
-        grid->SetCellValue(i, 1, " " + data[i].definition);
+        if (isFavor) {
+            grid->SetCellValue(i, 0, "  " + dataFav[i].word + " (" + dataFav[i].type + ")");
+            grid->SetCellValue(i, 1, " " + dataFav[i].definition);
+        }
+        else {
+            grid->SetCellValue(i, 0, "  " + dataHisto[i].word + " (" + dataHisto[i].type + ")");
+            grid->SetCellValue(i, 1, " " + dataHisto[i].definition);
+        }
         grid->SetCellRenderer(i, 1, new wxGridCellAutoWrapStringRenderer());
         grid->SetCellBackgroundColour(i, 0, nounColour); 
         grid->SetCellTextColour(i, 0, nountext);
@@ -92,13 +96,13 @@ ListWindow::ListWindow(wxWindow* parent, int mode, int isFavor) : wxWindow(paren
 
     std::string s = std::to_string(mode);
 
-    wxBitmapButton* delbutton = new wxBitmapButton(subPanel, del_id, wxBitmap(DELETEICON_IMG, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(79, 79));
+    wxBitmapButton* delbutton = new wxBitmapButton(subPanel, del_id, wxBitmap(DELETEICON_IMG, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(79, 79), wxBORDER_NONE);
     delbutton->SetBackgroundColour(backgroundColour);
     delbutton->Bind(wxEVT_BUTTON, &ListWindow::onDelClick, this);
     wxStaticBitmap* delText = new wxStaticBitmap(subPanel, wxID_ANY, wxBitmap("assets/histofav/delete" + s + ".png", wxBITMAP_TYPE_PNG));
 
 
-    wxBitmapButton* selbutton = new wxBitmapButton(subPanel, sel_id, wxBitmap(SELECTALLICON_IMG, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(79, 79));
+    wxBitmapButton* selbutton = new wxBitmapButton(subPanel, sel_id, wxBitmap(SELECTALLICON_IMG, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(79, 79), wxBORDER_NONE);
     selbutton->SetBackgroundColour(backgroundColour);
     selbutton->Bind(wxEVT_BUTTON, &ListWindow::onSelClick, this);
     wxStaticBitmap* selectText = new wxStaticBitmap(subPanel, wxID_ANY, wxBitmap("assets/histofav/selectall" + s + ".png", wxBITMAP_TYPE_PNG));
@@ -171,8 +175,7 @@ void ListWindow::OnSizeChange(wxSizeEvent&) {
 }
 
 
-bool ListWindow::loadDataToGrid(std::string path) {
-    data.clear();
+bool ListWindow::loadDataToGrid(std::string path, int isFav) {
     std::ifstream fin(path);
     if (fin.is_open()) {
         while (!fin.eof()) {
@@ -181,7 +184,10 @@ bool ListWindow::loadDataToGrid(std::string path) {
             getline(fin, aWord.type, ')');
             getline(fin, aWord.definition);
             while (aWord.definition[0] == ' ') aWord.definition.erase(0, 1);
-            data.push_back(aWord);
+            if (isFav) {
+                dataFav.push_back(aWord);
+            }
+            else dataHisto.push_back(aWord);
         }
         fin.close();
         return true;

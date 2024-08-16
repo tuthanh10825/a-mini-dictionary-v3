@@ -8,23 +8,18 @@
 #include <wx/bitmap.h>
 #include <wx/statbmp.h>
 #include "fstream"
-
-struct word {
-	std::string word;
-	std::string type;
-	std::string definition;
-};
+#include "Globals.h"
 
 class ListWindow : public wxWindow {
 	public:
-		ListWindow(wxWindow* parent, int mode, int histoOrFavor);
+		ListWindow(wxWindow* parent, int mode, int isFavor);
 private:
-	std::vector<word> data;
 	wxGrid* grid;
 
 	// Need to implement
-	bool loadDataToGrid(std::string path);
+	// 
 	// Finished
+	bool loadDataToGrid(std::string path, int isFav);
 	void deleteSelectedRows();
 	void SelectAllRows();
 	void onDelClick(wxCommandEvent&);
