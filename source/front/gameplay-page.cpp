@@ -6,6 +6,7 @@ DefiGameWindow::DefiGameWindow(wxWindow* parent, wxString word, std::vector<wxSt
 	
 	this->answer = answerList; 
 	SetSizeHints(wxSize(WIDTH, HEIGHT));
+
 	wxPanel* topPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize); 
 	wxStaticBitmap* guessTextLine = new wxStaticBitmap(topPanel, wxID_ANY, wxBitmap(wxString("assets/game/play/guess-defi-line-text.png"), wxBITMAP_TYPE_PNG)); 
 	topPanel->SetBackgroundColour(WHITE); 

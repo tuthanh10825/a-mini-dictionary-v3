@@ -1,3 +1,4 @@
+#pragma once
 #include <wx/wx.h>
 #include <vector>
 #include<wx/stc/stc.h>

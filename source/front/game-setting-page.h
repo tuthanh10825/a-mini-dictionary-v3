@@ -1,5 +1,9 @@
+#pragma once
 #include "wx/wx.h"
-
+#include "gameplay-page.h"
+#include "properties.h"
+#include <wx/spinctrl.h>
+#include "Globals.h"
 
 class GameSettingPage : public wxWindow
 {
@@ -15,6 +19,8 @@ public:
 	wxCheckBox* finite;
 	wxSpinCtrl* value;
 	wxCheckBox* infinite;
+
+	TST* list;
 
 	void OnChooseWordClicked(wxCommandEvent&); 
 	void OnChooseDefiClicked(wxCommandEvent&); 

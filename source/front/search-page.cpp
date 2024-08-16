@@ -5,12 +5,14 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	wxFont::AddPrivateFont("fonts/pala.ttf"); 
 	wxFont pala(25, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT, false, "Palatino Linotype");
 	language->SetFont(pala);  wordOrDefi->SetFont(pala); 
-	//language->Append(wxString("ENG/ENG")); 
+
+	language->Append(wxString("ENG/ENG")); 
 	language->Append(wxString("ENG/VIE")); 
 	language->Append(wxString("VIE/ENG")); 
-	//language->Append(wxString("SLANG"));
-	//language->Append(wxString("EMOTICON"));
-	language->SetSelection(0); 
+	language->Append(wxString("SLANG"));
+	language->Append(wxString("EMOTICON"));
+
+	language->SetSelection(1); 
 
 	wordOrDefi->Append(wxString("KEYWORD")); 
 	//wordOrDefi->Append(wxString("DEFINITION")); 
@@ -164,6 +166,7 @@ void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 	}
 	
 }
+
 void SearchPage::OnChooseLanguage(wxCommandEvent& evt)
 {
 	std::string type = evt.GetString().utf8_string();
@@ -177,14 +180,30 @@ void SearchPage::OnChooseLanguage(wxCommandEvent& evt)
 
 			list = EVtree;
 		}
-
-		else 
-			if (type == "VIE/ENG") {
+		else if (type == "VIE/ENG") {
 				if (!VEtree->isLoaded())
 					VEtree->loadWord(VEDATASET);
 
 				list = VEtree;
 			}
+		else if (type == "ENG/ENG") {
+			if (!EEtree->isLoaded())
+				EEtree->loadWord(EEDATASET);
+
+			list = EEtree;
+		}
+		else if (type == "EMOTICON") {
+			if (!EMOtree->isLoaded())
+				EMOtree->loadWord(EMODATASET);
+
+			list = EMOtree;
+		}
+		else if (type == "SLANG") {
+			if (!SLtree->isLoaded())
+				SLtree->loadWord(SLDATASET);
+
+			list = SLtree;
+		}
 	}
 	else
 	{

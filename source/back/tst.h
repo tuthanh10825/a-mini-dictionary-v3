@@ -9,6 +9,7 @@
 #include <chrono>
 #include <random>
 #include <cstdlib>
+
 using std::vector;
 using std::pair;
 class TST
@@ -189,31 +190,49 @@ public:
 	{
 		std::ifstream fin; fin.open(filename);
 		if (!fin.is_open()) return;
-		//for (int i = 0; i < 3; ++i) fin.ignore();
-		std::string name; std::getline(fin, name);
 
-		std::string defi;
-		while (!fin.eof())
-		{
-			for (std::string tempLine; !fin.eof();)
+		if (filename == "data/ev/data.txt" || filename == "data/ve/data.txt" ) {
+			std::string name; 
+			std::getline(fin, name);
+			std::string defi;
+
+			while (!fin.eof())
 			{
-				std::getline(fin, tempLine);
-				if (fin.eof()) break;
-				if (tempLine[0] == '@')
+				for (std::string tempLine; !fin.eof();)
 				{
+					std::getline(fin, tempLine);
+					if (fin.eof()) break;
+					if (tempLine[0] == '@')
+					{
 
-					name.erase(name.begin());
-					this->insert(name, defi);
-					name = tempLine;
-					defi.clear();
-					break;
+						name.erase(name.begin());
+						this->insert(name, defi);
+						name = tempLine;
+						defi.clear();
+						break;
+					}
+					else
+						defi += '\n' + tempLine;
 				}
-				else
-					defi += '\n' + tempLine;
+			}
+			name.erase(name.begin());
+			this->insert(name, defi);
+		}
+		else {
+			std::string name, type, def;
+			while (!fin.eof()) {
+				fin >> name >> type;
+				getline(fin, def);
+
+				def = "\n - " +  type + "\n - " + def;
+				while (def[0] == ' ')
+					def.erase(0, 1);
+
+				this->insert(name, def);
 			}
 		}
-		name.erase(name.begin());
-		this->insert(name, defi);
+
+		fin.close();
 	}
 
 	bool isLoaded() {
