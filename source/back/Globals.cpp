@@ -1,7 +1,7 @@
 #include "globals.h"
 
-TST EVtree;
-TST VEtree;
-TST EEtree;
-TST EMOtree;
-TST SLtree;
+TST* EVtree = new TST();
+TST* VEtree = new TST();
+TST* EEtree = new TST();
+TST* EMOtree = new TST();
+TST* SLtree = new TST();

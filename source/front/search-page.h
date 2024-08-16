@@ -43,7 +43,7 @@ public:
 	void OnRandomBtnClicked(wxCommandEvent&);
 
 private:
-	TST list; 
+	TST* list = new TST();
 	std::string currLang = "ENG_VIE"; 
 	std::string currType = "KEYWORD"; 
 	
