@@ -76,7 +76,12 @@ void resPage::clearScreen()
 
 SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT))
 {
-	list.loadWord("data/ev/data.txt"); 
+	// Load Eng-Viet dataset
+	if (!EVtree.isLoaded())
+		EVtree.loadWord(EVDATASET);
+
+	list.root = EVtree.root;
+
 	wxPanel* searchPanel = new wxPanel(this, wxID_ANY);
 
 	wxBoxSizer* searchBarSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -107,6 +112,7 @@ SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultP
 	box->findBox->Bind(wxEVT_TEXT, &SearchPage::OnFindBoxEnter, this);
 	box->language->Bind(wxEVT_COMBOBOX, &SearchPage::OnChooseLanguage, this); 
 	box->wordOrDefi->Bind(wxEVT_COMBOBOX, &SearchPage::OnChooseWordOrDefi, this); 
+
 
 	box->searchButton->Bind(wxEVT_BUTTON, &SearchPage::OnSearchBtnClicked, this);
 	box->randomButton->Bind(wxEVT_BUTTON, &SearchPage::OnRandomBtnClicked, this);
@@ -166,8 +172,20 @@ void SearchPage::OnChooseLanguage(wxCommandEvent& evt)
 	list.clear(list.root); 
 	if (box->wordOrDefi->GetValue() == "KEYWORD")
 	{
-		if (type == "ENG/VIE") list.loadWord("data/ev/data.txt");
-		else if (type == "VIE/ENG") list.loadWord("data/ve/data.txt");
+		if (type == "ENG/VIE") {
+			if (!EVtree.isLoaded())
+				EVtree.loadWord(EVDATASET);
+
+			list.root = EVtree.root;
+		}
+
+		else 
+			if (type == "VIE/ENG") {
+				if (!VEtree.isLoaded())
+					VEtree.loadWord(VEDATASET);
+
+				list.root = VEtree.root;
+			}
 	}
 	else
 	{

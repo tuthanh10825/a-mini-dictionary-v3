@@ -83,11 +83,12 @@ public:
 		std::u32string::iterator iter = prefix_str.begin(); 
 
 		TreeNode* curr = root; 
-		TreeNode* prev = 0; 
+		TreeNode* prev = nullptr; 
+
 		while (curr && (iter != prefix_str.end()))
 		{
 			prev = curr; 
-			if (*iter == curr->val)
+			if (curr!= nullptr && *iter == curr->val)
 			{
 				curr = curr->mid;
 				++iter;
@@ -96,9 +97,12 @@ public:
 			else curr = curr->right;
 			
 		}
+
 		if (iter != prefix_str.end()) return {}; 
 		vector<wxString> ans; 
-		if (prev->eow) ans.push_back(wxString(una::utf32to16(prefix))); 
+
+		if (prev!=nullptr &&  prev->eow) 
+			ans.push_back(wxString(una::utf32to16(prefix))); 
 		traverse(ans, prefix_str, 5, curr);
 		return ans;
 	}
@@ -210,6 +214,12 @@ public:
 		}
 		name.erase(name.begin());
 		this->insert(name, defi);
+	}
+
+	bool isLoaded() {
+		if (root == nullptr)
+			return false;
+		return true;
 	}
 private:
 	void traverse(vector<wxString>& ans, std::u32string currStr, int limit, TreeNode *currNode)

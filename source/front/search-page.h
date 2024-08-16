@@ -2,7 +2,7 @@
 #include <wx/wx.h>
 #include <wx/bmpcbox.h>
 #include <wx/fontutil.h>
-#include "tst.h"
+#include "Globals.h"
 class searchBox : public wxWindow
 {
 public: 
