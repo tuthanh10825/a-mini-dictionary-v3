@@ -1,19 +1,19 @@
-#include "search-page.h"
+﻿#include "search-page.h"
 
 searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
 	wxFont::AddPrivateFont("fonts/pala.ttf"); 
 	wxFont pala(25, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT, false, "Palatino Linotype");
 	language->SetFont(pala);  wordOrDefi->SetFont(pala); 
-	language->Append(wxString("ENG/ENG")); 
+	//language->Append(wxString("ENG/ENG")); 
 	language->Append(wxString("ENG/VIE")); 
 	language->Append(wxString("VIE/ENG")); 
-	language->Append(wxString("SLANG"));
-	language->Append(wxString("EMOTICON"));
+	//language->Append(wxString("SLANG"));
+	//language->Append(wxString("EMOTICON"));
 	language->SetSelection(0); 
 
 	wordOrDefi->Append(wxString("KEYWORD")); 
-	wordOrDefi->Append(wxString("DEFINITION")); 
+	//wordOrDefi->Append(wxString("DEFINITION")); 
 	wordOrDefi->SetSelection(0); 
 
 	 
@@ -76,6 +76,7 @@ void resPage::clearScreen()
 
 SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT))
 {
+	list.loadWord("data/ev/data.txt"); 
 	wxPanel* searchPanel = new wxPanel(this, wxID_ANY);
 
 	wxBoxSizer* searchBarSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -99,11 +100,13 @@ SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultP
 			this->box->findBox->ChangeValue(ans);
 			this->box->findBox->SetInsertionPointEnd();
 			this->box->findBox->SelectNone();
+			this->box->findBox->ChangeValue(ans);
 			this->box->findBox->Dismiss();
+			this->box->findBox->ChangeValue(ans);
 		});
 	box->findBox->Bind(wxEVT_TEXT, &SearchPage::OnFindBoxEnter, this);
-	
-	
+	box->language->Bind(wxEVT_COMBOBOX, &SearchPage::OnChooseLanguage, this); 
+	box->wordOrDefi->Bind(wxEVT_COMBOBOX, &SearchPage::OnChooseWordOrDefi, this); 
 
 	box->searchButton->Bind(wxEVT_BUTTON, &SearchPage::OnSearchBtnClicked, this);
 	box->randomButton->Bind(wxEVT_BUTTON, &SearchPage::OnRandomBtnClicked, this);
@@ -119,6 +122,7 @@ void SearchPage::OnFindBoxEnter(wxCommandEvent& evt)
 {
 
 	std::u32string word = una::utf8to32u(evt.GetString().utf8_string());
+	
 	while (!this->box->findBox->IsListEmpty()) this->box->findBox->Delete(0); 
 
 
@@ -128,14 +132,17 @@ void SearchPage::OnFindBoxEnter(wxCommandEvent& evt)
 	}
 	else
 	{
-		
+		this->box->findBox->ChangeValue(wxString(una::utf32to16(word)));		
 		this->box->findBox->Append(list.searchByPrefix(word));
 		if (!this->box->isDropdown) 
 			this->box->findBox->Popup();
-		
-		this->box->findBox->ChangeValue(wxString(una::utf32to8(word)));
- 		this->box->findBox->SetInsertionPointEnd(); 
+				
 		this->box->findBox->SelectNone();
+		this->box->findBox->ChangeValue(wxString(una::utf32to16(word)));
+ 		this->box->findBox->SetInsertionPointEnd(); 
+		
+		
+		
 		
 	}
 	
@@ -151,6 +158,44 @@ void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 	}
 	
 }
+void SearchPage::OnChooseLanguage(wxCommandEvent& evt)
+{
+	std::string type = evt.GetString().utf8_string();
+	if (type == currLang) return; 
+	
+	list.clear(list.root); 
+	if (box->wordOrDefi->GetValue() == "KEYWORD")
+	{
+		if (type == "ENG/VIE") list.loadWord("data/ev/data.txt");
+		else if (type == "VIE/ENG") list.loadWord("data/ve/data.txt");
+	}
+	else
+	{
+		return; 
+	} 
+	currLang = type; 
+	return;
+}
+
+void SearchPage::OnChooseWordOrDefi(wxCommandEvent& evt)
+{
+	std::string type = evt.GetString().utf8_string(); 
+	if (type == currType) return; 
+	
+	if (box->language->GetValue() == "ENG/VIE")
+	{
+		if (type == "DEFINTION"); 
+		else list.loadWord("data/ev/data.txt");
+	}
+	else if (box->language->GetValue() == "VIE/ENG")
+	{
+		if (type == "DEFINTION");
+		else list.loadWord("data/ve/data.txt");
+	}
+	currType = type; 
+	return; 
+}
+
 void SearchPage::OnRandomBtnClicked(wxCommandEvent&)
 {
 	this->res->clearScreen(); 

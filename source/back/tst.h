@@ -131,6 +131,7 @@ public:
 		delete(root); root = 0;
 		return;
 	}
+	
 
 	~TST()
 	{
@@ -178,6 +179,37 @@ public:
 			curr_root = curr_root->mid; 
 		}
 		return make_pair(ans, temp_root->defi);
+		
+	}
+	void loadWord(std::string filename)
+	{
+		std::ifstream fin; fin.open(filename);
+		if (!fin.is_open()) return;
+		//for (int i = 0; i < 3; ++i) fin.ignore();
+		std::string name; std::getline(fin, name);
+
+		std::string defi;
+		while (!fin.eof())
+		{
+			for (std::string tempLine; !fin.eof();)
+			{
+				std::getline(fin, tempLine);
+				if (fin.eof()) break;
+				if (tempLine[0] == '@')
+				{
+
+					name.erase(name.begin());
+					this->insert(name, defi);
+					name = tempLine;
+					defi.clear();
+					break;
+				}
+				else
+					defi += '\n' + tempLine;
+			}
+		}
+		name.erase(name.begin());
+		this->insert(name, defi);
 	}
 private:
 	void traverse(vector<wxString>& ans, std::u32string currStr, int limit, TreeNode *currNode)
@@ -197,38 +229,6 @@ private:
 	
 };
 
-static TST loadWord(std::string filename)
-{
-	TST ans; 
 
-	std::ifstream fin; fin.open(filename); 
-	if (!fin.is_open()) return ans; 
-	//for (int i = 0; i < 3; ++i) fin.ignore();
-	std::string name; std::getline(fin, name); 
-
-	std::string defi; 
-	while (!fin.eof())
-	{
-		for (std::string tempLine; !fin.eof();)
-		{
-			std::getline(fin, tempLine); 
-			if (fin.eof()) break;
-			if (tempLine[0] == '@')
-			{
-			
-				name.erase(name.begin());
-				ans.insert(name, defi);
-				name = tempLine; 
-				defi.clear();
-				break; 
-			}
-			else
-				defi += '\n' + tempLine; 
-		} 
-	}
-	name.erase(name.begin());
-	ans.insert(name, defi); 
-	return ans; 
-}
 
 

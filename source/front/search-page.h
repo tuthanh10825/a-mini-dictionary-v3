@@ -43,7 +43,12 @@ public:
 	void OnRandomBtnClicked(wxCommandEvent&);
 
 private:
-	TST list = loadWord("data/ev/data.txt");
+	TST list; 
+	std::string currLang = "ENG_VIE"; 
+	std::string currType = "KEYWORD"; 
+	
 	void OnFindBoxEnter(wxCommandEvent& evt);
 	void OnSearchBtnClicked(wxCommandEvent&); 
+	void OnChooseLanguage(wxCommandEvent& evt); 
+	void OnChooseWordOrDefi(wxCommandEvent& evt);
 };
