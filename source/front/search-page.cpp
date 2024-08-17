@@ -1,5 +1,5 @@
 ﻿#include "search-page.h"
-
+#include <sstream>
 searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
 	wxFont::AddPrivateFont("fonts/pala.ttf"); 
@@ -45,6 +45,7 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 }
 
 
+
 resPage::resPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
 	wxFont::AddPrivateFont(wxString("./fonts/pala.ttf"));
@@ -52,12 +53,14 @@ resPage::resPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	resWord->SetFont(font); 
 	editButton = new wxBitmapButton(this, wxID_ANY, wxBitmap(wxString("assets/result/edit-button.png"), wxBITMAP_TYPE_PNG));
 	favorButton = new wxBitmapButton(this, wxID_ANY, wxBitmap(wxString("assets/result/favorite-button.png"), wxBITMAP_TYPE_PNG));
+	favorButton->Bind(wxEVT_BUTTON, &resPage::OnFavouriteBtnClicked, this);
 	removeButton = new wxBitmapButton(this, wxID_ANY, wxBitmap(wxString("assets/result/remove-button.png"), wxBITMAP_TYPE_PNG));
 
 	wxBoxSizer* subSizer = new wxBoxSizer(wxVERTICAL); 
 	subSizer->Add(editButton, 1, wxEXPAND); 
 	subSizer->Add(favorButton, 1, wxEXPAND); 
 	subSizer->Add(removeButton, 1, wxEXPAND); 
+
 
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxHORIZONTAL); 
 	mainSizer->Add(subSizer, 0, wxEXPAND); 
@@ -74,6 +77,18 @@ void resPage::addingString(wxString total)
 void resPage::clearScreen()
 {
 	resWord->Clear();
+}
+
+
+void resPage::OnFavouriteBtnClicked(wxCommandEvent&) {
+	vector<word> temp = dataHisto;
+	dataFav.push_back(temp.back());
+	temp.pop_back();
+	while (!temp.empty()) {
+		if (temp.back().word != dataFav.back().word) return;
+		dataFav.push_back(temp.back());
+		temp.pop_back();
+	}
 }
 
 SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT))
@@ -126,6 +141,7 @@ SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultP
 	searchSizer->Add(res, 1, wxEXPAND);
 	this->SetSizerAndFit(searchSizer);
 }
+
 void SearchPage::OnFindBoxEnter(wxCommandEvent& evt)
 {
 
@@ -162,10 +178,59 @@ void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 	TST::TreeNode* ans = list->search(una::utf8to32u(this->box->findBox->GetValue().utf8_string()));
 	if (ans)
 	{
+		word newWord;
+		newWord.word = this->box->findBox->GetValue().utf8_string();
+		std::string defi = ans->defi;
+		std::stringstream ss(defi);
+		if (currLang == "ENG/VIE" or currLang == "VIE/ENG") {
+			defi.erase(0, 1);
+			while (defi[0] == '*') {
+				defi.erase(0, 1);
+				auto pos = defi.find_first_of("\n");
+				if (pos != std::string::npos) {
+					newWord.type = defi.substr(0, pos);
+					defi = defi.substr(pos+1);
+					pos = defi.find_first_of("*");
+					if (pos != std::string::npos) {
+						newWord.definition = defi.substr(0, pos);
+						defi = defi.substr(pos);
+					}
+					else {
+						newWord.definition = defi;
+						defi = "\0";
+					}
+					dataHisto.push_back(newWord);
+					if (defi[0] == '\0') break;
+				}
+			}
+		}
+		else if (currLang == "EMOTICON") {
+			auto pos = defi.find_first_of("(");
+			defi = defi.substr(pos + 1);
+			pos = defi.find_first_of(")");
+			if (pos != std::string::npos ) newWord.type = defi.substr(0, pos);
+			pos = defi.find_first_of("\t");
+			defi = defi.substr(pos + 1);
+			newWord.definition = defi;
+			defi = '\0';
+			dataHisto.push_back(newWord);
+		}
+		else {
+			auto pos = defi.find_first_of("(");
+			defi = defi.substr(pos + 1);
+			pos = defi.find_first_of(")");
+			if (pos != std::string::npos) newWord.type = defi.substr(0, pos);
+			defi = defi.substr(pos + 1);
+			newWord.definition = defi;
+			defi = '\0';
+			dataHisto.push_back(newWord);
+		}
 		this->res->addingString(wxString(una::utf8to16(this->box->findBox->GetValue().utf8_string())) + wxString(una::utf8to16(ans->defi)));
+		
 	}
 	
 }
+
 
 void SearchPage::OnChooseLanguage(wxCommandEvent& evt)
 {

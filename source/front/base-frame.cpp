@@ -180,5 +180,7 @@ void BaseFrame::OnHistoryBtnClicked(wxCommandEvent&) {
 }
 
 void BaseFrame::OnFavouriteBtnClicked(wxCommandEvent&) {
+    favouritePage->AppendRows(dataFav);
+    favouritePage->grid->ForceRefresh();
     workingPage->ChangeSelection(5);
 }

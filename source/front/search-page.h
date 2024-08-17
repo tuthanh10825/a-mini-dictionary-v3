@@ -26,9 +26,9 @@ public:
 	wxBitmapButton* favorButton; 
 	wxBitmapButton* removeButton;
 	wxFont font; 
-	wxTextCtrl* resWord = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY); 
+	wxTextCtrl* resWord = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY);
+	void OnFavouriteBtnClicked(wxCommandEvent&);
 	resPage(wxWindow*); 
-
 	void addingString(wxString); 
 	void clearScreen(); 
 	
@@ -44,7 +44,7 @@ public:
 
 private:
 	TST* list = new TST();
-	std::string currLang = "ENG_VIE"; 
+	std::string currLang = "ENG/VIE"; 
 	std::string currType = "KEYWORD"; 
 	
 	void OnFindBoxEnter(wxCommandEvent& evt);
