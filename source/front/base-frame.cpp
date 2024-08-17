@@ -174,6 +174,8 @@ void BaseFrame::OnMoreBtnClicked(wxCommandEvent&)
 }
 
 void BaseFrame::OnHistoryBtnClicked(wxCommandEvent&) {
+    historyPage->AppendRows(dataHisto);
+    historyPage->grid->ForceRefresh();
     workingPage->ChangeSelection(4);
 }
 

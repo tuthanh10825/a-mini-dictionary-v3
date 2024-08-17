@@ -36,13 +36,13 @@ ListWindow::ListWindow(wxWindow* parent, int mode, int isFavor) : wxWindow(paren
 
     if (isFavor) {
         if (dataFav.empty()) {
-            loadDataToGrid("data/favorite.txt", 1);
+            loadData("data/favorite.txt", 1);
             numberOfWords = dataFav.size();
         }
     }
     else {
         if (dataHisto.empty()) {
-            loadDataToGrid("data/history.txt", 0);
+            loadData("data/history.txt", 0);
         }
         numberOfWords = dataHisto.size();
     }
@@ -73,19 +73,28 @@ ListWindow::ListWindow(wxWindow* parent, int mode, int isFavor) : wxWindow(paren
 
    
     //Set cell properties
-    for (int i = 0; i < numberOfWords; ++i) {
+    while (numberOfWords--) {
+        std::string s = "";
         if (isFavor) {
-            grid->SetCellValue(i, 0, "  " + dataFav[i].word + " (" + dataFav[i].type + ")");
-            grid->SetCellValue(i, 1, " " + dataFav[i].definition);
+            if (dataFav[numberOfWords].type != "") s = " (" + dataFav[numberOfWords].type + ")";
+
+            grid->SetCellValue(numberOfWords, 0, wxString(una::utf8to16("  " + dataFav[numberOfWords].word + s)));
+            grid->SetCellValue(numberOfWords, 1, wxString(una::utf8to16(" " + dataFav[numberOfWords].definition)));
+            dataFav.pop_back();
         }
         else {
-            grid->SetCellValue(i, 0, "  " + dataHisto[i].word + " (" + dataHisto[i].type + ")");
-            grid->SetCellValue(i, 1, " " + dataHisto[i].definition);
+            if (dataHisto[numberOfWords].type != "") s = " (" + dataHisto[numberOfWords].type + ")";
+            grid->SetCellValue(numberOfWords, 0, wxString(una::utf8to16("  " + dataHisto[numberOfWords].word + s)));
+            grid->SetCellValue(numberOfWords, 1, wxString(una::utf8to16(" " + dataHisto[numberOfWords].definition)));
+            dataHisto.pop_back();
         }
-        grid->SetCellRenderer(i, 1, new wxGridCellAutoWrapStringRenderer());
-        grid->SetCellBackgroundColour(i, 0, nounColour); 
-        grid->SetCellTextColour(i, 0, nountext);
+        grid->SetCellRenderer(numberOfWords, 1, new wxGridCellAutoWrapStringRenderer());
+        grid->SetCellBackgroundColour(numberOfWords, 0, nounColour);
+        grid->SetCellTextColour(numberOfWords, 0, nountext);
+
     }
+
+   
     
 
     grid->SetMargins(0 - wxSYS_VSCROLL_X, 0 - wxSYS_HSCROLL_Y);
@@ -175,7 +184,26 @@ void ListWindow::OnSizeChange(wxSizeEvent&) {
 }
 
 
-bool ListWindow::loadDataToGrid(std::string path, int isFav) {
+void ListWindow::AppendRows(vector<word>& words) {
+    int size = words.size();
+    grid->InsertRows(0,size);
+    for (int i = 0; i < size; ++i) {
+        std::string s = "";
+        if (words[i].type != "") s = " (" + words[i].type + ")";
+        grid->SetCellValue(i, 0, wxString(una::utf8to16("  " + words[i].word + s)));
+        grid->SetCellValue(i, 1, wxString(una::utf8to16(" " + words[i].definition)));
+        grid->SetCellRenderer(i, 1, new wxGridCellAutoWrapStringRenderer());
+        grid->SetCellBackgroundColour(i, 0, wxColour(255, 221, 173));
+        grid->SetCellTextColour(i, 0, wxColour(4, 73, 153));
+    }
+    words.clear();
+    grid->SetMargins(0 - wxSYS_VSCROLL_X, 0 - wxSYS_HSCROLL_Y);
+    grid->AutoSizeColumn(0);
+    grid->SetColSize(1, 810);
+    grid->AutoSizeRows();
+}
+
+bool ListWindow::loadData(std::string path, int isFav) {
     std::ifstream fin(path);
     if (fin.is_open()) {
         while (!fin.eof()) {
