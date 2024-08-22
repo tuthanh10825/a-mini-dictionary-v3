@@ -92,6 +92,9 @@ void resPage::OnFavouriteBtnClicked(wxCommandEvent&) {
 			temp.pop_back();
 		}
 	}
+
+	wxString message = "Add success!";
+	wxMessageBox(message, "Notification", wxOK | wxICON_INFORMATION);
 }
 
 void resPage::OnRemoveBtnClicked(wxCommandEvent&)
