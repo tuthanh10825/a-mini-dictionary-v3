@@ -254,53 +254,73 @@ void GameSettingPage::OnPlayButtonClicked(wxCommandEvent&)
 {
 	wxFrame* gameFrame = new wxFrame(this, wxID_ANY, wxString("Play!"), wxDefaultPosition, wxDefaultSize);
 	int count = 10; 
-	if (chooseDefi->IsChecked())
-	{
-		if (chooseEngVie->IsChecked()) {
-			if (!EVtree->isLoaded())
-				EVtree->loadWord(EVDATASET);
-			list = EVtree;
-		}
 
-		// pair<std::u32string, std::string> ans = list->random();
-
-		DefiGameWindow* gamePlay = new DefiGameWindow(gameFrame, wxString("test"),
-			{
-				wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
-				wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
-				wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
-				wxString("An examination of somebody’s knowledge or ability, consisting of questions for them to answer or activities for them to perform"),
-
-			});
-		
+	list = EVtree;
+	if (chooseEngVie->IsChecked()) {
+		if (!EVtree->isLoaded())
+			EVtree->loadWord(EVDATASET);
+		list = EVtree;
 	}
-	else
-	{
-	
-		wordGameWindow* gamePlay = new wordGameWindow(gameFrame, wxString("a way of discovering, by questions or practical activities, what someone knows, or what someone or something can do or is like"),
-			{
-				wxString("test"),
-				wxString("practice"),
-				wxString("trial"),
-				wxString("verification")
-			});
-		
+	else if (chooseEngEng->IsChecked()) {
+		if (!EEtree->isLoaded())
+			EEtree->loadWord(EEDATASET);
+		list = EEtree;
 	}
+	else if (chooseEmoticon->IsChecked()) {
+		if (!EMOtree->isLoaded())
+			EMOtree->loadWord(EMODATASET);
+		list = EMOtree;
+	}
+	else if (chooseVieEng->IsChecked()) {
+		if (!VEtree->isLoaded())
+			VEtree->loadWord(VEDATASET);
+		list = VEtree;
+	}
+	else if (chooseSlang->IsChecked()) {
+		if (!SLtree->isLoaded())
+			SLtree->loadWord(SLDATASET);
+		list = SLtree;
+	}
+
+
+	StartGameRound(gameFrame, 5, 1);
+
+
 	gameFrame->SetClientSize(wxSize(WIDTH, HEIGHT));
 	gameFrame->SetSizeHints(wxSize(WIDTH, 700));
 	gameFrame->Show(true);
-	/*gameFrame->Bind(wxEVT_BUTTON, [&count](wxCommandEvent& event)
-		{
-			if (ans == true) count--;
-			else
-			{
-				gamePlay = new DefiGame...()
-			}
-			if (count == 0)
-			{
-				wxMessageBox("You win!");
-				gameFrame->Close();
-
-			});*/
 	return; 
+}
+
+void GameSettingPage::StartGameRound(wxFrame* gameFrame, int totalRounds, int currentRound)
+{
+	if (currentRound > totalRounds) {
+		wxMessageBox("Game Over!", "Result", wxOK | wxICON_INFORMATION);
+		return;
+	}
+
+	if (chooseDefi->IsChecked())
+	{
+		pair<std::u32string, std::string> ans = list->random();
+		wxString ques = wxString(una::utf32to16(ans.first));
+		wxString ans1 = wxString::FromUTF8(ans.second);
+		wxString ans2 = wxString::FromUTF8(list->random().second);
+		wxString ans3 = wxString::FromUTF8(list->random().second);
+		wxString ans4 = wxString::FromUTF8(list->random().second);
+
+		Question tempQ(ques, ans1, ans2, ans3, ans4, 0);
+
+		DefiGameWindow* gamePlay = new DefiGameWindow(gameFrame, tempQ);
+
+		gamePlay->Bind(wxEVT_CLOSE_WINDOW, [=](wxCloseEvent&) {
+
+			StartGameRound(gameFrame, totalRounds, currentRound + 1);
+			});
+
+		gamePlay->Show();
+	}
+	else
+	{
+		// Your existing logic for wordGameWindow...
+	}
 }

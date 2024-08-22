@@ -1,7 +1,6 @@
 #pragma once
 #include "wx/wx.h"
 #include "gameplay-page.h"
-#include "properties.h"
 #include <wx/spinctrl.h>
 #include "Globals.h"
 
@@ -33,4 +32,6 @@ public:
 	void OnInfiniteClicked(wxCommandEvent&); 
 
 	void OnPlayButtonClicked(wxCommandEvent&); 
+
+	void StartGameRound(wxFrame* gameFrame, int totalRounds, int currentRound);
 };

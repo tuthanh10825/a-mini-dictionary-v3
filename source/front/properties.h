@@ -36,3 +36,7 @@
 #define SELECTALLICON_IMG "assets/icons/select-icon.png"
 
 #define BLUEBLACK wxColour(33, 38, 79)
+
+
+#define Pala30 "Palatino Linotype 30 WINDOWS-1252"
+#define Pala15 "Palatino Linotype 15 WINDOWS-1252"
