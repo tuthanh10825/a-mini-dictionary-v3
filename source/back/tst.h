@@ -74,7 +74,7 @@ public:
 			
 		}
 		prev->eow = true; 
-		prev->defi = value;
+		prev->defi += value;
 		return; 
 	}
 	vector<wxString> searchByPrefix(std::u32string prefix)
@@ -205,7 +205,8 @@ public:
 					if (tempLine[0] == '@')
 					{
 
-						name.erase(name.begin());
+						name.erase(name.begin()); 
+						while (name.back() == ' ') name.pop_back(); 
 						this->insert(name, defi);
 						name = tempLine;
 						defi.clear();

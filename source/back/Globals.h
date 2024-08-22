@@ -1,5 +1,7 @@
 #pragma once
 #include "tst.h"
+#include "suffix-array.h"
+
 #define EVDATASET "data/ev/data.txt"
 #define VEDATASET "data/ve/data.txt"
 #define EEDATASET "data/ee/data.txt"
@@ -21,3 +23,9 @@ extern TST* SLtree;
 
 
 extern std::vector<word> dataHisto, dataFav;
+
+static suffixArr EEDef; 
+static suffixArr EVDef; 
+static suffixArr VEDef;
+static suffixArr SLDef; 
+static suffixArr EMODef; 

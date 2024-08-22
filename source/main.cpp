@@ -9,5 +9,13 @@ class myApp : public wxApp
 		baseFrame->Show(true); 
 		return true; 
 	}
+	~myApp()
+	{
+		delete EVtree;
+		delete EEtree;
+		delete VEtree;
+		delete EMOtree;
+		delete SLtree;
+	}
 };
 wxIMPLEMENT_APP(myApp);

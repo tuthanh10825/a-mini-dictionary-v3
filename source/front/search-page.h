@@ -43,12 +43,12 @@ public:
 	void OnRandomBtnClicked(wxCommandEvent&);
 
 private:
-	TST* list = new TST();
-	std::string currLang = "ENG/VIE"; 
+	TST* list; 
+	suffixArr* defi; 
+	std::string currLang = "ENG/ENG"; 
 	std::string currType = "KEYWORD"; 
 	
 	void OnFindBoxEnter(wxCommandEvent& evt);
 	void OnSearchBtnClicked(wxCommandEvent&); 
 	void OnChooseLanguage(wxCommandEvent& evt); 
-	void OnChooseWordOrDefi(wxCommandEvent& evt);
 };
