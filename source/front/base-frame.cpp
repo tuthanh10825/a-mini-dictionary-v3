@@ -173,14 +173,19 @@ void BaseFrame::OnMoreBtnClicked(wxCommandEvent&)
     workingPage->ChangeSelection(3); 
 }
 
-void BaseFrame::OnHistoryBtnClicked(wxCommandEvent&) {
-    historyPage->AppendRows(dataHisto);
-    historyPage->grid->ForceRefresh();
+void BaseFrame::OnHistoryBtnClicked(wxCommandEvent& evt) {
+    historyPage->AppendRows(dataHisto, 0);
+ 
+    int trueSize = historyPage -> grid->GetVirtualSize().x - historyPage -> grid->GetColSize(0) - 85;
+    historyPage -> grid->SetColSize(1, trueSize);
+    historyPage -> grid->ForceRefresh();
     workingPage->ChangeSelection(4);
 }
 
 void BaseFrame::OnFavouriteBtnClicked(wxCommandEvent&) {
-    favouritePage->AppendRows(dataFav);
+    favouritePage->AppendRows(dataFav, 1);
+    int trueSize = favouritePage->grid->GetVirtualSize().x - favouritePage->grid->GetColSize(0) - 85;
+    favouritePage->grid->SetColSize(1, trueSize);
     favouritePage->grid->ForceRefresh();
     workingPage->ChangeSelection(5);
 }

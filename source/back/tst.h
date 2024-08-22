@@ -74,7 +74,7 @@ public:
 			
 		}
 		prev->eow = true; 
-		prev->defi = value;
+		prev->defi += value;
 		return; 
 	}
 	vector<wxString> searchByPrefix(std::u32string prefix)
@@ -209,7 +209,8 @@ public:
 					if (tempLine[0] == '@')
 					{
 
-						name.erase(name.begin());
+						name.erase(name.begin()); 
+						while (name.back() == ' ') name.pop_back(); 
 						this->insert(name, defi);
 						name = tempLine;
 						defi.clear();
@@ -244,6 +245,36 @@ public:
 			return false;
 		return true;
 	}
+
+	int delete_word(TreeNode*& root, std::u32string word, int level)
+	{
+		if (!root) return 0;
+		if (word[static_cast<std::basic_string<char32_t, std::char_traits<char32_t>, std::allocator<char32_t>>::size_type>(level) + 1] == U'\0')
+		{
+			if (root->eow == true)
+			{
+				root->eow = false;
+				root->defi.clear();
+			}
+			if (!root->left && !root->mid && !root->right)
+				return 1;
+			else return 0;
+		}
+		if (word[level] > root->val)
+			delete_word(root->right, word, level);
+		if (word[level] < root->val)
+			delete_word(root->left, word, level);
+		if (word[level] == root->val)
+		{
+			if (delete_word(root->mid, word, level + 1))
+				delete(root->mid);
+			if (!root->left && !root->right && !root->mid && !root->eow)
+				return 1;
+			else return 0;
+		}
+		return 0;
+	}
+
 private:
 	void traverse(vector<wxString>& ans, std::u32string currStr, int limit, TreeNode *currNode)
 	{

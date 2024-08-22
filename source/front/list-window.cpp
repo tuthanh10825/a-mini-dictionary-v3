@@ -35,14 +35,16 @@ ListWindow::ListWindow(wxWindow* parent, int mode, int isFavor) : wxWindow(paren
     int numberOfWords = 0;
 
     if (isFavor) {
-        if (dataFav.empty()) {
+        if (!isLoaded) {
             loadData("data/favorite.txt", 1);
             numberOfWords = dataFav.size();
+            isLoaded = true;
         }
     }
     else {
-        if (dataHisto.empty()) {
+        if (!isLoaded) {
             loadData("data/history.txt", 0);
+            isLoaded = true;
         }
         numberOfWords = dataHisto.size();
     }
@@ -184,10 +186,22 @@ void ListWindow::OnSizeChange(wxSizeEvent&) {
 }
 
 
-void ListWindow::AppendRows(vector<word>& words) {
+void ListWindow::AppendRows(vector<word>& words, int isFav) {
+    if (!isLoaded) {
+        if (isFav) {
+            loadData("data/favorite.txt", 1);
+            isLoaded = true;
+        }
+    }
+    else {
+        if (!isLoaded) {
+            loadData("data/history.txt", 0);
+            isLoaded = true;
+        }
+    }
     int size = words.size();
     grid->InsertRows(0,size);
-    for (int i = 0; i < size; ++i) {
+    for (int i = size - 1; i >= 0; --i) {
         std::string s = "";
         if (words[i].type != "") s = " (" + words[i].type + ")";
         grid->SetCellValue(i, 0, wxString(una::utf8to16("  " + words[i].word + s)));
