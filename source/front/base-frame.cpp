@@ -174,7 +174,7 @@ void BaseFrame::OnMoreBtnClicked(wxCommandEvent&)
 }
 
 void BaseFrame::OnHistoryBtnClicked(wxCommandEvent& evt) {
-    historyPage->AppendRows(dataHisto);
+    historyPage->AppendRows(dataHisto, 0);
  
     int trueSize = historyPage -> grid->GetVirtualSize().x - historyPage -> grid->GetColSize(0) - 85;
     historyPage -> grid->SetColSize(1, trueSize);
@@ -183,7 +183,7 @@ void BaseFrame::OnHistoryBtnClicked(wxCommandEvent& evt) {
 }
 
 void BaseFrame::OnFavouriteBtnClicked(wxCommandEvent&) {
-    favouritePage->AppendRows(dataFav);
+    favouritePage->AppendRows(dataFav, 1);
     int trueSize = favouritePage->grid->GetVirtualSize().x - favouritePage->grid->GetColSize(0) - 85;
     favouritePage->grid->SetColSize(1, trueSize);
     favouritePage->grid->ForceRefresh();

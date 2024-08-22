@@ -49,6 +49,7 @@ private:
 	std::string currLang = "ENG/ENG"; 
 	std::string currType = "KEYWORD"; 
 	
+	void insertHistory(TST::TreeNode* ans);
 	void OnFindBoxEnter(wxCommandEvent& evt);
 	void OnSearchBtnClicked(wxCommandEvent&); 
 	void OnChooseLanguage(wxCommandEvent& evt); 

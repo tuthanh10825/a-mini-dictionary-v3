@@ -14,10 +14,10 @@
 class ListWindow : public wxWindow {
 	public:
 		ListWindow(wxWindow* parent, int mode, int isFavor);
-		void AppendRows(vector<word>& words);
+		void AppendRows(vector<word>& words, int isFav);
 		wxGrid* grid;
 private:
-
+	bool isLoaded = false;
 	// Need to implement
 	// Finished
 	bool loadData(std::string path, int isFav);
