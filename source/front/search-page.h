@@ -28,6 +28,7 @@ public:
 	wxFont font; 
 	wxTextCtrl* resWord = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY);
 	void OnFavouriteBtnClicked(wxCommandEvent&);
+	void OnRemoveBtnClicked(wxCommandEvent&);
 	resPage(wxWindow*); 
 	void addingString(wxString); 
 	void clearScreen(); 

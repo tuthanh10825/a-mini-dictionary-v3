@@ -55,6 +55,7 @@ resPage::resPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	favorButton = new wxBitmapButton(this, wxID_ANY, wxBitmap(wxString("assets/result/favorite-button.png"), wxBITMAP_TYPE_PNG));
 	favorButton->Bind(wxEVT_BUTTON, &resPage::OnFavouriteBtnClicked, this);
 	removeButton = new wxBitmapButton(this, wxID_ANY, wxBitmap(wxString("assets/result/remove-button.png"), wxBITMAP_TYPE_PNG));
+	removeButton->Bind(wxEVT_BUTTON, &resPage::OnRemoveBtnClicked, this);
 
 	wxBoxSizer* subSizer = new wxBoxSizer(wxVERTICAL); 
 	subSizer->Add(editButton, 1, wxEXPAND); 
@@ -89,6 +90,11 @@ void resPage::OnFavouriteBtnClicked(wxCommandEvent&) {
 		dataFav.push_back(temp.back());
 		temp.pop_back();
 	}
+}
+
+void resPage::OnRemoveBtnClicked(wxCommandEvent&)
+{
+
 }
 
 SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT))
