@@ -153,6 +153,5 @@ private:
 			k *= 2;
 		}
 	}
-	private: 
-		
+
 };
