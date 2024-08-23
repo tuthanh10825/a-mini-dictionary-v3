@@ -1,7 +1,6 @@
 #include "more-page.h"
 #include "properties.h"
 #include "Globals.h"
-#include "base-frame.h"
 
 MoreWindow::MoreWindow(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
