@@ -26,6 +26,8 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	addButton = new wxBitmapButton(this, wxID_ANY, wxBitmap("assets/search/add-button.png", wxBITMAP_TYPE_PNG)); 
 	resetButton = new wxBitmapButton(this, wxID_ANY, wxBitmap("assets/search/reset-button.png", wxBITMAP_TYPE_PNG));
 
+	
+
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxHORIZONTAL); 
 	mainSizer->Add(language, 1, wxEXPAND); 
 	mainSizer->Add(wordOrDefi, 1, wxEXPAND);
@@ -55,7 +57,6 @@ resPage::resPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	favorButton = new wxBitmapButton(this, wxID_ANY, wxBitmap(wxString("assets/result/favorite-button.png"), wxBITMAP_TYPE_PNG));
 	favorButton->Bind(wxEVT_BUTTON, &resPage::OnFavouriteBtnClicked, this);
 	removeButton = new wxBitmapButton(this, wxID_ANY, wxBitmap(wxString("assets/result/remove-button.png"), wxBITMAP_TYPE_PNG));
-	removeButton->Bind(wxEVT_BUTTON, &resPage::OnRemoveBtnClicked, this);
 
 	wxBoxSizer* subSizer = new wxBoxSizer(wxVERTICAL); 
 	subSizer->Add(editButton, 1, wxEXPAND); 
@@ -90,11 +91,6 @@ void resPage::OnFavouriteBtnClicked(wxCommandEvent&) {
 		dataFav.push_back(temp.back());
 		temp.pop_back();
 	}
-}
-
-void resPage::OnRemoveBtnClicked(wxCommandEvent&)
-{
-
 }
 
 SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT))
@@ -142,6 +138,7 @@ SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultP
 
 
 	res = new resPage(this);
+	this->res->removeButton->Bind(wxEVT_BUTTON, &SearchPage::OnRemoveBtnClicked, this);
 	wxBoxSizer* searchSizer = new wxBoxSizer(wxVERTICAL);
 	searchSizer->Add(searchPanel, 0, wxEXPAND);
 	searchSizer->Add(res, 1, wxEXPAND);
@@ -205,7 +202,10 @@ void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 						newWord.definition = defi;
 						defi = "\0";
 					}
+					//word to be deleted
+					deleted_word = una::utf8to32u(newWord.word);
 					dataHisto.push_back(newWord);
+
 					if (defi[0] == '\0') break;
 				}
 			}
@@ -219,6 +219,8 @@ void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 			defi = defi.substr(pos + 1);
 			newWord.definition = defi;
 			defi = '\0';
+			//word to be deleted
+			deleted_word = una::utf8to32u(newWord.word);
 			dataHisto.push_back(newWord);
 		}
 		else {
@@ -229,6 +231,8 @@ void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 			defi = defi.substr(pos + 1);
 			newWord.definition = defi;
 			defi = '\0';
+			//word to be deleted
+			deleted_word = una::utf8to32u(newWord.word);
 			dataHisto.push_back(newWord);
 		}
 		this->res->addingString(wxString(una::utf8to16(this->box->findBox->GetValue().utf8_string())) + wxString(una::utf8to16(ans->defi)));
@@ -331,4 +335,33 @@ void SearchPage::OnRandomBtnClicked(wxCommandEvent&)
 	pair<std::u32string, std::string> ans = list->random();
 	this->res->addingString(wxString(una::utf32to16(ans.first)) + wxString(una::utf8to16(ans.second))); 
 	return; 
+}
+
+void SearchPage::OnRemoveBtnClicked(wxCommandEvent&)
+{
+	std::u32string str = deleted_word;
+	str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
+	
+	if (this->currLang == "ENG/VIE")
+	{
+		this->list->delete_word(list->root, str, "data/ev/delete.txt");
+	}
+	else if (this->currLang == "VIE/ENG")
+	{
+		this->list->delete_word(list->root, str, VEDELETE);
+	}
+	else if (this->currLang == "ENG/ENG")
+	{
+		this->list->delete_word(list->root, str, EEDELETE);
+	}
+	else if (this->currLang == "EMOTICON")
+	{
+		this->list->delete_word(list->root, str, EMODELETE);
+	}
+	else if (this->currLang == "SLANG")
+	{
+		this->list->delete_word(list->root, str, SLDELETE);
+	}
+	//wxMessageBox("Delete successfully","successfully", wxOK | wxICON_INFORMATION);
+	return;
 }
