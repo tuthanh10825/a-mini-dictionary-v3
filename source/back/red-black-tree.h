@@ -7,7 +7,7 @@ class redBlackTree <T>
 private:
 	struct TreeNode
 	{
-		int val = -1;
+		T val = -1;
 		TreeNode* left;
 		TreeNode* right;
 		TreeNode* p;
