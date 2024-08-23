@@ -6,4 +6,5 @@ public:
 	wxBitmapButton* darkmodeButton; 
 	MoreWindow(wxWindow*);
 	void OnUserManualClicked(wxCommandEvent&); 
+	void OnDarkmodeClicked(wxCommandEvent&);
 };

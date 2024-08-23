@@ -13,7 +13,7 @@
 
 class ListWindow : public wxWindow {
 	public:
-		ListWindow(wxWindow* parent, int mode, int isFavor);
+		ListWindow(wxWindow* parent, int isFavor);
 		void AppendRows(vector<word>& words, int isFav);
 		wxGrid* grid;
 private:
