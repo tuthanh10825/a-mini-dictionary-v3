@@ -242,33 +242,48 @@ public:
 		return true;
 	}
 
-	int delete_word(TreeNode*& root, std::u32string word, int level)
-	{
-		if (!root) return 0;
-		if (word[static_cast<std::basic_string<char32_t, std::char_traits<char32_t>, std::allocator<char32_t>>::size_type>(level) + 1] == U'\0')
-		{
-			if (root->eow == true)
-			{
-				root->eow = false;
-				root->defi.clear();
+	TreeNode* deleteHelper(TreeNode* node, std::u32string& word, int depth) {
+		if (!node) return nullptr;
+
+		char currentChar = word[depth];
+
+		if (currentChar < node->val) {
+			node->left = deleteHelper(node->left, word, depth);
+		}
+		else if (currentChar > node->val) {
+			node->right = deleteHelper(node->right, word, depth);
+		}
+		else {
+		
+			if (depth + 1 == word.size()) {
+				
+				if (node->eow) {
+					node->eow = false;
+				}
 			}
-			if (!root->left && !root->mid && !root->right)
-				return 1;
-			else return 0;
+			else {
+				node->mid = deleteHelper(node->mid, word, depth + 1);
+			}
+
+		
+			if (!node->eow && !node->left && !node->mid && !node->right) {
+				delete node;
+				node = nullptr;
+			}
 		}
-		if (word[level] > root->val)
-			delete_word(root->right, word, level);
-		if (word[level] < root->val)
-			delete_word(root->left, word, level);
-		if (word[level] == root->val)
-		{
-			if (delete_word(root->mid, word, level + 1))
-				delete(root->mid);
-			if (!root->left && !root->right && !root->mid && !root->eow)
-				return 1;
-			else return 0;
-		}
-		return 0;
+		return node;
+	}
+
+	void delete_word(TreeNode*& root, std::u32string& word, std::string filename) {
+		root = deleteHelper(root, word, 0);
+		std::ofstream fout;
+		fout.open(filename, std::ios::app);
+		std::string s = una::utf32to8(word);
+		if (fout.is_open()) { fout << "hi"; }
+		else return;
+		fout << std::endl;
+		fout.close();
+		wxMessageBox("Delete successfully", "successfully", wxOK | wxICON_INFORMATION);
 	}
 
 private:
