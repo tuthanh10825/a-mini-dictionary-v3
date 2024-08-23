@@ -9,5 +9,9 @@ TST* EMOtree = new TST();
 TST* SLtree = new TST();
 
 
+std::u32string deleted_word;
+
+
 bool LIGHTMODE = true;
 std::vector<word> dataHisto, dataFav;
+

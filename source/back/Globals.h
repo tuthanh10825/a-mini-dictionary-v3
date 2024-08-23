@@ -8,12 +8,20 @@
 #define EMODATASET "data/emo/data.txt"
 #define SLDATASET "data/slang/data.txt"
 
+#define EVDELETE "data/ev/delete.txt"
+#define VEDELETE "data/ve/delete.txt"
+#define EEDELETE "data/ee/delete.txt"
+#define EMODELETE "data/emo/delete.txt"
+#define SLDELETE "data/slang/delete.txt"
+
 
 struct word {
 	std::string word;
 	std::string type;
 	std::string definition;
 };
+
+extern bool LIGHTMODE;
 
 extern TST* EVtree;
 extern TST* VEtree;
@@ -24,8 +32,13 @@ extern TST* SLtree;
 extern bool LIGHTMODE;
 extern std::vector<word> dataHisto, dataFav;
 
+
+extern std::vector<word> dataHisto, dataFav;
+extern std::u32string deleted_word;
+
 static suffixArr EEDef; 
 static suffixArr EVDef; 
 static suffixArr VEDef;
 static suffixArr SLDef; 
 static suffixArr EMODef; 
+

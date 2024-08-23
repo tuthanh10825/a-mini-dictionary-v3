@@ -57,11 +57,11 @@ HomePage::HomePage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	
 	rightPanel->SetSizerAndFit(rightSizer); 
 	
-	//for left panel. 
+	// for left panel. 
 	wxPanel* leftPanel = new wxPanel(this, wxID_ANY);
 	leftPanel->SetBackgroundColour(background); 
 
-	wxBoxSizer* centeringSizer = new wxBoxSizer(wxVERTICAL); 
+	wxBoxSizer* centeringSizer = new wxBoxSizer(wxVERTICAL);
 
 	wxPanel* subPanel = new wxPanel(leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize);
 	subPanel->SetBackgroundColour(background); 
@@ -69,25 +69,47 @@ HomePage::HomePage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	centeringSizer->Add(subPanel, 1, wxALL | wxEXPAND, 100);
 	leftPanel->SetSizerAndFit(centeringSizer);
 
-	wxBoxSizer* wotdSizer = new wxBoxSizer(wxVERTICAL); 
+	wxBoxSizer* wotdSizer = new wxBoxSizer(wxVERTICAL);
 
 	wxBitmap* wotdBitmap = new wxBitmap("assets/homepage/word-of-the-day"+s+".png", wxBITMAP_TYPE_PNG); 
 	wxStaticBitmap* wordOfTheDay = new wxStaticBitmap(subPanel, wxID_ANY, *wotdBitmap); 
 	wotdSizer->Add(wordOfTheDay, 1); 
 
-	wordPanel = new wxPanel(subPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER); 
+	wordPanel = new wxPanel(subPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER);
 
-	wotdSizer->Add(wordPanel, 3, wxEXPAND); 
+	// Add content to wordPanel
+	wxBoxSizer* wordSizer = new wxBoxSizer(wxVERTICAL);
+
+	if (!EEtree->isLoaded())
+		EEtree->loadWord(EEDATASET);
+	auto randomText = EEtree->random();
+	wxString wordText = wxString(una::utf32to16(randomText.first));
+	std::string defText = randomText.second;
+
+	wxStaticText* wordInfo = new wxStaticText(wordPanel, wxID_ANY, wordText, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
+	wxFont::AddPrivateFont("fonts/pala.ttf");
+	wxFont pala(40, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT, false, "Palatino Linotype");
+	wordInfo->SetFont(pala);
+
+	wxStaticText* defInfo = new wxStaticText(wordPanel, wxID_ANY, defText, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
+	wxFont pala20(20, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT, false, "Palatino Linotype");
+	defInfo->SetFont(pala20);
+
+	// Add components with proportion 0 to avoid extra spacing
+	wordSizer->Add(wordInfo, 0, wxALL | wxALIGN_LEFT, 10);
+	wordSizer->Add(defInfo, 0, wxALL | wxALIGN_LEFT, 5);
+	wordPanel->SetSizerAndFit(wordSizer);
+
+	wotdSizer->Add(wordPanel, 3, wxEXPAND);
 	subPanel->SetSizerAndFit(wotdSizer);
-	
-	
-	
-	
-	//handle left & right.
-	wxBoxSizer* mainSizer = new wxBoxSizer(wxHORIZONTAL); 
-	mainSizer->Add(leftPanel, 1, wxEXPAND); 
+
+
+	// handle left & right.
+	wxBoxSizer* mainSizer = new wxBoxSizer(wxHORIZONTAL);
+	mainSizer->Add(leftPanel, 1, wxEXPAND);
 	mainSizer->Add(rightPanel, 1, wxEXPAND);
 
-	this->SetSizerAndFit(mainSizer); 
-	return; 
+	this->SetSizerAndFit(mainSizer);
+	return;
+
 }
