@@ -22,10 +22,10 @@ BaseFrame::BaseFrame(const wxString& title)
     moreWindow = new MoreWindow(workingPage);
     workingPage->AddPage(moreWindow, wxString("more")); 
 
-    historyPage = new ListWindow(workingPage, 0, 0);
+    historyPage = new ListWindow(workingPage, 0);
     workingPage->AddPage(historyPage, wxString("History"));
 
-    favouritePage = new ListWindow(workingPage, 0, 1);
+    favouritePage = new ListWindow(workingPage, 1);
     workingPage->AddPage(favouritePage, wxString("Favourite"));
 
     LoadNavigation(); 
@@ -49,11 +49,18 @@ void BaseFrame::LoadHeader()
 
     wxPanel* leftHeaderPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 0), wxSize(1156.5, 154.5));
     LoadImage(NAME_IMG, leftHeaderPanel);
-    leftHeaderPanel->SetBackgroundColour(BLUEBLACK);
+    if (LIGHTMODE) {
+        leftHeaderPanel->SetBackgroundColour(LIGHTMODE_labelANDHeaderColor);
+    }
+    else leftHeaderPanel->SetBackgroundColour(DARKMODE_HeaderColor);
 
     wxPanel* rightHeaderPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 1156.5), wxSize(1451.25 - 1156.5, 154.5));
     LoadImage(LOGO_IMG, rightHeaderPanel);
-    rightHeaderPanel->SetBackgroundColour(WHITE);
+
+    if (LIGHTMODE) {
+        rightHeaderPanel->SetBackgroundColour(LIGHTMODE_backgroundANDNaviColor);
+    } else rightHeaderPanel->SetBackgroundColour(DARKMODE_backgroundColor);
+    
 
     wxBoxSizer* headerSizer = new wxBoxSizer(wxHORIZONTAL);
 
@@ -67,7 +74,7 @@ void BaseFrame::LoadHeader()
 void BaseFrame::loadFooter()
 {
     wxPanel* footer = new wxPanel(this, wxID_ANY, wxPoint(0, 849.75), wxSize(1451.25, 30));
-    footer->SetBackgroundColour(BLUEBLACK);
+    footer->SetBackgroundColour(LIGHTMODE_labelANDHeaderColor);
     LoadImage(FOOTER_IMG, footer);
 
     mainSizer->Add(footer, 0, wxALL | wxEXPAND); 
@@ -75,22 +82,28 @@ void BaseFrame::loadFooter()
 void BaseFrame::LoadNavigation()
 {
     wxPanel* naviPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 156), wxSize(1451.25, 63.13), wxBORDER_SIMPLE);
-    naviPanel->SetBackgroundColour(WHITE); 
+    wxColour background;
+    if (LIGHTMODE) {
+        background = LIGHTMODE_backgroundANDNaviColor;
+    }
+    else background = DARKMODE_backgroundColor;
 
+    naviPanel->SetBackgroundColour(background);
     
-    wxBitmap homeBtnBitmap(HOMEICON_IMG, wxBITMAP_TYPE_PNG);
-    wxBitmap dictionaryBtnBitmap(SEARCHICON_IMG, wxBITMAP_TYPE_PNG);
-    wxBitmap gameBtnBitmap(GAMEICON_IMG, wxBITMAP_TYPE_PNG);
-    wxBitmap historyBtnBitmap(HISTORYICON_IMG, wxBITMAP_TYPE_PNG);
-    wxBitmap favoriteBtnBitmap(FAVORITEICON_IMG, wxBITMAP_TYPE_PNG);
-    wxBitmap moreBtnBitmap(MOREICON_IMG, wxBITMAP_TYPE_PNG);
+    std::string s;
+    if (LIGHTMODE) s = ""; else s = '1';
+    wxBitmap homeBtnBitmap("assets/icons/home-icon" + s + ".png", wxBITMAP_TYPE_PNG);
+    wxBitmap dictionaryBtnBitmap("assets/icons/search-icon"+s+".png", wxBITMAP_TYPE_PNG);
+    wxBitmap gameBtnBitmap("assets/icons/game-icon" + s + ".png", wxBITMAP_TYPE_PNG);
+    wxBitmap historyBtnBitmap("assets/icons/history-icon" + s + ".png", wxBITMAP_TYPE_PNG);
+    wxBitmap favoriteBtnBitmap("assets/icons/favourite-icon"+s+".png", wxBITMAP_TYPE_PNG);
+    wxBitmap moreBtnBitmap("assets/icons/more-icon"+s+".png", wxBITMAP_TYPE_PNG);
     //wxBitmap homeBtnBitmap(HOMEICON_IMG, wxBITMAP_TYPE_PNG);
 
 
     // Create the bitmap button
 
     //wxBitmapButton* homeBtn = new wxBitmapButton(parent, wxID_ANY, homeBtnBitmap, wxDefaultPosition, wxSize(width, height));
-
     
     double distance = (1451.25 / 6); 
     wxBitmapButton* homeBtn = new wxBitmapButton(naviPanel, wxID_ANY, homeBtnBitmap, wxDefaultPosition, wxSize((1451.25 / 6), 63.13));
@@ -99,6 +112,13 @@ void BaseFrame::LoadNavigation()
     wxBitmapButton* historyBtn = new wxBitmapButton(naviPanel, wxID_ANY, historyBtnBitmap, wxPoint(3 * distance, 0), wxSize(1451.25 / 6, 63.13));
     wxBitmapButton* favoriteBtn = new wxBitmapButton(naviPanel, wxID_ANY, favoriteBtnBitmap, wxPoint(4 * distance, 0), wxSize(1451.25 / 6, 63.13));
     wxBitmapButton* moreBtn = new wxBitmapButton(naviPanel, wxID_ANY, moreBtnBitmap, wxPoint(5 * distance, 0), wxSize(1451.25 / 6, 63.13));
+
+    homeBtn->SetBackgroundColour(background);
+    dictionaryBtn->SetBackgroundColour(background);
+    gameBtn->SetBackgroundColour(background);
+    historyBtn->SetBackgroundColour(background);
+    favoriteBtn->SetBackgroundColour(background);
+    moreBtn->SetBackgroundColour(background);
 
     wxBoxSizer* horiNaviPanel = new wxBoxSizer(wxHORIZONTAL);
 
@@ -173,14 +193,19 @@ void BaseFrame::OnMoreBtnClicked(wxCommandEvent&)
     workingPage->ChangeSelection(3); 
 }
 
-void BaseFrame::OnHistoryBtnClicked(wxCommandEvent&) {
-    historyPage->AppendRows(dataHisto);
-    historyPage->grid->ForceRefresh();
+void BaseFrame::OnHistoryBtnClicked(wxCommandEvent& evt) {
+    historyPage->AppendRows(dataHisto, 0);
+ 
+    int trueSize = historyPage -> grid->GetVirtualSize().x - historyPage -> grid->GetColSize(0) - 85;
+    historyPage -> grid->SetColSize(1, trueSize);
+    historyPage -> grid->ForceRefresh();
     workingPage->ChangeSelection(4);
 }
 
 void BaseFrame::OnFavouriteBtnClicked(wxCommandEvent&) {
-    favouritePage->AppendRows(dataFav);
+    favouritePage->AppendRows(dataFav, 1);
+    int trueSize = favouritePage->grid->GetVirtualSize().x - favouritePage->grid->GetColSize(0) - 85;
+    favouritePage->grid->SetColSize(1, trueSize);
     favouritePage->grid->ForceRefresh();
     workingPage->ChangeSelection(5);
 }

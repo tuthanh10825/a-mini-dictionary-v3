@@ -11,10 +11,12 @@ class myApp : public wxApp
 	}
 	~myApp()
 	{
-		delete EEtree; 
-		delete EMOtree; 
-		delete EVtree; 
-		delete VEtree; 
+  
+		delete EVtree;
+		delete EEtree;
+		delete VEtree;
+		delete EMOtree;
+
 		delete SLtree;
 	}
 };

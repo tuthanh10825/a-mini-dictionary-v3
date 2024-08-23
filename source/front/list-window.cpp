@@ -8,23 +8,28 @@ enum butID {
 
 
 
-ListWindow::ListWindow(wxWindow* parent, int mode, int isFavor) : wxWindow(parent, wxID_ANY) {
+ListWindow::ListWindow(wxWindow* parent, int isFavor) : wxWindow(parent, wxID_ANY) {
 
 
-    wxColour backgroundColour = wxColour(255, 255, 255), textColour = wxColour(0, 0, 0), nountext = wxColour(4, 73, 153), labelColour = wxColour(33, 38, 79), nounColour = wxColour(255, 221, 173), selectionCorlour = wxColour(166, 166, 166);
-    if (mode) {
-        backgroundColour = wxColour(16, 15, 28);
-        textColour = wxColour(255, 255, 255);
-        labelColour = wxColour(39, 37, 62);
-        nounColour = wxColour(65, 64, 42);
-        selectionCorlour = wxColour(37, 37, 48);
-        nountext = wxColour(255, 255, 255);
+    wxColour backgroundColor = LIGHTMODE_backgroundANDNaviColor, 
+        textBlackColour = LIGHTMODE_blackTextColor, 
+        blueTextColor = LIGHTMODE_blueTextColor, 
+        labelColor = LIGHTMODE_labelANDHeaderColor, 
+        backgroundYellowColor = LIGHTMODE_backgroundYellowColor, 
+        selectionCorlor = LIGHTMODE_selectionGrayCorlor;
+    if (!LIGHTMODE) {
+        backgroundColor = DARKMODE_backgroundColor;
+        textBlackColour = DARKMODE_whiteTextColor;
+        labelColor = DARKMODE_labelANDNaviColor;
+        backgroundYellowColor = DARKMODE_backgroundYellowColor;
+        selectionCorlor = DARKMODE_selectionPurpleCorlor;
+        blueTextColor = DARKMODE_whiteTextColor;
     }
     
     
     wxPanel* subPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 0), wxSize(1451, 631));
-    subPanel->SetBackgroundColour(backgroundColour);
-    this->SetBackgroundColour(backgroundColour);
+    subPanel->SetBackgroundColour(backgroundColor);
+    this->SetBackgroundColour(backgroundColor);
     wxInitAllImageHandlers();
 
     wxFont::AddPrivateFont("fonts/pala.ttf");
@@ -35,14 +40,16 @@ ListWindow::ListWindow(wxWindow* parent, int mode, int isFavor) : wxWindow(paren
     int numberOfWords = 0;
 
     if (isFavor) {
-        if (dataFav.empty()) {
+        if (!isLoaded) {
             loadData("data/favorite.txt", 1);
             numberOfWords = dataFav.size();
+            isLoaded = true;
         }
     }
     else {
-        if (dataHisto.empty()) {
+        if (!isLoaded) {
             loadData("data/history.txt", 0);
+            isLoaded = true;
         }
         numberOfWords = dataHisto.size();
     }
@@ -52,13 +59,13 @@ ListWindow::ListWindow(wxWindow* parent, int mode, int isFavor) : wxWindow(paren
 
     //Grid Properties
     grid->EnableEditing(false);
-    grid->SetSelectionBackground(selectionCorlour);
+    grid->SetSelectionBackground(selectionCorlor);
     grid->DisableDragColSize();
     grid->DisableDragGridSize();
     grid->SetDefaultCellFont(cellFont);
-    grid->SetDefaultCellTextColour(textColour); 
+    grid->SetDefaultCellTextColour(textBlackColour); 
     grid->SetDefaultCellAlignment(wxALIGN_LEFT, wxALIGN_CENTER);
-    grid->SetDefaultCellBackgroundColour(backgroundColour);
+    grid->SetDefaultCellBackgroundColour(backgroundColor);
 
     // Set column labels
     grid->SetColLabelValue(0, "Word");
@@ -67,7 +74,7 @@ ListWindow::ListWindow(wxWindow* parent, int mode, int isFavor) : wxWindow(paren
     // Set column label colors
     grid->SetColLabelSize(70);
     grid->SetLabelTextColour(*wxWHITE);
-    grid->SetLabelBackgroundColour(labelColour);
+    grid->SetLabelBackgroundColour(labelColor);
     grid->SetLabelFont(cellFont.Bold());
 
 
@@ -89,8 +96,8 @@ ListWindow::ListWindow(wxWindow* parent, int mode, int isFavor) : wxWindow(paren
             dataHisto.pop_back();
         }
         grid->SetCellRenderer(numberOfWords, 1, new wxGridCellAutoWrapStringRenderer());
-        grid->SetCellBackgroundColour(numberOfWords, 0, nounColour);
-        grid->SetCellTextColour(numberOfWords, 0, nountext);
+        grid->SetCellBackgroundColour(numberOfWords, 0, backgroundYellowColor);
+        grid->SetCellTextColour(numberOfWords, 0, blueTextColor);
 
     }
 
@@ -102,17 +109,17 @@ ListWindow::ListWindow(wxWindow* parent, int mode, int isFavor) : wxWindow(paren
     grid->SetColSize(1, 810);
     grid->AutoSizeRows();
    
+    std::string s;
 
-    std::string s = std::to_string(mode);
-
+    if (LIGHTMODE) s = '0'; else s = '1';
     wxBitmapButton* delbutton = new wxBitmapButton(subPanel, del_id, wxBitmap(DELETEICON_IMG, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(79, 79), wxBORDER_NONE);
-    delbutton->SetBackgroundColour(backgroundColour);
+    delbutton->SetBackgroundColour(backgroundColor);
     delbutton->Bind(wxEVT_BUTTON, &ListWindow::onDelClick, this);
     wxStaticBitmap* delText = new wxStaticBitmap(subPanel, wxID_ANY, wxBitmap("assets/histofav/delete" + s + ".png", wxBITMAP_TYPE_PNG));
 
 
     wxBitmapButton* selbutton = new wxBitmapButton(subPanel, sel_id, wxBitmap(SELECTALLICON_IMG, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(79, 79), wxBORDER_NONE);
-    selbutton->SetBackgroundColour(backgroundColour);
+    selbutton->SetBackgroundColour(backgroundColor);
     selbutton->Bind(wxEVT_BUTTON, &ListWindow::onSelClick, this);
     wxStaticBitmap* selectText = new wxStaticBitmap(subPanel, wxID_ANY, wxBitmap("assets/histofav/selectall" + s + ".png", wxBITMAP_TYPE_PNG));
 
@@ -184,10 +191,22 @@ void ListWindow::OnSizeChange(wxSizeEvent&) {
 }
 
 
-void ListWindow::AppendRows(vector<word>& words) {
+void ListWindow::AppendRows(vector<word>& words, int isFav) {
+    if (!isLoaded) {
+        if (isFav) {
+            loadData("data/favorite.txt", 1);
+            isLoaded = true;
+        }
+    }
+    else {
+        if (!isLoaded) {
+            loadData("data/history.txt", 0);
+            isLoaded = true;
+        }
+    }
     int size = words.size();
     grid->InsertRows(0,size);
-    for (int i = 0; i < size; ++i) {
+    for (int i = size - 1; i >= 0; --i) {
         std::string s = "";
         if (words[i].type != "") s = " (" + words[i].type + ")";
         grid->SetCellValue(i, 0, wxString(una::utf8to16("  " + words[i].word + s)));

@@ -12,10 +12,10 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	language->Append(wxString("SLANG"));
 	language->Append(wxString("EMOTICON"));
 
-	language->SetSelection(1); 
+	language->SetSelection(0); 
 
 	wordOrDefi->Append(wxString("KEYWORD")); 
-	//wordOrDefi->Append(wxString("DEFINITION")); 
+	wordOrDefi->Append(wxString("DEFINITION")); 
 	wordOrDefi->SetSelection(0); 
 
 	 
@@ -84,22 +84,27 @@ void resPage::clearScreen()
 
 void resPage::OnFavouriteBtnClicked(wxCommandEvent&) {
 	vector<word> temp = dataHisto;
-	dataFav.push_back(temp.back());
-	temp.pop_back();
-	while (!temp.empty()) {
-		if (temp.back().word != dataFav.back().word) return;
+	if (!temp.empty()) {
 		dataFav.push_back(temp.back());
 		temp.pop_back();
+		while (!temp.empty()) {
+			if (temp.back().word != dataFav.back().word) return;
+			dataFav.push_back(temp.back());
+			temp.pop_back();
+		}
 	}
+
+	wxString message = "Add success!";
+	wxMessageBox(message, "Notification", wxOK | wxICON_INFORMATION);
 }
 
 SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT))
 {
 	// Load Eng-Viet dataset
-	if (!EVtree->isLoaded())
-		EVtree->loadWord(EVDATASET);
-
-	list = EVtree;
+	if (!EEtree->isLoaded())
+		EEtree->loadWord(EEDATASET);
+	defi = nullptr;
+	list = EEtree;
 
 	wxPanel* searchPanel = new wxPanel(this, wxID_ANY);
 
@@ -130,8 +135,6 @@ SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultP
 		});
 	box->findBox->Bind(wxEVT_TEXT, &SearchPage::OnFindBoxEnter, this);
 	box->language->Bind(wxEVT_COMBOBOX, &SearchPage::OnChooseLanguage, this); 
-	box->wordOrDefi->Bind(wxEVT_COMBOBOX, &SearchPage::OnChooseWordOrDefi, this); 
-
 
 	box->searchButton->Bind(wxEVT_BUTTON, &SearchPage::OnSearchBtnClicked, this);
 	box->randomButton->Bind(wxEVT_BUTTON, &SearchPage::OnRandomBtnClicked, this);
@@ -145,106 +148,137 @@ SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultP
 	this->SetSizerAndFit(searchSizer);
 }
 
+
 void SearchPage::OnFindBoxEnter(wxCommandEvent& evt)
 {
-
-	std::u32string word = una::utf8to32u(evt.GetString().utf8_string());
-	
-	while (!this->box->findBox->IsListEmpty()) this->box->findBox->Delete(0); 
-
-
-	if (word.empty())
+	if (this->box->wordOrDefi->GetValue().utf8_string() == "KEYWORD")
 	{
-		this->box->findBox->Dismiss();
-	}
-	else
-	{
-		this->box->findBox->ChangeValue(wxString(una::utf32to16(word)));		
-		this->box->findBox->Append(list->searchByPrefix(word));
-		if (!this->box->isDropdown) 
-			this->box->findBox->Popup();
-				
-		this->box->findBox->SelectNone();
-		this->box->findBox->ChangeValue(wxString(una::utf32to16(word)));
- 		this->box->findBox->SetInsertionPointEnd(); 
-		
-		
-		
-		
+		std::u32string word = una::utf8to32u(evt.GetString().utf8_string());
+		while (!this->box->findBox->IsListEmpty()) this->box->findBox->Delete(0);
+		if (word.empty())
+		{
+			this->box->findBox->Dismiss();
+		}
+		else
+		{
+			this->box->findBox->ChangeValue(wxString(una::utf32to16(word)));
+			this->box->findBox->Append(list->searchByPrefix(word));
+			if (!this->box->isDropdown)
+				this->box->findBox->Popup();
+
+			this->box->findBox->SelectNone();
+			this->box->findBox->ChangeValue(wxString(una::utf32to16(word)));
+			this->box->findBox->SetInsertionPointEnd();
+		}
 	}
 	
 }
 
-void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
-{
-	this->res->clearScreen();
-	TST::TreeNode* ans = list->search(una::utf8to32u(this->box->findBox->GetValue().utf8_string()));
-	if (ans)
-	{
-		word newWord;
-		newWord.word = this->box->findBox->GetValue().utf8_string();
-		std::string defi = ans->defi;
-		std::stringstream ss(defi);
-		if (currLang == "ENG/VIE" or currLang == "VIE/ENG") 
-		{
+
+void SearchPage::insertHistory(TST::TreeNode* ans) {
+	word newWord;
+	newWord.word = this->box->findBox->GetValue().utf8_string();
+	std::string defi = ans->defi;
+	std::stringstream ss(defi);
+	if (currLang == "ENG/VIE" or currLang == "VIE/ENG") {
+		defi.erase(0, 1);
+		while (defi[0] == '*') {
 			defi.erase(0, 1);
-			while (defi[0] == '*')
-			{
-				defi.erase(0, 1);
-				auto pos = defi.find_first_of("\n");
-				if (pos != std::string::npos) 
-				{
-					newWord.type = defi.substr(0, pos);
-					defi = defi.substr(pos+1);
-					pos = defi.find_first_of("*");
-					if (pos != std::string::npos) 
-					{
-						newWord.definition = defi.substr(0, pos);
-						defi = defi.substr(pos);
-					}
-					else 
-					{
-						newWord.definition = defi;
-						defi = "\0";
-					}
-					//word to be deleted
-					if (defi[0] == '\0') break;
+			auto pos = defi.find_first_of("\n");
+			if (pos != std::string::npos) {
+				newWord.type = defi.substr(0, pos);
+				defi = defi.substr(pos + 1);
+				pos = defi.find_first_of("*");
+				if (pos != std::string::npos) {
+					newWord.definition = defi.substr(0, pos);
+					defi = defi.substr(pos);
 				}
+				else {
+					newWord.definition = defi;
+					defi = "\0";
+
+				}
+				dataHisto.push_back(newWord);
+				if (defi[0] == '\0') break;
 			}
 			deleted_word = una::utf8to32u(newWord.word);
 			dataHisto.push_back(newWord);
 		}
-		else if (currLang == "EMOTICON") 
-		{
-			auto pos = defi.find_first_of("(");
-			defi = defi.substr(pos + 1);
-			pos = defi.find_first_of(")");
-			if (pos != std::string::npos ) newWord.type = defi.substr(0, pos);
-			pos = defi.find_first_of("\t");
-			defi = defi.substr(pos + 1);
-			newWord.definition = defi;
-			defi = '\0';
-			//word to be deleted
-			deleted_word = una::utf8to32u(newWord.word);
-			dataHisto.push_back(newWord);
-		}
-		else 
-		{
-			auto pos = defi.find_first_of("(");
-			defi = defi.substr(pos + 1);
-			pos = defi.find_first_of(")");
-			if (pos != std::string::npos) newWord.type = defi.substr(0, pos);
-			defi = defi.substr(pos + 1);
-			newWord.definition = defi;
-			defi = '\0';
-			//word to be deleted
-			deleted_word = una::utf8to32u(newWord.word);
-			dataHisto.push_back(newWord);
-		}
-		this->res->addingString(wxString(una::utf8to16(this->box->findBox->GetValue().utf8_string())) + wxString(una::utf8to16(ans->defi)));
-		
+
+
 	}
-	
+	else if (currLang == "EMOTICON") {
+		auto pos = defi.find_first_of("(");
+		defi = defi.substr(pos + 1);
+		pos = defi.find_first_of(")");
+		if (pos != std::string::npos) newWord.type = defi.substr(0, pos);
+		pos = defi.find_first_of("\t");
+		defi = defi.substr(pos + 1);
+		newWord.definition = defi;
+		defi = '\0';
+    deleted_word = una::utf8to32u(newWord.word);
+		dataHisto.push_back(newWord);
+	}
+	else {
+		auto pos = defi.find_first_of("(");
+		defi = defi.substr(pos + 1);
+		pos = defi.find_first_of(")");
+		if (pos != std::string::npos) newWord.type = defi.substr(0, pos);
+		defi = defi.substr(pos + 1);
+		newWord.definition = defi;
+		defi = '\0';
+    deleted_word = una::utf8to32u(newWord.word);
+		dataHisto.push_back(newWord);
+	}
+}
+
+void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
+{
+	if (this->box->wordOrDefi -> GetValue().utf8_string() == "KEYWORD")
+	{
+		this->res->clearScreen();
+		TST::TreeNode* ans = list->search(una::utf8to32u(this->box->findBox->GetValue().utf8_string()));
+		if (ans)
+		{
+			insertHistory(ans);
+			this->res->addingString(wxString(una::utf8to16(this->box->findBox->GetValue().utf8_string())) + wxString(una::utf8to16(ans->defi)));
+		}
+	}
+	else
+	{
+		std::string type = box->language->GetValue().utf8_string();
+		if (type == "ENG/ENG")
+		{
+			if (EEDef.text.empty()) EEDef.loadFile(EEDATASET);
+			this->defi = &EEDef;
+		}
+		else if (type == "ENG/VIE")
+		{
+			if (EVDef.text.empty()) EVDef.loadFile(EVDATASET);
+			this->defi = &EVDef;
+		}
+		else if (type == "VIE/ENG")
+		{
+			if (VEDef.text.empty()) VEDef.loadFile(VEDATASET);
+			this->defi = &VEDef;
+		}
+		else if (type == "SLANG")
+		{
+			if (SLDef.text.empty()) SLDef.loadFile(SLDATASET);
+			this->defi = &SLDef;
+		}
+		else if (type == "EMOTICON")
+		{
+			if (EMODef.text.empty()) EMODef.loadFile(EMODATASET);
+			this->defi = &EMODef;
+		}
+		vector<std::u32string> ans = this->defi->findSubtring(una::utf8to32u(this->box->findBox->GetValue().utf8_string()));
+		this->res->clearScreen();
+		std::u32string total_ans; 
+		for (const auto& val : ans)
+			total_ans += (val + U"\n");
+		this->res->addingString(wxString(una::utf32to16(total_ans))); 
+	}
 }
 
 
@@ -253,87 +287,41 @@ void SearchPage::OnChooseLanguage(wxCommandEvent& evt)
 	std::string type = evt.GetString().utf8_string();
 	if (type == currLang) return; 
 	
-	if (box->wordOrDefi->GetValue() == "KEYWORD")
-	{
-		if (type == "ENG/VIE") {
-			if (!EVtree->isLoaded())
-				EVtree->loadWord(EVDATASET);
+	if (type == "ENG/VIE") {
+		if (!EVtree->isLoaded())
+			EVtree->loadWord(EVDATASET);
 
-			list = EVtree;
-		}
-		else if (type == "VIE/ENG") {
-				if (!VEtree->isLoaded())
-					VEtree->loadWord(VEDATASET);
-
-				list = VEtree;
-			}
-		else if (type == "ENG/ENG") {
-			if (!EEtree->isLoaded())
-				EEtree->loadWord(EEDATASET);
-
-			list = EEtree;
-		}
-		else if (type == "EMOTICON") {
-			if (!EMOtree->isLoaded())
-				EMOtree->loadWord(EMODATASET);
-
-			list = EMOtree;
-		}
-		else if (type == "SLANG") {
-			if (!SLtree->isLoaded())
-				SLtree->loadWord(SLDATASET);
-
-			list = SLtree;
-		}
+		list = EVtree;
 	}
-	else
-	{
-		return; 
-	} 
+	else if (type == "VIE/ENG") {
+			if (!VEtree->isLoaded())
+				VEtree->loadWord(VEDATASET);
+
+			list = VEtree;
+		}
+	else if (type == "ENG/ENG") {
+		if (!EEtree->isLoaded())
+			EEtree->loadWord(EEDATASET);
+
+		list = EEtree;
+	}
+	else if (type == "EMOTICON") {
+		if (!EMOtree->isLoaded())
+			EMOtree->loadWord(EMODATASET);
+
+		list = EMOtree;
+	}
+	else if (type == "SLANG") {
+		if (!SLtree->isLoaded())
+			SLtree->loadWord(SLDATASET);
+
+		list = SLtree;
+	}
+	
 	currLang = type; 
 	return;
 }
 
-void SearchPage::OnChooseWordOrDefi(wxCommandEvent& evt)
-{
-	std::string type = evt.GetString().utf8_string(); 
-	if (type == currType) return; 
-	
-	if (box->language->GetValue() == "ENG/VIE")
-	{
-		if (type == "DEFINTION") {
-			if (!EVtree->isLoaded())
-				EVtree->loadWord(EVDATASET);
-
-			list = EVtree;
-		
-		}
-		else {
-			if (!EVtree->isLoaded())
-				EVtree->loadWord(EVDATASET);
-
-			list = EVtree;
-		}
-	}
-	else if (box->language->GetValue() == "VIE/ENG")
-	{
-		if (type == "DEFINTION") {
-			if (!VEtree->isLoaded())
-				VEtree->loadWord(VEDATASET);
-
-			list = VEtree;
-		}
-		else {
-			if (!VEtree->isLoaded())
-				VEtree->loadWord(VEDATASET);
-
-			list = VEtree;
-		}
-
-	}
-	currType = type; 
-	return; 
-}
 
 void SearchPage::OnRandomBtnClicked(wxCommandEvent&)
 {

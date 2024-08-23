@@ -150,10 +150,14 @@ public:
 		std::mt19937 rng(std::chrono::steady_clock::now().time_since_epoch().count());
 		std::uniform_int_distribution<int> dist(0, 256);
 		std::u32string ans;
-		TreeNode* curr_root = root; 
+
+		TreeNode* curr_root;
+		if (root != nullptr)
+			curr_root = root;
+
 		TreeNode* temp_root = 0; 
 		vector<TreeNode*> currChoice; 
-		while (curr_root)
+		while (curr_root != nullptr)
 		{
 			temp_root = curr_root; 
 			currChoice.clear();
@@ -205,8 +209,8 @@ public:
 					if (tempLine[0] == '@')
 					{
 
-						name.erase(name.begin());
-						while (name.back() == ' ') name.pop_back();
+						name.erase(name.begin()); 
+						while (name.back() == ' ') name.pop_back(); 
 						this->insert(name, defi);
 						name = tempLine;
 						defi.clear();
