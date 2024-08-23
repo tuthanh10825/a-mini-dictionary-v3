@@ -3,8 +3,10 @@
 class MoreWindow : public wxWindow
 {
 public:
-	wxBitmapButton* darkmodeButton; 
 	MoreWindow(wxWindow*);
+private:
+	wxBitmapButton* darkmodeButton; 
 	void OnUserManualClicked(wxCommandEvent&); 
 	void OnDarkmodeClicked(wxCommandEvent&);
+	//void refreshAllPage();
 };
