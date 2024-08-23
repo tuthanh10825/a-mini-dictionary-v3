@@ -286,7 +286,6 @@ public:
 		else return;
 		fout << std::endl;
 		fout.close();
-	
 	}
 
 private:

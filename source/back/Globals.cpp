@@ -11,3 +11,5 @@ TST* SLtree = new TST();
 
 std::vector<word> dataHisto, dataFav;
 std::u32string deleted_word;
+
+

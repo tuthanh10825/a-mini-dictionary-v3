@@ -345,28 +345,40 @@ void SearchPage::OnRandomBtnClicked(wxCommandEvent&)
 
 void SearchPage::OnRemoveBtnClicked(wxCommandEvent&)
 {
+	if (deleted_word.empty()) return;
 	std::u32string str = deleted_word;
-	
-	if (this->currLang == "ENG/VIE")
+	wxMessageDialog confirmDialog(
+		this,
+		"Are you sure to delete this word?",  
+		"Delete?",            
+		wxYES_NO | wxNO_DEFAULT | wxICON_WARNING
+	);
+	if (confirmDialog.ShowModal() == wxID_YES)
 	{
-		this->list->delete_word(list->root, str, "data/ev/delete.txt");
+		if (this->currLang == "ENG/VIE")
+		{
+			this->list->delete_word(list->root, str, EVDELETE);
+		}
+		else if (this->currLang == "VIE/ENG")
+		{
+			this->list->delete_word(list->root, str, VEDELETE);
+		}
+		else if (this->currLang == "ENG/ENG")
+		{
+			this->list->delete_word(list->root, str, EEDELETE);
+		}
+		else if (this->currLang == "EMOTICON")
+		{
+			this->list->delete_word(list->root, str, EMODELETE);
+		}
+		else if (this->currLang == "SLANG")
+		{
+			this->list->delete_word(list->root, str, SLDELETE);
+		}
+		wxMessageBox("Delete successfully", "Successfully", wxOK | wxICON_INFORMATION);
+		this->box->findBox->Clear();
+		this->res->clearScreen();
+		deleted_word.clear();
 	}
-	else if (this->currLang == "VIE/ENG")
-	{
-		this->list->delete_word(list->root, str, VEDELETE);
-	}
-	else if (this->currLang == "ENG/ENG")
-	{
-		this->list->delete_word(list->root, str, EEDELETE);
-	}
-	else if (this->currLang == "EMOTICON")
-	{
-		this->list->delete_word(list->root, str, EMODELETE);
-	}
-	else if (this->currLang == "SLANG")
-	{
-		this->list->delete_word(list->root, str, SLDELETE);
-	}
-	wxMessageBox("Delete successfully","successfully", wxOK | wxICON_INFORMATION);
 	return;
 }
