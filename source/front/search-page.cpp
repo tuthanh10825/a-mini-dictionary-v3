@@ -185,32 +185,37 @@ void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 		newWord.word = this->box->findBox->GetValue().utf8_string();
 		std::string defi = ans->defi;
 		std::stringstream ss(defi);
-		if (currLang == "ENG/VIE" or currLang == "VIE/ENG") {
+		if (currLang == "ENG/VIE" or currLang == "VIE/ENG") 
+		{
 			defi.erase(0, 1);
-			while (defi[0] == '*') {
+			while (defi[0] == '*')
+			{
 				defi.erase(0, 1);
 				auto pos = defi.find_first_of("\n");
-				if (pos != std::string::npos) {
+				if (pos != std::string::npos) 
+				{
 					newWord.type = defi.substr(0, pos);
 					defi = defi.substr(pos+1);
 					pos = defi.find_first_of("*");
-					if (pos != std::string::npos) {
+					if (pos != std::string::npos) 
+					{
 						newWord.definition = defi.substr(0, pos);
 						defi = defi.substr(pos);
 					}
-					else {
+					else 
+					{
 						newWord.definition = defi;
 						defi = "\0";
 					}
 					//word to be deleted
-					deleted_word = una::utf8to32u(newWord.word);
-					dataHisto.push_back(newWord);
-
 					if (defi[0] == '\0') break;
 				}
 			}
+			deleted_word = una::utf8to32u(newWord.word);
+			dataHisto.push_back(newWord);
 		}
-		else if (currLang == "EMOTICON") {
+		else if (currLang == "EMOTICON") 
+		{
 			auto pos = defi.find_first_of("(");
 			defi = defi.substr(pos + 1);
 			pos = defi.find_first_of(")");
@@ -223,7 +228,8 @@ void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 			deleted_word = una::utf8to32u(newWord.word);
 			dataHisto.push_back(newWord);
 		}
-		else {
+		else 
+		{
 			auto pos = defi.find_first_of("(");
 			defi = defi.substr(pos + 1);
 			pos = defi.find_first_of(")");
@@ -340,7 +346,6 @@ void SearchPage::OnRandomBtnClicked(wxCommandEvent&)
 void SearchPage::OnRemoveBtnClicked(wxCommandEvent&)
 {
 	std::u32string str = deleted_word;
-	str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
 	
 	if (this->currLang == "ENG/VIE")
 	{
@@ -362,6 +367,6 @@ void SearchPage::OnRemoveBtnClicked(wxCommandEvent&)
 	{
 		this->list->delete_word(list->root, str, SLDELETE);
 	}
-	//wxMessageBox("Delete successfully","successfully", wxOK | wxICON_INFORMATION);
+	wxMessageBox("Delete successfully","successfully", wxOK | wxICON_INFORMATION);
 	return;
 }

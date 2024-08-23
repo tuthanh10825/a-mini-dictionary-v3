@@ -245,7 +245,7 @@ public:
 	TreeNode* deleteHelper(TreeNode* node, std::u32string& word, int depth) {
 		if (!node) return nullptr;
 
-		char currentChar = word[depth];
+		char32_t currentChar = word[depth];
 
 		if (currentChar < node->val) {
 			node->left = deleteHelper(node->left, word, depth);
@@ -279,11 +279,14 @@ public:
 		std::ofstream fout;
 		fout.open(filename, std::ios::app);
 		std::string s = una::utf32to8(word);
-		if (fout.is_open()) { fout << "hi"; }
+		if (fout.is_open()) 
+		{
+			fout << s;
+		}
 		else return;
 		fout << std::endl;
 		fout.close();
-		wxMessageBox("Delete successfully", "successfully", wxOK | wxICON_INFORMATION);
+	
 	}
 
 private:
