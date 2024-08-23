@@ -21,7 +21,7 @@ extern TST* EEtree;
 extern TST* EMOtree;
 extern TST* SLtree;
 
-
+extern bool LIGHTMODE;
 extern std::vector<word> dataHisto, dataFav;
 
 static suffixArr EEDef; 
