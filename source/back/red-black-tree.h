@@ -27,7 +27,7 @@ private:
 	TreeNode* root = nil;
 
 public: 
-	bool remove(int val)
+	bool remove(T val)
 	{
 		TreeNode* z = search(val);
 		if (z == nil) return false;
@@ -69,7 +69,7 @@ public:
 
 	}
 
-	void insert(int val)
+	void insert(T val)
 	{
 		TreeNode* prev = nil;
 		TreeNode* curr = root;
@@ -387,11 +387,6 @@ private:
 			if (it.curr == this->curr) return true;
 			else return false; 
 		}
-		bool operator == (iterator& it)
-		{
-			if (it.curr == this->curr) return true;
-			else return false;
-		}
 
 	};
 public: 
@@ -407,9 +402,5 @@ public:
 	{
 		return iterator(search(elememt));
 		
-	}
-	iterator find(T& element)
-	{
-		return iterator(search(element)); 
 	}
 };
