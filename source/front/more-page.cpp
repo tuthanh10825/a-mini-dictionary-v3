@@ -55,3 +55,8 @@ void MoreWindow::OnUserManualClicked(wxCommandEvent& event)
 {
 	wxLaunchDefaultBrowser(wxString("https://github.com/tuthanh10825/a-mini-dictionary-v3"));
 }
+
+//void MoreWindow::OnDarkmodeClicked(wxCommandEvent&)
+//{
+//	LIGHTMODE = !LIGHTMODE;
+//}

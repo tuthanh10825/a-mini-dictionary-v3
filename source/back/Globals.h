@@ -15,6 +15,8 @@ struct word {
 	std::string definition;
 };
 
+extern bool LIGHTMODE;
+
 extern TST* EVtree;
 extern TST* VEtree;
 extern TST* EEtree;

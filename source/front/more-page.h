@@ -1,5 +1,5 @@
 #include <wx/wx.h>
-
+#include "Globals.h"
 class MoreWindow : public wxWindow
 {
 public:
