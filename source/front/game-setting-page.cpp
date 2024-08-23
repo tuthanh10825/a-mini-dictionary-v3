@@ -252,8 +252,7 @@ void GameSettingPage::OnInfiniteClicked(wxCommandEvent&)
 
 void GameSettingPage::OnPlayButtonClicked(wxCommandEvent&)
 {
-	wxFrame* gameFrame = new wxFrame(this, wxID_ANY, wxString("Play!"), wxDefaultPosition, wxDefaultSize);
-	int count = 10; 
+
 
 	list = EVtree;
 	if (chooseEngVie->IsChecked()) {
@@ -281,46 +280,55 @@ void GameSettingPage::OnPlayButtonClicked(wxCommandEvent&)
 			SLtree->loadWord(SLDATASET);
 		list = SLtree;
 	}
-
-
-	StartGameRound(gameFrame, 5, 1);
-
-
-	gameFrame->SetClientSize(wxSize(WIDTH, HEIGHT));
-	gameFrame->SetSizeHints(wxSize(WIDTH, 700));
-	gameFrame->Show(true);
-	return; 
-}
-
-void GameSettingPage::StartGameRound(wxFrame* gameFrame, int totalRounds, int currentRound)
-{
-	if (currentRound > totalRounds) {
-		wxMessageBox("Game Over!", "Result", wxOK | wxICON_INFORMATION);
-		return;
-	}
-
+	
 	if (chooseDefi->IsChecked())
-	{
-		pair<std::u32string, std::string> ans = list->random();
-		wxString ques = wxString(una::utf32to16(ans.first));
-		wxString ans1 = wxString::FromUTF8(ans.second);
-		wxString ans2 = wxString::FromUTF8(list->random().second);
-		wxString ans3 = wxString::FromUTF8(list->random().second);
-		wxString ans4 = wxString::FromUTF8(list->random().second);
-
-		Question tempQ(ques, ans1, ans2, ans3, ans4, 0);
-
-		DefiGameWindow* gamePlay = new DefiGameWindow(gameFrame, tempQ);
-
-		gamePlay->Bind(wxEVT_CLOSE_WINDOW, [=](wxCloseEvent&) {
-
-			StartGameRound(gameFrame, totalRounds, currentRound + 1);
-			});
-
-		gamePlay->Show();
+	{ 
+		DefiGameWindow* playFrame1 = new DefiGameWindow(this, list); 
+		playFrame1->numberOfQues = infinite->IsChecked() ? -1 : value->GetValue();
+		playFrame1->Show(true);
+		if (!playFrame1->IsShown()) return; 
 	}
 	else
 	{
-		// Your existing logic for wordGameWindow...
+		wordGameWindow* playFrame2 = new wordGameWindow(this, list); 
+		playFrame2->numberOfQues = infinite->IsChecked() ? -1 : value->GetValue();
+		playFrame2->Show(true);
+		if (!playFrame2->IsShown()) return;
 	}
+	
+	
+	
 }
+
+//void GameSettingPage::StartGameRound(wxFrame* gameFrame, int totalRounds, int currentRound)
+//{
+//	if (currentRound > totalRounds) {
+//		wxMessageBox("Game Over!", "Result", wxOK | wxICON_INFORMATION);
+//		return;
+//	}
+//
+//	if (chooseDefi->IsChecked())
+//	{
+//		pair<std::u32string, std::string> ans = list->random();
+//		wxString ques = wxString(una::utf32to16(ans.first));
+//		wxString ans1 = wxString::FromUTF8(ans.second);
+//		wxString ans2 = wxString::FromUTF8(list->random().second);
+//		wxString ans3 = wxString::FromUTF8(list->random().second);
+//		wxString ans4 = wxString::FromUTF8(list->random().second);
+//
+//		Question tempQ(ques, ans1, ans2, ans3, ans4, 0);
+//
+//		DefiGameWindow* gamePlay = new DefiGameWindow(gameFrame, tempQ);
+//
+//		gamePlay->Bind(wxEVT_CLOSE_WINDOW, [=](wxCloseEvent&) {
+//
+//			StartGameRound(gameFrame, totalRounds, currentRound + 1);
+//			});
+//
+//		gamePlay->Show();
+//	}
+//	else
+//	{
+//		// Your existing logic for wordGameWindow...
+//	}
+//}

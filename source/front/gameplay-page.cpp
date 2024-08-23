@@ -1,7 +1,8 @@
 #include "gameplay-page.h"
-
-DefiGameWindow::DefiGameWindow(wxWindow* parent, Question question)
-	: wxWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize)
+#include "uni_algo/all.h"
+#include "TST.h"
+DefiGameWindow::DefiGameWindow(wxWindow* parent, TST* clist)
+	: wxFrame(parent, wxID_ANY, "Play!", wxDefaultPosition, wxDefaultSize), list(clist)
 {
 	this->SetSizeHints(wxSize(WIDTH, HEIGHT));
 
@@ -12,7 +13,7 @@ DefiGameWindow::DefiGameWindow(wxWindow* parent, Question question)
 	wxFont topFont;
 	topFont.SetNativeFontInfoUserDesc(Pala30);
 
-	wxTextCtrl* guessWord = new wxTextCtrl(topPanel, wxID_ANY, question.detail, wxDefaultPosition, wxDefaultSize, wxBORDER_DEFAULT | wxTE_READONLY);
+	guessWord = new wxTextCtrl(topPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxBORDER_DEFAULT | wxTE_READONLY);
 	guessWord->SetFont(topFont);
 	guessWord->HideNativeCaret();
 	guessWord->SetBackgroundColour(WHITE);
@@ -32,16 +33,14 @@ DefiGameWindow::DefiGameWindow(wxWindow* parent, Question question)
 	wxFont answerFont;
 	answerFont.SetNativeFontInfoUserDesc(Pala15);
 
-	std::vector<wxRadioButton*> choiceButton;
-
-	for (int i = 0; i < question.choices.size(); ++i) {
+	for (int i = 0; i < 4; ++i) {
 		wxRadioButton* button = new wxRadioButton(answerPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, i == 0 ? wxRB_GROUP : 0);
-		wxTextCtrl* answer = new wxTextCtrl(answerPanel, wxID_ANY, question.choices[i], wxDefaultPosition, wxSize(-1, 80), wxTE_READONLY | wxTE_MULTILINE | wxBORDER_NONE | wxTE_NO_VSCROLL);
-		answer->SetFont(answerFont);
+		answer[i] = new wxTextCtrl(answerPanel, wxID_ANY, "", wxDefaultPosition, wxSize(-1, 200), wxTE_READONLY | wxTE_MULTILINE | wxBORDER_NONE | wxTE_NO_VSCROLL);
+		answer[i]->SetFont(answerFont);
 
 		wxBoxSizer* answerSizer = new wxBoxSizer(wxHORIZONTAL);
 		answerSizer->Add(button, 0, wxLEFT, 60);
-		answerSizer->Add(answer, 1, wxRIGHT, 60);
+		answerSizer->Add(answer[i], 1, wxRIGHT, 60);
 
 		totalAnswerSizer->Add(answerSizer, 1, wxEXPAND);
 		choiceButton.push_back(button);
@@ -58,31 +57,69 @@ DefiGameWindow::DefiGameWindow(wxWindow* parent, Question question)
 
 	mainSizer->Add(answerPanel, 1, wxEXPAND);
 	this->SetSizerAndFit(mainSizer);
+	submitAnsButton->Bind(wxEVT_BUTTON, &DefiGameWindow::OnSubmitButtonClicked, this); 
+	std::pair<std::u32string, std::string> ans = list->random();
+	wxString ques = wxString(una::utf32to16(ans.first));
+	wxString ans1 = wxString::FromUTF8(ans.second);
+	wxString ans2 = wxString::FromUTF8(list->random().second);
+	wxString ans3 = wxString::FromUTF8(list->random().second);
+	wxString ans4 = wxString::FromUTF8(list->random().second);
+	this->SetVal(Question(ques, ans1, ans2, ans3, ans4, 1));
 
-	// Event handling
-	submitAnsButton->Bind(wxEVT_BUTTON, [=](wxCommandEvent&) {
-		int selectedAnswer = -1;
-		for (int i = 0; i < choiceButton.size(); ++i) {
-			if (choiceButton[i]->GetValue()) {
-				selectedAnswer = i;
-				break;
-			}
-		}
-
-		wxString message = (selectedAnswer == question.answer) ? "Correct!" : "False";
-		wxMessageBox(message, "Result", wxOK | wxICON_INFORMATION);
-
-		// Close the frame after the result is shown
+}
+void DefiGameWindow::OnSubmitButtonClicked(wxCommandEvent&)
+{
+	for (int i = 0; i < 4; ++i)
+	{
+		if (choiceButton[i]->GetValue())
+			this->IsCorrect = (i == ques.answer);
+	}
+	if (!this->IsCorrect)
+	{
+		wxMessageBox("You lose!!!");
 		this->Close(true);
-
-		//if (this->GetParent()) {
-		//	this->GetParent()->Destroy();
-		//}
-		});
+	}
+	else if (numberOfQues >= 0)
+	{
+		if (++currentNumber == numberOfQues)
+		{
+			wxMessageBox("You win!!!");
+			this->Close(true);
+			return;
+		}
+		else
+		{
+			std::pair<std::u32string, std::string> ans = list->random();
+			wxString ques = wxString(una::utf32to16(ans.first));
+			wxString ans1 = wxString::FromUTF8(ans.second);
+			wxString ans2 = wxString::FromUTF8(list->random().second);
+			wxString ans3 = wxString::FromUTF8(list->random().second);
+			wxString ans4 = wxString::FromUTF8(list->random().second);
+			this->SetVal(Question(ques, ans1, ans2, ans3, ans4, 1));
+			
+		}
+	}
+	else
+	{
+		std::pair<std::u32string, std::string> ans = list->random();
+		wxString ques = wxString(una::utf32to16(ans.first));
+		wxString ans1 = wxString::FromUTF8(ans.second);
+		wxString ans2 = wxString::FromUTF8(list->random().second);
+		wxString ans3 = wxString::FromUTF8(list->random().second);
+		wxString ans4 = wxString::FromUTF8(list->random().second);
+		this->SetVal(Question(ques, ans1, ans2, ans3, ans4, 1));
+	}
+	
+}
+void DefiGameWindow::SetVal(Question ques)
+{
+	this->ques = ques; 
+	for (int i = 0; i < 4; ++i)
+		answer[i]->SetValue(ques.choices[i]);
+	guessWord->SetValue(ques.detail);
 }
 
-
-wordGameWindow::wordGameWindow(wxWindow* parent, wxString question, std::vector<wxString> answer) : wxWindow(parent, wxID_ANY)
+wordGameWindow::wordGameWindow(wxWindow* parent, TST* clist) : wxFrame(parent, wxID_ANY, "Play"), list(clist)
 {
 	// Panel to load image
 	wxPanel* quizPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition);
@@ -98,7 +135,7 @@ wordGameWindow::wordGameWindow(wxWindow* parent, wxString question, std::vector<
 	wxStaticBitmap* guesswordDisplay = new wxStaticBitmap(quizPanel, wxID_ANY, wxBitmap(wxString("assets/game/play/guess-word-text.png"), wxBITMAP_TYPE_PNG)
 		, wxDefaultPosition);
 
-	wxTextCtrl* word = new wxTextCtrl(quizPanel, wxID_ANY, question,
+	word = new wxTextCtrl(quizPanel, wxID_ANY, "",
 		wxDefaultPosition, wxSize(1100, 88), wxTE_READONLY | wxBORDER_NONE | wxTE_MULTILINE | wxTE_NO_VSCROLL);
 	word->SetBackgroundColour(wxColor(255, 255, 255)); 
 	wxFont defiQuizFont; defiQuizFont.SetNativeFontInfoUserDesc("Palatino Linotype 20 WINDOWS-1252"); 
@@ -118,9 +155,9 @@ wordGameWindow::wordGameWindow(wxWindow* parent, wxString question, std::vector<
 
 	wxFont answerFont; answerFont.SetNativeFontInfoUserDesc("Palatino Linotype 30 WINDOWS-1252"); 
 	
-	for (int i = 0; i < answer.size(); ++i)
+	for (int i = 0; i < 4; ++i)
 	{
-		wxToggleButton* choice = new wxToggleButton(answerPanel, wxID_ANY, answer[i], wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT); 
+		wxToggleButton* choice = new wxToggleButton(answerPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
 		choice->SetFont(answerFont); 
 		choice->SetBackgroundColour(colours[i]); 
 		this -> answer.push_back(choice); 
@@ -147,7 +184,68 @@ wordGameWindow::wordGameWindow(wxWindow* parent, wxString question, std::vector<
 	mainSizer->Add(quizPanel, 1, wxEXPAND); 
 	mainSizer->Add(answerPanel, 4, wxEXPAND); 
 	this->SetSizerAndFit(mainSizer); 
+	submitButton->Bind(wxEVT_BUTTON, &wordGameWindow::OnSubmitBtnClicked, this); 
+
+	std::pair<std::u32string, std::string> ans = list->random();
+	wxString ques = wxString(una::utf8to16(ans.second));
+	wxString ans1 = wxString(una::utf32to16(ans.first));
+	wxString ans2 = wxString(una::utf32to16(list->random().first));
+	wxString ans3 = wxString(una::utf32to16(list->random().first));
+	wxString ans4 = wxString(una::utf32to16(list->random().first));
+	this->SetVal(Question(ques, ans1, ans2, ans3, ans4, 1));
+
 	return;
+	
+}
+
+void wordGameWindow::OnSubmitBtnClicked(wxCommandEvent&)
+{
+	bool isCorrect = false; 
+	for (int i = 0; i < 4; ++i)
+	{
+		if (answer[i]->GetValue())
+		{
+			isCorrect = (ques.answer == i); 
+		}
+	}
+	if (!isCorrect)
+	{
+		wxMessageBox("You lose!!!");
+		this->Close(true);
+		return; 
+	}
+	else if (numberOfQues >= 0)
+	{
+		if (++currentNumber == numberOfQues)
+		{
+			wxMessageBox("You win!!!");
+			this->Close(true);
+			return;
+		}
+		else
+		{
+			std::pair<std::u32string, std::string> ans = list->random();
+			wxString ques = wxString(una::utf8to16(ans.second));
+			wxString ans1 = wxString(una::utf32to16(ans.first));
+			wxString ans2 = wxString(una::utf32to16(list->random().first));
+			wxString ans3 = wxString(una::utf32to16(list->random().first));
+			wxString ans4 = wxString(una::utf32to16(list->random().first));
+			this->SetVal(Question(ques, ans1, ans2, ans3, ans4, 1));
+
+		}
+	}
+	else
+	{
+		std::pair<std::u32string, std::string> ans = list->random();
+		wxString ques = wxString(una::utf8to16(ans.second));
+		wxString ans1 = wxString(una::utf32to16(ans.first));
+		wxString ans2 = wxString(una::utf32to16(list->random().first));
+		wxString ans3 = wxString(una::utf32to16(list->random().first));
+		wxString ans4 = wxString(una::utf32to16(list->random().first));
+		this->SetVal(Question(ques, ans1, ans2, ans3, ans4, 1));
+
+	}
+	
 }
 
 void wordGameWindow::OnToggleButton(wxCommandEvent& event)
@@ -163,5 +261,17 @@ void wordGameWindow::OnToggleButton(wxCommandEvent& event)
 	}
 
 	wxToggleButton* is_selected = dynamic_cast<wxToggleButton*>(event.GetEventObject());
+	
 	is_selected->SetBackgroundColour(wxColor(224, 238, 249));
+}
+
+void wordGameWindow::SetVal(Question ques)
+{
+	for (int i = 0; i < 4; ++i)
+	{
+		answer[i]->SetLabelText(ques.choices[i]); 
+	}
+	ques.detail.erase(ques.detail.begin()); 
+	word->SetValue(ques.detail); 
+	this->ques = ques; 
 }

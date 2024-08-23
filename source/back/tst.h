@@ -182,7 +182,7 @@ public:
 			if (wordChoice->eow)
 			{
 				
-				bool isChosen = dist(rng) % (dist(rng) % 10 + 1); 
+				bool isChosen = dist(rng) % (dist(rng) % 20 + 1); 
 				if ( !isChosen || !wordChoice->mid) return { ans, wordChoice->defi }; 
 			}
 			curr_root = curr_root->mid; 

@@ -6,7 +6,7 @@
 #include "properties.h"
 #include <codecvt>
 #include <locale>
-
+#include "tst.h"
 struct Question {
 	wxString detail;
 	std::vector<wxString> choices;
@@ -51,30 +51,43 @@ struct Question {
 	}
 };
 
-class DefiGameWindow : public wxWindow
+class DefiGameWindow : public wxFrame
 {
 public:
-	DefiGameWindow(wxWindow* parent, Question question);
-	std::vector<wxString> answer; 
-	std::vector<wxRadioButton*> choiceButton; 
+	DefiGameWindow(wxWindow* parent, TST* clist);
 	
-	int correctAns = 0; 
-	
+	wxTextCtrl* answer[4]; 
+	wxTextCtrl* guessWord; 
+	std::vector<wxRadioButton*> choiceButton;
+	bool IsCorrect = true; 
 
+	int numberOfQues = 0;
+	int currentNumber = 0;
+	TST* list = nullptr;
+	Question ques; 
+
+	void OnSubmitButtonClicked(wxCommandEvent&); 
+	void SetVal(Question ques);
 };
 
-class wordGameWindow : public wxWindow
+class wordGameWindow : public wxFrame
 {
 public: 
-	wordGameWindow(wxWindow*, wxString, std::vector<wxString>); 
+	wordGameWindow(wxWindow*, TST* clist); 
 	std::vector<wxToggleButton*> answer; 
-	int correctAns = 0;
 	wxBitmapButton* submitButton;
+	wxTextCtrl* word; 
+	TST* list = nullptr; 
+	Question ques; 
+	int numberOfQues = 0; 
+	int currentNumber = 0;
 	wxColour colours[4] = {
 	   wxColour(236, 178, 179),
 	   wxColour(178, 236, 179),
 	   wxColour(187, 188, 246),
 	   wxColour(247, 247, 184)
 	};
+	void OnSubmitBtnClicked(wxCommandEvent&); 
 	void OnToggleButton(wxCommandEvent&); 
+	void SetVal(Question ques); 
 };

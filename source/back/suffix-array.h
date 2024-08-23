@@ -12,6 +12,7 @@
 #include <set>
 
 using std::vector;
+
 class suffixArr
 {
 public:
@@ -118,8 +119,24 @@ private:
 			for (int i = 0; i < n; ++i)
 				temp_SA_index[i] = (SA_index[i] + n - k) % n;
 
+			//using counting/radix sort to fix this. 
+			//std::stable_sort(temp_SA_index.begin(), temp_SA_index.end(), [primary_key](int a, int b) {return primary_key[a] < primary_key[b]; });
 
-			std::stable_sort(temp_SA_index.begin(), temp_SA_index.end(), [primary_key](int a, int b) {return primary_key[a] < primary_key[b]; });
+			vector <int> cou(10000, 0);
+			vector <int> temp_vector(n);
+			for (int count = 1; count <= n; count *= 10000)
+			{
+				temp_vector.resize(n);
+				std::fill(cou.begin(), cou.end(), 0);
+				for (int i = 0; i < n; ++i)
+					++cou[primary_key[temp_SA_index[i]] / count % 10000];
+				for (int i = 1; i < 10000; ++i)
+					cou[i] += cou[i - 1];
+				for (int i = n - 1; i >= 0; --i)
+					temp_vector[--cou[primary_key[temp_SA_index[i]] / count % 10000]] = temp_SA_index[i];
+				temp_SA_index = std::move(temp_vector);
+			}
+
 			SA_index = std::move(temp_SA_index);
 			for (int i = 1; i < n; ++i)
 			{
@@ -136,5 +153,6 @@ private:
 			k *= 2;
 		}
 	}
-
+	private: 
+		
 };
