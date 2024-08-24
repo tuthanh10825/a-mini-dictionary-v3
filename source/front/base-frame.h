@@ -9,7 +9,7 @@
 #include "game-setting-page.h"
 #include "more-page.h"
 #include "list-window.h"
-
+#include "add-page.h"
 class BaseFrame : public wxFrame {
 public:
     BaseFrame(const wxString& title);
@@ -21,6 +21,7 @@ public:
     GameSettingPage* gameSettingPage; 
     ListWindow* historyPage;
     ListWindow* favouritePage;
+    AddWindow* addpage;
 private:
 
     void LoadHeader();
@@ -35,6 +36,8 @@ private:
 
     void OnHistoryBtnClicked(wxCommandEvent&);
     void OnFavouriteBtnClicked(wxCommandEvent&);
+
+    void OnAddBtnClicked(wxCommandEvent&);
 };
 
 #endif // BASEFRAME_H

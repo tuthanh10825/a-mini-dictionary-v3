@@ -9,12 +9,6 @@
 Welcome to the `Mini Dictionary Project`! 
 This project is designed to develop a dictionary application using C/C++ that allows users to look up meanings of words, manage their favorite words, view search history, and more. This project is undertaken as part of the CS163 coursework.
 
-### Participants and grading proportion
-1. Le Thi Tuyet Tram - n %
-2. Le Vinh Thuan - n %
-3. Tu Cong Thanh - n %
-4. Ngo Hoang Bao Thach - n %
-5. Nguyen Thu Uyen - n %
    
 ### Background
 *Dictionaries* are essential tools for language learners, writers, and anyone looking to enhance their vocabulary. The primary motivation behind this project is to apply the concepts learned in CS163, particularly in **designing efficient data structures and algorithms**, to build a functional and user-friendly dictionary application with software development, data management, and algorithm optimization.
@@ -25,8 +19,25 @@ This project is designed to develop a dictionary application using C/C++ that al
 * Group ID: 3
 * Last modified date: 28/08/2024
 
+### Participants and grading proportion
+1. Le Thi Tuyet Tram - n %
+2. Le Vinh Thuan - n %
+3. Tu Cong Thanh - n %
+4. Ngo Hoang Bao Thach - n %
+5. Nguyen Thu Uyen - n %
+
+## Technical Implementation
+
+### Architectual Structures
+
 ### Features
-The Mini Dictionary Project comes with a variety of features aimed at providing a comprehensive and interactive experience for users:
+<details open>
+<summary>
+Function
+</summary> <br />
+<p align="center">
+    The Mini Dictionary Project comes with a variety of features aimed at providing a comprehensive and interactive experience for users:
+</p>
 1. **Dataset Management:**
 - Users can switch between different datasets (e.g., emojis, slang words, English-to-English, English-to-Vietnamese, and Vietnamese-to-English).
 - The program builds and stores data structures for each dataset in RAM and saves them to files for quick loading in future sessions.
@@ -49,6 +60,9 @@ The Mini Dictionary Project comes with a variety of features aimed at providing 
 
 4. **Reset and Miscellaneous:**
 - Users can reset the dictionary to its original state.
+
+</details>
+
 
 
 <details open>

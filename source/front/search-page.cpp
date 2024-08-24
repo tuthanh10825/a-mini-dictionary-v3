@@ -201,7 +201,7 @@ void SearchPage::insertHistory(TST::TreeNode* ans) {
 				dataHisto.push_back(newWord);
 				if (defi[0] == '\0') break;
 			}
-			deleted_word = una::utf8to32u(newWord.word);
+			//deleted_word = una::utf8to32u(newWord.word);
 			dataHisto.push_back(newWord);
 		}
 
@@ -216,7 +216,7 @@ void SearchPage::insertHistory(TST::TreeNode* ans) {
 		defi = defi.substr(pos + 1);
 		newWord.definition = defi;
 		defi = '\0';
-    deleted_word = una::utf8to32u(newWord.word);
+    //deleted_word = una::utf8to32u(newWord.word);
 		dataHisto.push_back(newWord);
 	}
 	else {
@@ -227,7 +227,7 @@ void SearchPage::insertHistory(TST::TreeNode* ans) {
 		defi = defi.substr(pos + 1);
 		newWord.definition = defi;
 		defi = '\0';
-    deleted_word = una::utf8to32u(newWord.word);
+    //deleted_word = una::utf8to32u(newWord.word);
 		dataHisto.push_back(newWord);
 	}
 }
@@ -333,6 +333,7 @@ void SearchPage::OnRandomBtnClicked(wxCommandEvent&)
 
 void SearchPage::OnRemoveBtnClicked(wxCommandEvent&)
 {
+	deleted_word = una::utf8to32u(this->box->findBox->GetValue().utf8_string());
 	if (deleted_word.empty()) return;
 	std::u32string str = deleted_word;
 	wxMessageDialog confirmDialog(
