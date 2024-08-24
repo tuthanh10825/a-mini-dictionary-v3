@@ -28,6 +28,9 @@ BaseFrame::BaseFrame(const wxString& title)
     favouritePage = new ListWindow(workingPage, 1);
     workingPage->AddPage(favouritePage, wxString("Favourite"));
 
+    addpage = new AddWindow(workingPage);
+    workingPage->AddPage(addpage, wxString("Add"));
+
     LoadNavigation(); 
     mainSizer->Add(workingPage, 1, wxEXPAND); 
     loadFooter();
@@ -150,6 +153,8 @@ void BaseFrame::LoadNavigation()
     moreBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnMoreBtnClicked, this); 
     historyBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnHistoryBtnClicked, this); 
     favoriteBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnFavouriteBtnClicked, this);
+
+    this->searchPage->box->addButton->Bind(wxEVT_BUTTON, &BaseFrame::OnAddBtnClicked, this);
 }
 
 
@@ -208,4 +213,8 @@ void BaseFrame::OnFavouriteBtnClicked(wxCommandEvent&) {
     favouritePage->grid->SetColSize(1, trueSize);
     favouritePage->grid->ForceRefresh();
     workingPage->ChangeSelection(5);
+}
+void BaseFrame::OnAddBtnClicked(wxCommandEvent&)
+{
+    workingPage->ChangeSelection(6);
 }

@@ -18,6 +18,8 @@
 #define MOREQUIZ_IMG wxT("assets/icons/morequiz-icon.png")
 #define USERMANUAL_IMG wxT("assets/icons/usermanual-icon.png")
 #define DARKMODE_IMG wxT("assets/icons/darkmode-icon.png")
+#define ADD_IMG wxT("assets/icons/add-icon.png")
+#define CANCEL_IMG wxT("assets/icons/cancel-icon.png")
 
 
 #define WOTD_IMG "assets/world-of-the-day.png"
