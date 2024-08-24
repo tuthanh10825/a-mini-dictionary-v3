@@ -9,7 +9,7 @@
 #include <uni_algo/all.h>
 #include <cassert>
 #include <map>
-#include <set>
+#include "red-black-tree.h"
 
 using std::vector;
 
@@ -18,7 +18,7 @@ class suffixArr
 public:
 	std::u32string text;
 	vector<int> SA_index;
-	std::map<int, std::u32string> mapping;		//fix it. 
+	ordered_map <int, std::u32string> mapping;
 	void loadFile(std::string filename)
 	{
 		std::ifstream fin; fin.open(filename);
@@ -65,10 +65,15 @@ public:
 		vector<int> ans; 
 		int start = 0, end = SA_index.size() - 1; 
 		generate_ans(start, end, str, k, ans);
-		std::set<std::u32string> real_ans; 
+		ordered_set<std::u32string> real_ans; 
 		for (const int& val : ans)
 			real_ans.insert(mapping[val]); 
-		return vector<std::u32string>(real_ans.begin(), real_ans.end()); 
+
+		/*vector<std::u32string> ans_vector; 
+		for (auto iter = real_ans.begin(); iter != real_ans.end(); ++iter)
+			ans_vector.push_back(*iter);  */
+		return real_ans.to_vector(); 
+		 
 	}
 private: 
 	void generate_ans(int start, int end, std::u32string str, int k, vector<int> & ans )
@@ -153,5 +158,11 @@ private:
 			k *= 2;
 		}
 	}
-
+public: 
+	~suffixArr()
+	{
+		mapping.clear(); 
+		SA_index.clear(); 
+		text.clear(); 
+	}
 };
