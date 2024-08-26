@@ -16,7 +16,6 @@ class myApp : public wxApp
 		delete EEtree;
 		delete VEtree;
 		delete EMOtree;
-
 		delete SLtree;
 	}
 };

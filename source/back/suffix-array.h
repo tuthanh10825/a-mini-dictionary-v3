@@ -97,6 +97,8 @@ private:
 	{
 		int n = text.size();
 		SA_index.resize(n);
+
+
 		std::iota(SA_index.begin(), SA_index.end(), 0);
 		std::sort(SA_index.begin(), SA_index.end(), [this](int a, int b) { return text[a] < text[b];  });
 

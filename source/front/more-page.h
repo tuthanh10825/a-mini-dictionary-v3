@@ -4,9 +4,14 @@ class MoreWindow : public wxWindow
 {
 public:
 	MoreWindow(wxWindow*);
+	wxBitmapButton* darkmodeButton;
+	void FlipColor();
+
 private:
-	wxBitmapButton* darkmodeButton; 
+	wxColour background;
+	wxPanel* descriptionPanel = new wxPanel(this, wxID_ANY);
+	wxBitmapButton* userManualButton = new wxBitmapButton(descriptionPanel, wxID_ANY, wxBitmap("assets/more/user-manual-button.png", wxBITMAP_TYPE_PNG));
 	void OnUserManualClicked(wxCommandEvent&); 
-	void OnDarkmodeClicked(wxCommandEvent&);
+	
 	//void refreshAllPage();
 };

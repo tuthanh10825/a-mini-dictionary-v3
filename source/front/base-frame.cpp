@@ -42,25 +42,29 @@ BaseFrame::BaseFrame(const wxString& title)
             this->searchPage->OnRandomBtnClicked(evt);
             this->workingPage->ChangeSelection(1);
         });
-
+    this->searchPage->box->addButton->Bind(wxEVT_BUTTON, &BaseFrame::OnAddBtnClicked, this);
+    this->moreWindow->darkmodeButton->Bind(wxEVT_BUTTON, &BaseFrame::OnFlipColor, this);
     this->SetSizerAndFit(mainSizer); 
     // 155 x 37
+   
 }
 
 void BaseFrame::LoadHeader()
 {
 
-    wxPanel* leftHeaderPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 0), wxSize(1156.5, 154.5));
+    leftHeaderPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 0), wxSize(1156.5, 154.5));
     LoadImage(NAME_IMG, leftHeaderPanel);
     if (LIGHTMODE) {
         leftHeaderPanel->SetBackgroundColour(LIGHTMODE_labelANDHeaderColor);
     }
     else leftHeaderPanel->SetBackgroundColour(DARKMODE_HeaderColor);
 
-    wxPanel* rightHeaderPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 1156.5), wxSize(1451.25 - 1156.5, 154.5));
-    LoadImage(LOGO_IMG, rightHeaderPanel);
+    rightHeaderPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 1156.5), wxSize(1451.25 - 1156.5, 154.5));
+    std::string s = LIGHTMODE ? "" : "1"; 
+    logoBitmap = new wxStaticBitmap(rightHeaderPanel, wxID_ANY, wxBitmap("assets/logo" + s + ".png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
 
     if (LIGHTMODE) {
+
         rightHeaderPanel->SetBackgroundColour(LIGHTMODE_backgroundANDNaviColor);
     } else rightHeaderPanel->SetBackgroundColour(DARKMODE_backgroundColor);
     
@@ -84,14 +88,16 @@ void BaseFrame::loadFooter()
 }
 void BaseFrame::LoadNavigation()
 {
-    wxPanel* naviPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 156), wxSize(1451.25, 63.13), wxBORDER_SIMPLE);
-    wxColour background;
+    naviPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 156), wxSize(1451.25, 63.13), wxBORDER_SIMPLE);
+    
+    wxColour background; 
+
     if (LIGHTMODE) {
         background = LIGHTMODE_backgroundANDNaviColor;
     }
-    else background = DARKMODE_backgroundColor;
-
+    else background = (DARKMODE_backgroundColor);
     naviPanel->SetBackgroundColour(background);
+   
     
     std::string s;
     if (LIGHTMODE) s = ""; else s = '1';
@@ -109,12 +115,12 @@ void BaseFrame::LoadNavigation()
     //wxBitmapButton* homeBtn = new wxBitmapButton(parent, wxID_ANY, homeBtnBitmap, wxDefaultPosition, wxSize(width, height));
     
     double distance = (1451.25 / 6); 
-    wxBitmapButton* homeBtn = new wxBitmapButton(naviPanel, wxID_ANY, homeBtnBitmap, wxDefaultPosition, wxSize((1451.25 / 6), 63.13));
-    wxBitmapButton* dictionaryBtn = new wxBitmapButton(naviPanel, wxID_ANY, dictionaryBtnBitmap, wxPoint(distance,0), wxSize((1451.25 / 6), 63.13));
-    wxBitmapButton* gameBtn = new wxBitmapButton(naviPanel, wxID_ANY, gameBtnBitmap, wxPoint(2 * distance, 0), wxSize(1451.25 /6, 63.13));
-    wxBitmapButton* historyBtn = new wxBitmapButton(naviPanel, wxID_ANY, historyBtnBitmap, wxPoint(3 * distance, 0), wxSize(1451.25 / 6, 63.13));
-    wxBitmapButton* favoriteBtn = new wxBitmapButton(naviPanel, wxID_ANY, favoriteBtnBitmap, wxPoint(4 * distance, 0), wxSize(1451.25 / 6, 63.13));
-    wxBitmapButton* moreBtn = new wxBitmapButton(naviPanel, wxID_ANY, moreBtnBitmap, wxPoint(5 * distance, 0), wxSize(1451.25 / 6, 63.13));
+    homeBtn = new wxBitmapButton(naviPanel, wxID_ANY, homeBtnBitmap, wxDefaultPosition, wxSize((1451.25 / 6), 63.13));
+    dictionaryBtn = new wxBitmapButton(naviPanel, wxID_ANY, dictionaryBtnBitmap, wxPoint(distance,0), wxSize((1451.25 / 6), 63.13));
+    gameBtn = new wxBitmapButton(naviPanel, wxID_ANY, gameBtnBitmap, wxPoint(2 * distance, 0), wxSize(1451.25 /6, 63.13));
+    historyBtn = new wxBitmapButton(naviPanel, wxID_ANY, historyBtnBitmap, wxPoint(3 * distance, 0), wxSize(1451.25 / 6, 63.13));
+    favoriteBtn = new wxBitmapButton(naviPanel, wxID_ANY, favoriteBtnBitmap, wxPoint(4 * distance, 0), wxSize(1451.25 / 6, 63.13));
+    moreBtn = new wxBitmapButton(naviPanel, wxID_ANY, moreBtnBitmap, wxPoint(5 * distance, 0), wxSize(1451.25 / 6, 63.13));
 
     homeBtn->SetBackgroundColour(background);
     dictionaryBtn->SetBackgroundColour(background);
@@ -154,7 +160,7 @@ void BaseFrame::LoadNavigation()
     historyBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnHistoryBtnClicked, this); 
     favoriteBtn->Bind(wxEVT_BUTTON, &BaseFrame::OnFavouriteBtnClicked, this);
 
-    this->searchPage->box->addButton->Bind(wxEVT_BUTTON, &BaseFrame::OnAddBtnClicked, this);
+   
 }
 
 
@@ -217,4 +223,75 @@ void BaseFrame::OnFavouriteBtnClicked(wxCommandEvent&) {
 void BaseFrame::OnAddBtnClicked(wxCommandEvent&)
 {
     workingPage->ChangeSelection(6);
+}
+
+void BaseFrame::OnFlipColor(wxCommandEvent&)
+{
+    LIGHTMODE = !LIGHTMODE; 
+    this -> FlipColor(); 
+    this->homePage->FlipColor(); 
+    this -> moreWindow->FlipColor(); 
+    this->favouritePage->FlipColor(); 
+    this->historyPage->FlipColor(); 
+    this->searchPage->FlipColor();
+    this->gameSettingPage->FlipColor();
+
+}
+
+void BaseFrame::FlipColor()
+{
+    wxColour background;
+
+    if (LIGHTMODE) {
+        background = LIGHTMODE_backgroundANDNaviColor;
+    }
+    else background = (DARKMODE_backgroundColor);
+
+    if (LIGHTMODE) {
+        leftHeaderPanel->SetBackgroundColour(LIGHTMODE_labelANDHeaderColor);
+    }
+    else leftHeaderPanel->SetBackgroundColour(DARKMODE_HeaderColor);
+    leftHeaderPanel->Refresh();
+
+    rightHeaderPanel->SetBackgroundColour(background);
+    rightHeaderPanel->Refresh();
+
+    naviPanel->SetBackgroundColour(background);
+    naviPanel->Refresh();
+
+    std::string s;
+    if (LIGHTMODE) s = ""; else s = '1';
+    wxBitmap homeBtnBitmap("assets/icons/home-icon" + s + ".png", wxBITMAP_TYPE_PNG);
+    wxBitmap dictionaryBtnBitmap("assets/icons/search-icon" + s + ".png", wxBITMAP_TYPE_PNG);
+    wxBitmap gameBtnBitmap("assets/icons/game-icon" + s + ".png", wxBITMAP_TYPE_PNG);
+    wxBitmap historyBtnBitmap("assets/icons/history-icon" + s + ".png", wxBITMAP_TYPE_PNG);
+    wxBitmap favoriteBtnBitmap("assets/icons/favourite-icon" + s + ".png", wxBITMAP_TYPE_PNG);
+    wxBitmap moreBtnBitmap("assets/icons/more-icon" + s + ".png", wxBITMAP_TYPE_PNG);
+    
+    logoBitmap->SetBitmap(wxBitmap("assets/logo" + s + ".png", wxBITMAP_TYPE_PNG));
+
+    homeBtn->SetBitmapLabel(homeBtnBitmap);
+    homeBtn->SetBackgroundColour(background);
+    homeBtn->Refresh();
+
+    dictionaryBtn->SetBitmapLabel(dictionaryBtnBitmap);
+    dictionaryBtn->SetBackgroundColour(background);
+    dictionaryBtn->Refresh();
+
+
+    gameBtn->SetBitmapLabel(gameBtnBitmap);
+    gameBtn->SetBackgroundColour(background);
+    gameBtn->Refresh();
+
+    historyBtn->SetBitmapLabel(historyBtnBitmap);
+    historyBtn->SetBackgroundColour(background);
+    historyBtn->Refresh();
+
+    favoriteBtn->SetBitmapLabel(favoriteBtnBitmap);
+    favoriteBtn->SetBackgroundColour(background);
+    favoriteBtn->Refresh();
+
+    moreBtn->SetBitmapLabel(moreBtnBitmap);
+    moreBtn->SetBackgroundColour(background);
+    moreBtn->Refresh();
 }

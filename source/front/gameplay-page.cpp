@@ -1,14 +1,16 @@
 #include "gameplay-page.h"
 #include "uni_algo/all.h"
 #include "TST.h"
+#include "Globals.h"
 DefiGameWindow::DefiGameWindow(wxWindow* parent, TST* clist)
 	: wxFrame(parent, wxID_ANY, "Play!", wxDefaultPosition, wxDefaultSize), list(clist)
 {
+	std::string s = LIGHTMODE ? "" : "1"; 
 	this->SetSizeHints(wxSize(WIDTH, HEIGHT));
 
 	wxPanel* topPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
-	wxStaticBitmap* guessTextLine = new wxStaticBitmap(topPanel, wxID_ANY, wxBitmap(wxString("assets/game/play/guess-defi-line-text.png"), wxBITMAP_TYPE_PNG));
-	topPanel->SetBackgroundColour(WHITE);
+	wxStaticBitmap* guessTextLine = new wxStaticBitmap(topPanel, wxID_ANY, wxBitmap(wxString("assets/game/play/guess-defi-line-text" + s +".png"), wxBITMAP_TYPE_PNG));
+	topPanel->SetBackgroundColour(LIGHTMODE ? WHITE : BLACK);
 
 	wxFont topFont;
 	topFont.SetNativeFontInfoUserDesc(Pala30);
@@ -16,7 +18,8 @@ DefiGameWindow::DefiGameWindow(wxWindow* parent, TST* clist)
 	guessWord = new wxTextCtrl(topPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, wxBORDER_DEFAULT | wxTE_READONLY);
 	guessWord->SetFont(topFont);
 	guessWord->HideNativeCaret();
-	guessWord->SetBackgroundColour(WHITE);
+	guessWord->SetBackgroundColour(LIGHTMODE ? WHITE : BLACK);
+	guessWord->SetForegroundColour(LIGHTMODE ? BLACK : WHITE);
 
 	wxBoxSizer* topSizer = new wxBoxSizer(wxHORIZONTAL);
 	topSizer->Add(guessTextLine, 0, wxLEFT | wxTOP | wxBOTTOM | wxALIGN_BOTTOM | wxALIGN_LEFT, 60);
@@ -27,17 +30,17 @@ DefiGameWindow::DefiGameWindow(wxWindow* parent, TST* clist)
 	mainSizer->Add(topPanel, 0, wxEXPAND);
 
 	wxPanel* answerPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
-	answerPanel->SetBackgroundColour(WHITE);
+	answerPanel->SetBackgroundColour(LIGHTMODE ? WHITE : BLACK);
 
 	wxBoxSizer* totalAnswerSizer = new wxBoxSizer(wxVERTICAL);
 	wxFont answerFont;
 	answerFont.SetNativeFontInfoUserDesc(Pala15);
-
 	for (int i = 0; i < 4; ++i) {
 		wxRadioButton* button = new wxRadioButton(answerPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, i == 0 ? wxRB_GROUP : 0);
 		answer[i] = new wxTextCtrl(answerPanel, wxID_ANY, "", wxDefaultPosition, wxSize(-1, 200), wxTE_READONLY | wxTE_MULTILINE | wxBORDER_NONE | wxTE_NO_VSCROLL);
 		answer[i]->SetFont(answerFont);
-
+		answer[i]->SetForegroundColour(LIGHTMODE ? WHITE : BLACK);
+		answer[i]->SetBackgroundColour(LIGHTMODE ? BLACK : WHITE);
 		wxBoxSizer* answerSizer = new wxBoxSizer(wxHORIZONTAL);
 		answerSizer->Add(button, 0, wxLEFT, 60);
 		answerSizer->Add(answer[i], 1, wxRIGHT, 60);
@@ -48,6 +51,7 @@ DefiGameWindow::DefiGameWindow(wxWindow* parent, TST* clist)
 
 	wxBitmapButton* submitAnsButton = new wxBitmapButton(answerPanel, wxID_ANY, wxBitmap(wxString("assets/game/play/answer-button.png"), wxBITMAP_TYPE_PNG));
 
+	submitAnsButton->SetBackgroundColour(LIGHTMODE ? WHITE : BLACK);
 	wxBoxSizer* submitSizer = new wxBoxSizer(wxHORIZONTAL);
 	submitSizer->Add(submitAnsButton, 0, wxALIGN_CENTER);
 	wxBoxSizer* centeringSubmitSizer = new wxBoxSizer(wxVERTICAL);
@@ -115,7 +119,12 @@ void DefiGameWindow::SetVal(Question ques)
 {
 	this->ques = ques; 
 	for (int i = 0; i < 4; ++i)
+	{
 		answer[i]->SetValue(ques.choices[i]);
+		answer[i]->SetBackgroundColour(LIGHTMODE ? WHITE : BLACK);
+		answer[i]->SetForegroundColour(LIGHTMODE ? BLACK : WHITE);
+	}
+
 	guessWord->SetValue(ques.detail);
 }
 
@@ -124,20 +133,21 @@ wordGameWindow::wordGameWindow(wxWindow* parent, TST* clist) : wxFrame(parent, w
 	// Panel to load image
 	wxPanel* quizPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition);
 	wxPanel* answerPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition);
-	quizPanel->SetBackgroundColour(WHITE); 
-	answerPanel->SetBackgroundColour(WHITE); 
+	quizPanel->SetBackgroundColour(LIGHTMODE ? WHITE : BLACK);
+	answerPanel->SetBackgroundColour(LIGHTMODE ? WHITE : BLACK);
 
 
 	// Load image for topPanel
-	
-	wxStaticBitmap* markDisplay = new wxStaticBitmap(quizPanel, wxID_ANY, wxBitmap(wxString("assets/game/play/mark-image.png"), wxBITMAP_TYPE_PNG));
+	std::string s = LIGHTMODE ? "" : "1";
+	wxStaticBitmap* markDisplay = new wxStaticBitmap(quizPanel, wxID_ANY, wxBitmap(wxString("assets/game/play/mark-image" + s  +  ".png"), wxBITMAP_TYPE_PNG));
 
-	wxStaticBitmap* guesswordDisplay = new wxStaticBitmap(quizPanel, wxID_ANY, wxBitmap(wxString("assets/game/play/guess-word-text.png"), wxBITMAP_TYPE_PNG)
+	wxStaticBitmap* guesswordDisplay = new wxStaticBitmap(quizPanel, wxID_ANY, wxBitmap(wxString("assets/game/play/guess-word-text" + s + ".png"), wxBITMAP_TYPE_PNG)
 		, wxDefaultPosition);
 
 	word = new wxTextCtrl(quizPanel, wxID_ANY, "",
 		wxDefaultPosition, wxSize(1100, 88), wxTE_READONLY | wxBORDER_NONE | wxTE_MULTILINE | wxTE_NO_VSCROLL);
-	word->SetBackgroundColour(wxColor(255, 255, 255)); 
+	word->SetBackgroundColour(LIGHTMODE ? WHITE : BLACK);
+	word->SetForegroundColour(LIGHTMODE ? BLACK : WHITE); 
 	wxFont defiQuizFont; defiQuizFont.SetNativeFontInfoUserDesc("Palatino Linotype 20 WINDOWS-1252"); 
 	word->SetFont(defiQuizFont);
 	wxBoxSizer* firstSizer = new wxBoxSizer(wxVERTICAL); 

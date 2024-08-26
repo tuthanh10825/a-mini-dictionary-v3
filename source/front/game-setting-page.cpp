@@ -2,18 +2,16 @@
 
 GameSettingPage::GameSettingPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
-	wxPanel* logoPanel = new wxPanel(this, wxID_ANY); //1
-	logoPanel->SetBackgroundColour(WHITE); 
-	wxStaticBitmap* logo = new wxStaticBitmap(logoPanel, wxID_ANY, wxBitmap("assets/game/setting/logo.png", wxBITMAP_TYPE_PNG)); 
+	//1
+	FlipColor(); 
+	
 	wxBoxSizer* centerVert = new wxBoxSizer(wxVERTICAL); 
 	centerVert->Add(logo, 0, wxALIGN_CENTER); 
 	wxBoxSizer* centerHori = new wxBoxSizer(wxHORIZONTAL); 
 	centerHori->Add(centerVert, 1, wxALIGN_CENTER); 
 	logoPanel->SetSizerAndFit(centerHori); 
 
-	wxPanel* chooseGamePanel = new wxPanel(this, wxID_ANY); //2
-	chooseGamePanel->SetBackgroundColour(WHITE);
-	wxStaticBitmap* chooseGameText = new wxStaticBitmap(chooseGamePanel, wxID_ANY, wxBitmap("assets/game/setting/choose-game-text.png", wxBITMAP_TYPE_PNG));
+	
 	
 	
 	wxBoxSizer* centerChooseGameHori = new wxBoxSizer(wxHORIZONTAL); 
@@ -21,18 +19,15 @@ GameSettingPage::GameSettingPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	wxBoxSizer* centerChooseGameVert = new wxBoxSizer(wxVERTICAL); 
 	centerChooseGameVert->Add(centerChooseGameHori, 0, wxALIGN_LEFT);
 	chooseGamePanel->SetSizerAndFit(centerChooseGameVert);
-
-	wxPanel* choicePanelGame = new wxPanel(this, wxID_ANY); 
-	choicePanelGame->SetBackgroundColour(WHITE); 
+ 
 	
 	chooseWord = new wxCheckBox(choicePanelGame, wxID_ANY, wxEmptyString); 
-	wxStaticBitmap* chooseWordText = new wxStaticBitmap(choicePanelGame, wxID_ANY, wxBitmap("assets/game/setting/choose-word-text.png", wxBITMAP_TYPE_PNG)); 
+	
 	wxBoxSizer* chooseWordSizer = new wxBoxSizer(wxHORIZONTAL); 
 	chooseWordSizer->Add(chooseWord, 0);
 	chooseWordSizer->Add(chooseWordText, 0); 
 
 	chooseDefi = new wxCheckBox(choicePanelGame, wxID_ANY, wxEmptyString);
-	wxStaticBitmap* chooseDefiText = new wxStaticBitmap(choicePanelGame, wxID_ANY, wxBitmap("assets/game/setting/choose-defi-text.png", wxBITMAP_TYPE_PNG));
 	wxBoxSizer* chooseDefiSizer = new wxBoxSizer(wxHORIZONTAL);
 	chooseDefiSizer->Add(chooseDefi, 0);
 	chooseDefiSizer->Add(chooseDefiText, 0);
@@ -53,48 +48,40 @@ GameSettingPage::GameSettingPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	choicePanelGame->SetSizerAndFit(chooseGameSizer); 
 	
 
-	wxPanel* chooseLangPanel = new wxPanel(this, wxID_ANY); //4
-	chooseLangPanel->SetBackgroundColour(WHITE); 
-	wxStaticBitmap* chooseLangText = new wxStaticBitmap(chooseLangPanel, wxID_ANY, wxBitmap("assets/game/setting/choose-lang-text.png", wxBITMAP_TYPE_PNG));
+	
 	wxBoxSizer* centerChooseLangHori = new wxBoxSizer(wxHORIZONTAL);
 	centerChooseLangHori->Add(chooseLangText, 0, wxALL, 20);
 	wxBoxSizer* centerChooseLangVert = new wxBoxSizer(wxVERTICAL);
 	centerChooseLangVert->Add(centerChooseLangHori, 0, wxALIGN_LEFT);
 	chooseLangPanel->SetSizerAndFit(centerChooseLangVert);
 
-	wxPanel* choicePanelLang = new wxPanel(this, wxID_ANY); 
-	choicePanelLang->SetBackgroundColour(WHITE); 
+
 
 	chooseEngEng = new wxCheckBox(choicePanelLang, wxID_ANY, wxEmptyString);
-	wxStaticBitmap* chooseEngEngText = new wxStaticBitmap(choicePanelLang, wxID_ANY, wxBitmap("assets/game/setting/choose-ee-text.png", wxBITMAP_TYPE_PNG));
 	wxBoxSizer* chooseEngEngSizer = new wxBoxSizer(wxHORIZONTAL);
 	chooseEngEngSizer->Add(chooseEngEng, 0);
 	chooseEngEngSizer->Add(chooseEngEngText, 0);
 	chooseEngEng->Bind(wxEVT_CHECKBOX, &GameSettingPage::OnChooseEEClicked, this); 
 
 	chooseEngVie = new wxCheckBox(choicePanelLang, wxID_ANY, wxEmptyString);
-	wxStaticBitmap* chooseEngVieText = new wxStaticBitmap(choicePanelLang, wxID_ANY, wxBitmap("assets/game/setting/choose-ev-text.png", wxBITMAP_TYPE_PNG));
 	wxBoxSizer* chooseEngVieSizer = new wxBoxSizer(wxHORIZONTAL);
 	chooseEngVieSizer->Add(chooseEngVie, 0);
 	chooseEngVieSizer->Add(chooseEngVieText, 0);
 	chooseEngVie->Bind(wxEVT_CHECKBOX, &GameSettingPage::OnChooseEVClicked, this); 
 
 	chooseVieEng = new wxCheckBox(choicePanelLang, wxID_ANY, wxEmptyString);
-	wxStaticBitmap* chooseVieEngText = new wxStaticBitmap(choicePanelLang, wxID_ANY, wxBitmap("assets/game/setting/choose-ve-text.png", wxBITMAP_TYPE_PNG));
 	wxBoxSizer* chooseVieEngSizer = new wxBoxSizer(wxHORIZONTAL);
 	chooseVieEngSizer->Add(chooseVieEng, 0);
 	chooseVieEngSizer->Add(chooseVieEngText, 0);
 	chooseVieEng->Bind(wxEVT_CHECKBOX, &GameSettingPage::OnChooseVEClicked, this); 
 
 	chooseEmoticon = new wxCheckBox(choicePanelLang, wxID_ANY, wxEmptyString);
-	wxStaticBitmap* chooseEmoticonText = new wxStaticBitmap(choicePanelLang, wxID_ANY, wxBitmap("assets/game/setting/choose-emo-text.png", wxBITMAP_TYPE_PNG));
 	wxBoxSizer* chooseEmoticonSizer = new wxBoxSizer(wxHORIZONTAL);
 	chooseEmoticonSizer->Add(chooseEmoticon, 0);
 	chooseEmoticonSizer->Add(chooseEmoticonText, 0);
 	chooseEmoticon->Bind(wxEVT_CHECKBOX, &GameSettingPage::OnChooseEmoticonClicked, this);
 
 	chooseSlang = new wxCheckBox(choicePanelLang, wxID_ANY, wxEmptyString);
-	wxStaticBitmap* chooseSlangText = new wxStaticBitmap(choicePanelLang, wxID_ANY, wxBitmap("assets/game/setting/choose-slang-text.png", wxBITMAP_TYPE_PNG));
 	wxBoxSizer* chooseSlangSizer = new wxBoxSizer(wxHORIZONTAL);
 	chooseSlangSizer->Add(chooseSlang, 0);
 	chooseSlangSizer->Add(chooseSlangText, 0);
@@ -133,19 +120,16 @@ GameSettingPage::GameSettingPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	
 	choicePanelLang->SetSizerAndFit(totalChooseLangSizer); 
 
-	wxPanel* selectPlayPanel = new wxPanel(this, wxID_ANY); 
-	selectPlayPanel->SetBackgroundColour(WHITE); 
-	wxBitmapButton* selectPlay = new wxBitmapButton(selectPlayPanel, wxID_ANY, wxBitmap("assets/game/setting/select-play.png", wxBITMAP_TYPE_PNG)); 
+	
 	wxBoxSizer* centerPlaySizerHori = new wxBoxSizer(wxHORIZONTAL); 
 	centerPlaySizerHori->Add(selectPlay, 0, wxALIGN_CENTER); 
 	wxBoxSizer* centerPlaySizerVert = new wxBoxSizer(wxVERTICAL); 
 	centerPlaySizerVert->Add(centerPlaySizerHori, 1, wxALIGN_CENTER); 
 	selectPlayPanel->SetSizerAndFit(centerPlaySizerVert); 
 
-	wxPanel* number = new wxPanel(this, wxID_ANY); 
+	
 
 	
-	wxStaticBitmap* numberText = new wxStaticBitmap(number, wxID_ANY, wxBitmap("assets/game/setting/number-text.png", wxBITMAP_TYPE_PNG)); 
 	
 	finite = new wxCheckBox(number, wxID_ANY, "");
 	value = new wxSpinCtrl(number, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, 16384L, 1, 100, 1); 
@@ -156,7 +140,6 @@ GameSettingPage::GameSettingPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	finite->SetValue(true); 
 
 	infinite = new wxCheckBox(number, wxID_ANY, ""); 
-	wxStaticBitmap* infiniteText = new wxStaticBitmap(number, wxID_ANY, wxBitmap("assets/game/setting/endlessly-text.png", wxBITMAP_TYPE_PNG)); 
 	wxBoxSizer* infiniteSizer = new wxBoxSizer(wxHORIZONTAL); 
 	infiniteSizer->Add(infinite, 0); 
 	infiniteSizer->Add(infiniteText, 1); 
@@ -174,7 +157,7 @@ GameSettingPage::GameSettingPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	mainNumberSizer->Add(adjustInfiniteSizer,1, wxALL, 20); 
 
 	number->SetSizerAndFit(mainNumberSizer); 
-	number->SetBackgroundColour(WHITE); 
+	
 
 	wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL); 
 	mainSizer->Add(logoPanel, 1, wxEXPAND); 
@@ -295,10 +278,55 @@ void GameSettingPage::OnPlayButtonClicked(wxCommandEvent&)
 		playFrame2->Show(true);
 		if (!playFrame2->IsShown()) return;
 	}
-	
-	
-	
 }
+
+void GameSettingPage::FlipColor()
+{
+	std::string s; 
+	if (LIGHTMODE)
+	{
+		choicePanelGame->SetBackgroundColour(WHITE);
+		logoPanel->SetBackgroundColour(WHITE);
+		chooseGamePanel->SetBackgroundColour(WHITE);
+		chooseLangPanel->SetBackgroundColour(WHITE);
+		selectPlayPanel->SetBackgroundColour(WHITE);
+		choicePanelLang->SetBackgroundColour(WHITE);
+		number->SetBackgroundColour(WHITE);
+		s = "";
+		selectPlay->SetBackgroundColour(WHITE);
+	}
+	else
+	{
+		choicePanelGame->SetBackgroundColour(BLACK);
+		logoPanel->SetBackgroundColour(BLACK);
+		chooseGamePanel->SetBackgroundColour(BLACK);
+		chooseLangPanel->SetBackgroundColour(BLACK);
+		selectPlayPanel->SetBackgroundColour(BLACK);
+		choicePanelLang->SetBackgroundColour(BLACK);
+		number->SetBackgroundColour(BLACK);
+		selectPlay->SetBackgroundColour(BLACK);
+		s = "1"; 
+	}
+	logo->SetBitmap(wxBitmap("assets/game/setting/logo" + s + ".png", wxBITMAP_TYPE_PNG));
+	chooseGameText->SetBitmap(wxBitmap("assets/game/setting/choose-game-text" + s + ".png", wxBITMAP_TYPE_PNG));
+	chooseWordText->SetBitmap(wxBitmap("assets/game/setting/choose-word-text" + s + ".png", wxBITMAP_TYPE_PNG));
+	chooseDefiText->SetBitmap(wxBitmap("assets/game/setting/choose-defi-text" + s + ".png", wxBITMAP_TYPE_PNG));
+
+	chooseLangText->SetBitmap(wxBitmap("assets/game/setting/choose-lang-text" + s + ".png", wxBITMAP_TYPE_PNG));
+
+	chooseEngEngText->SetBitmap(wxBitmap("assets/game/setting/choose-ee-text" + s + ".png", wxBITMAP_TYPE_PNG));
+	chooseEngVieText->SetBitmap(wxBitmap("assets/game/setting/choose-ev-text" + s + ".png", wxBITMAP_TYPE_PNG));
+	chooseEngVieText->SetBitmap(wxBitmap("assets/game/setting/choose-ev-text" + s + ".png", wxBITMAP_TYPE_PNG));
+	chooseVieEngText->SetBitmap(wxBitmap("assets/game/setting/choose-ve-text" + s + ".png", wxBITMAP_TYPE_PNG));
+	chooseEmoticonText->SetBitmap(wxBitmap("assets/game/setting/choose-emo-text" + s + ".png", wxBITMAP_TYPE_PNG));
+	chooseSlangText->SetBitmap(wxBitmap("assets/game/setting/choose-slang-text" + s + ".png", wxBITMAP_TYPE_PNG));
+
+	numberText->SetBitmap(wxBitmap("assets/game/setting/number-text" + s + ".png", wxBITMAP_TYPE_PNG));
+	infiniteText->SetBitmap(wxBitmap("assets/game/setting/endlessly-text" + s + ".png", wxBITMAP_TYPE_PNG));
+}
+
+
+
 
 //void GameSettingPage::StartGameRound(wxFrame* gameFrame, int totalRounds, int currentRound)
 //{

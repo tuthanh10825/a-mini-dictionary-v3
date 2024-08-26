@@ -12,10 +12,11 @@
 #include "Globals.h"
 
 class ListWindow : public wxWindow {
-	public:
-		ListWindow(wxWindow* parent, int isFavor);
-		void AppendRows(vector<word>& words, int isFav);
-		wxGrid* grid;
+public:
+	ListWindow(wxWindow* parent, int isFavor);
+	void AppendRows(vector<word>& words, int isFav);
+	wxGrid* grid;
+	void FlipColor(); 
 private:
 	bool isLoaded = false;
 	// Need to implement
@@ -27,4 +28,9 @@ private:
 	void onSelClick(wxCommandEvent&);
 	void OnSizeChange(wxSizeEvent&);
 
+	wxPanel* subPanel; 
+	wxBitmapButton* delbutton;
+	wxBitmapButton* selbutton; 
+	wxStaticBitmap* delText; 
+	wxStaticBitmap* selectText;
 };
