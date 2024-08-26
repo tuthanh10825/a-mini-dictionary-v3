@@ -327,6 +327,7 @@ void SearchPage::OnRandomBtnClicked(wxCommandEvent&)
 {
 	this->res->clearScreen(); 
 	pair<std::u32string, std::string> ans = list->random();
+	this->box->findBox->ChangeValue(wxString(una::utf32to16(ans.first)));
 	this->res->addingString(wxString(una::utf32to16(ans.first)) + wxString(una::utf8to16(ans.second))); 
 	return; 
 }
