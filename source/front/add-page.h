@@ -13,4 +13,7 @@ public:
 private:
 	TST* list;
 	std::string currLang = "ENG/ENG";
+	void OnChooseLanguage(wxCommandEvent& evt);
+	void OnAddBtnClicked(wxCommandEvent&);
+	void OnCancelBtnClicked(wxCommandEvent&);
 };
