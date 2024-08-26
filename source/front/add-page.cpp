@@ -98,16 +98,34 @@ void AddWindow::OnChooseLanguage(wxCommandEvent& evt)
 }
 void AddWindow::OnAddBtnClicked(wxCommandEvent&)
 {
-	wxString s1 = keyword->GetValue();
-	wxString s2 = type->GetValue();
-	wxString s3 = defi->GetValue();
+	wxString s1 = keyword->GetValue().utf8_string();
+	wxString s2 = type->GetValue().utf8_string();
+	wxString s3 = defi->GetValue().utf8_string();
 
 	std::string keystr = s1.ToStdString();
 	std::string typestr = s2.ToStdString();
 	std::string defistr = s3.ToStdString();
+	std::string definition = defistr;
 
 	defistr = "\n - " + typestr + "\n - " + defistr;
 
 	this->list->insert(keystr, defistr);
 	wxMessageBox("Add a new word successfully", "Successfully", wxOK | wxICON_INFORMATION);
+	std::ofstream fout;
+	if (currLang == "ENG/VIE" || currLang == "VIE/ENG")
+	{
+		if (currLang == "ENG/VIE") fout.open(EVINSERT, std::ios::app);
+		else if(currLang == "VIE/ENG") fout.open(VEINSERT, std::ios::app);
+		fout << '@' << keystr << std::endl;
+		fout << "*  " << typestr <<std::endl;
+		fout << "- " << definition <<std::endl;
+	}
+	else
+	{
+		if (currLang == "ENG/ENG") fout.open(EEINSERT, std::ios::app);
+		if (currLang == "EMOTICON") fout.open(EMOINSERT, std::ios::app);
+		if (currLang == "SLANG") fout.open(SLINSERT, std::ios::app);
+		fout << keystr << " (" << typestr << ") " << definition << std::endl;
+	}
+	fout.close();
 }

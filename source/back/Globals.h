@@ -14,6 +14,12 @@
 #define EMODELETE "data/emo/delete.txt"
 #define SLDELETE "data/slang/delete.txt"
 
+#define EVINSERT "data/ev/insert.txt"
+#define VEINSERT "data/ve/insert.txt"
+#define EEINSERT "data/ee/insert.txt"
+#define EMOINSERT "data/emo/insert.txt"
+#define SLINSERT "data/slang/insert.txt"
+
 
 struct word {
 	std::string word;
