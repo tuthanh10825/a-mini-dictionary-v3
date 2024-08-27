@@ -815,7 +815,6 @@ static void loadInserting()
 			for (std::string tempLine; !fin.eof();)
 			{
 				std::getline(fin, tempLine);
-				if (fin.eof()) break;
 				if (tempLine[0] == '@')
 				{
 					name.erase(name.begin());
@@ -828,7 +827,11 @@ static void loadInserting()
 					defi += '\n' + tempLine;
 			}
 		}
-		addingEE[una::utf8to32u(name)] = defi;
+		if (!name.empty())
+		{
+			name.erase(name.begin());
+			addingEE[una::utf8to32u(name)] = defi;
+		}
 	}
 	fin.close(); fin.open(EVINSERT);
 	if (fin.is_open())
@@ -841,7 +844,6 @@ static void loadInserting()
 			for (std::string tempLine; !fin.eof();)
 			{
 				std::getline(fin, tempLine);
-				if (fin.eof()) break;
 				if (tempLine[0] == '@')
 				{
 					name.erase(name.begin());
@@ -857,7 +859,11 @@ static void loadInserting()
 			}
 
 		}
-		addingEV[una::utf8to32u(name)] = defi;
+		if (!name.empty())
+		{
+			name.erase(name.begin());
+			addingEV[una::utf8to32u(name)] = defi;
+		}
 	}
 	fin.close(); fin.open(VEINSERT);
 	if (fin.is_open())
@@ -870,7 +876,6 @@ static void loadInserting()
 			for (std::string tempLine; !fin.eof();)
 			{
 				std::getline(fin, tempLine);
-				if (fin.eof()) break;
 				if (tempLine[0] == '@')
 				{
 					name.erase(name.begin());
@@ -885,7 +890,11 @@ static void loadInserting()
 			}
 
 		}
-		addingVE[una::utf8to32u(name)] = defi;
+		if (!name.empty())
+		{
+			name.erase(name.begin());
+			addingVE[una::utf8to32u(name)] = defi;
+		}
 	}
 	fin.close(); fin.open(SLINSERT);
 	if (fin.is_open())
@@ -898,7 +907,6 @@ static void loadInserting()
 			for (std::string tempLine; !fin.eof();)
 			{
 				std::getline(fin, tempLine);
-				if (fin.eof()) break;
 				if (tempLine[0] == '@')
 				{
 					name.erase(name.begin());
@@ -913,7 +921,11 @@ static void loadInserting()
 			}
 
 		}
-		addingSlang[una::utf8to32u(name)] = defi;
+		if (!name.empty())
+		{
+			name.erase(name.begin());
+			addingSlang[una::utf8to32u(name)] = defi;
+		}
 	}
 	fin.close(); fin.open(EMOINSERT);
 	if (fin.is_open())
@@ -926,7 +938,6 @@ static void loadInserting()
 			for (std::string tempLine; !fin.eof();)
 			{
 				std::getline(fin, tempLine);
-				if (fin.eof()) break;
 				if (tempLine[0] == '@')
 				{
 					name.erase(name.begin());
@@ -937,11 +948,15 @@ static void loadInserting()
 					break;
 				}
 				else
-					defi += '\n' + tempLine;
+					defi += "\n" + tempLine;
 			}
 
 		}
-		addingEmo[una::utf8to32u(name)] = defi;
+		if (!name.empty())
+		{
+			name.erase(name.begin());
+			addingEmo[una::utf8to32u(name)] = defi;
+		}
 	}
 	return;
 }
@@ -952,8 +967,9 @@ static void saveInserting()
 	if (fout.is_open())
 	{
 		for (auto iter = addingEE.begin(); iter != addingEE.end();)
-		{
-			fout << "@" << una::utf32to8((*iter).first) << "\n" << (*iter).second;
+		{	
+			if ((*iter).second.empty()) continue; 
+			fout << "@" << una::utf32to8((*iter).first) << (*iter).second;
 			if (++iter != addingEE.end()) fout << "\n";
 		}
 
@@ -963,7 +979,8 @@ static void saveInserting()
 	{
 		for (auto iter = addingEV.begin(); iter != addingEV.end();)
 		{
-			fout << "@" << una::utf32to8((*iter).first) << "\n" << (*iter).second;
+			if ((*iter).second.empty()) continue;
+			fout << "@" << una::utf32to8((*iter).first) << (*iter).second;
 			if (++iter != addingEV.end()) fout << "\n";
 		}
 
@@ -973,7 +990,8 @@ static void saveInserting()
 	{
 		for (auto iter = addingVE.begin(); iter != addingVE.end();)
 		{
-			fout << "@" << una::utf32to8((*iter).first) << "\n" << (*iter).second;
+			if ((*iter).second.empty()) continue;
+			fout << "@" << una::utf32to8((*iter).first) << (*iter).second;
 			if (++iter != addingVE.end()) fout << "\n";
 		}
 
@@ -983,7 +1001,8 @@ static void saveInserting()
 	{
 		for (auto iter = addingSlang.begin(); iter != addingSlang.end();)
 		{
-			fout << "@" << una::utf32to8((*iter).first) << "\n" << (*iter).second;
+			if ((*iter).second.empty()) continue;
+			fout << "@" << una::utf32to8((*iter).first) << (*iter).second;
 			if (++iter != addingSlang.end()) fout << "\n";
 		}
 
@@ -993,7 +1012,8 @@ static void saveInserting()
 	{
 		for (auto iter = addingEmo.begin(); iter != addingEmo.end();)
 		{
-			fout << "@" << una::utf32to8((*iter).first) << "\n" << (*iter).second;
+			if ((*iter).second.empty()) continue;
+			fout << "@" << una::utf32to8((*iter).first)<< (*iter).second;
 			if (++iter != addingEmo.end()) fout << "\n";
 		}
 

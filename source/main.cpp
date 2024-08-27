@@ -7,7 +7,6 @@ public:
 	{
 		loadInserting(); 
 		loadRemoving(); 
-		removingEE.begin();
 	}
 private: 
 	virtual bool OnInit()
