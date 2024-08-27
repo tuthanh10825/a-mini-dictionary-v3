@@ -1,8 +1,23 @@
 #pragma once
+
+#define EVDELETE "data/ev/delete.txt"
+#define VEDELETE "data/ve/delete.txt"
+#define EEDELETE "data/ee/delete.txt"
+#define EMODELETE "data/emo/delete.txt"
+#define SLDELETE "data/slang/delete.txt"
+
+#define EVINSERT "data/ev/insert.txt"
+#define VEINSERT "data/ve/insert.txt"
+#define EEINSERT "data/ee/insert.txt"
+#define EMOINSERT "data/emo/insert.txt"
+#define SLINSERT "data/slang/insert.txt"
+
 #include <cassert>
 #include <vector>
 #include <xutility>
-using std::pair; 
+#include <fstream>
+#include <uni_algo/all.h>
+using namespace std; 
 template<typename T>
 class ordered_set
 {
@@ -169,10 +184,7 @@ public:
 		return std::move(ans); 
 	}
 	void clear() { clear(root); }
-	~ordered_set()
-	{
-		clear(); 
-	}
+	
 	//modifying operations
 private:
 	void clear(TreeNode*& curr)
@@ -430,7 +442,7 @@ public:
 		}
 		bool operator == (iterator other)
 		{
-			return this->curr -= other.curr;
+			return this->curr == other.curr;
 		}
 		T& operator *()
 		{
@@ -440,9 +452,8 @@ public:
 
 	iterator begin()
 	{
-		if (root == nil) assert("Empty set can not have element. ");
 		TreeNode* curr = root;
-		while (curr->left != nil) curr = curr->left;
+		while (curr != nil && curr->left != nil) curr = curr->left;
 		return iterator(curr);
 	}
 	iterator end()
@@ -711,9 +722,8 @@ public:
 
 	iterator begin()
 	{
-		if (root == nil) assert("Empty set can not have element. ");
 		TreeNode* curr = root;
-		while (curr->left != nil) curr = curr->left;
+		while (curr != nil && curr->left != nil) curr = curr->left;
 		return iterator(curr);
 	}
 	iterator end()
@@ -722,8 +732,323 @@ public:
 	}
 	
 };
-static void loadInserting(); 
-static void loadRemoving(); 
 
-static void saveInserting(); 
-static void saveRemoving(); 
+
+static ordered_map<std::u32string, std::string> addingEE;
+static ordered_map<std::u32string, std::string> addingEV;
+static ordered_map<std::u32string, std::string> addingVE;
+static ordered_map<std::u32string, std::string> addingSlang;
+static ordered_map<std::u32string, std::string> addingEmo;
+
+static ordered_set<std::u32string> removingEE;
+static ordered_set<std::u32string> removingEV;
+static ordered_set<std::u32string> removingVE;
+static ordered_set<std::u32string> removingSlang;
+static ordered_set<std::u32string> removingEmo;
+
+static void saveRemoving()
+{
+	ofstream fout;
+	fout.open(EEDELETE);
+	if (fout.is_open())
+	{
+		for (auto iter = removingEE.begin(); iter != removingEE.end();)
+		{
+			fout << una::utf32to8(*iter);
+			if (++iter != removingEE.end()) fout << "\n";
+		}
+
+	}
+	fout.close(); fout.open(EVDELETE);
+	if (fout.is_open())
+	{
+		for (auto iter = removingEV.begin(); iter != removingEV.end();)
+		{
+			fout << una::utf32to8(*iter);
+			if (++iter != removingEV.end()) fout << "\n";
+		}
+
+	}
+	fout.close(); fout.open(VEDELETE);
+	if (fout.is_open())
+	{
+		for (auto iter = removingVE.begin(); iter != removingVE.end();)
+		{
+			fout << una::utf32to8(*iter);
+			if (++iter != removingVE.end()) fout << "\n";
+		}
+	}
+	fout.close(); fout.open(SLDELETE);
+	if (fout.is_open())
+	{
+		for (auto iter = removingSlang.begin(); iter != removingSlang.end();)
+		{
+			fout << una::utf32to8(*iter);
+			if (++iter != removingSlang.end()) fout << "\n";
+		}
+	}
+	fout.close(); fout.open(EMODELETE);
+	if (fout.is_open())
+	{
+		for (auto iter = removingEmo.begin(); iter != removingEmo.end();)
+		{
+			fout << una::utf32to8(*iter);
+			if (++iter != removingEmo.end()) fout << "\n";
+		}
+	}
+	fout.close();
+	return;
+}
+
+
+static void loadInserting()
+{
+	ifstream fin; fin.open(EEINSERT);
+	if (fin.is_open())
+	{
+		std::string name;
+		std::getline(fin, name);
+		std::string defi;
+
+		while (!fin.eof())
+		{
+			for (std::string tempLine; !fin.eof();)
+			{
+				std::getline(fin, tempLine);
+				if (fin.eof()) break;
+				if (tempLine[0] == '@')
+				{
+					name.erase(name.begin());
+					addingEE[una::utf8to32u(name)] = defi;
+					name = tempLine;
+					defi.clear();
+					break;
+				}
+				else
+					defi += '\n' + tempLine;
+			}
+		}
+		addingEE[una::utf8to32u(name)] = defi;
+	}
+	fin.close(); fin.open(EVINSERT);
+	if (fin.is_open())
+	{
+		std::string name;
+		std::getline(fin, name);
+		std::string defi;
+		while (!fin.eof())
+		{
+			for (std::string tempLine; !fin.eof();)
+			{
+				std::getline(fin, tempLine);
+				if (fin.eof()) break;
+				if (tempLine[0] == '@')
+				{
+					name.erase(name.begin());
+					while (name.back() == ' ') name.pop_back();
+
+					addingEV[una::utf8to32u(name)] = defi;
+					name = tempLine;
+					defi.clear();
+					break;
+				}
+				else
+					defi += '\n' + tempLine;
+			}
+
+		}
+		addingEV[una::utf8to32u(name)] = defi;
+	}
+	fin.close(); fin.open(VEINSERT);
+	if (fin.is_open())
+	{
+		std::string name;
+		std::getline(fin, name);
+		std::string defi;
+		while (!fin.eof())
+		{
+			for (std::string tempLine; !fin.eof();)
+			{
+				std::getline(fin, tempLine);
+				if (fin.eof()) break;
+				if (tempLine[0] == '@')
+				{
+					name.erase(name.begin());
+					while (name.back() == ' ') name.pop_back();
+					addingVE[una::utf8to32u(name)] = defi;
+					name = tempLine;
+					defi.clear();
+					break;
+				}
+				else
+					defi += '\n' + tempLine;
+			}
+
+		}
+		addingVE[una::utf8to32u(name)] = defi;
+	}
+	fin.close(); fin.open(SLINSERT);
+	if (fin.is_open())
+	{
+		std::string name;
+		std::getline(fin, name);
+		std::string defi;
+		while (!fin.eof())
+		{
+			for (std::string tempLine; !fin.eof();)
+			{
+				std::getline(fin, tempLine);
+				if (fin.eof()) break;
+				if (tempLine[0] == '@')
+				{
+					name.erase(name.begin());
+					while (name.back() == ' ') name.pop_back();
+					addingSlang[una::utf8to32u(name)] = defi;
+					name = tempLine;
+					defi.clear();
+					break;
+				}
+				else
+					defi += '\n' + tempLine;
+			}
+
+		}
+		addingSlang[una::utf8to32u(name)] = defi;
+	}
+	fin.close(); fin.open(EMOINSERT);
+	if (fin.is_open())
+	{
+		std::string name;
+		std::getline(fin, name);
+		std::string defi;
+		while (!fin.eof())
+		{
+			for (std::string tempLine; !fin.eof();)
+			{
+				std::getline(fin, tempLine);
+				if (fin.eof()) break;
+				if (tempLine[0] == '@')
+				{
+					name.erase(name.begin());
+					while (name.back() == ' ') name.pop_back();
+					addingEmo[una::utf8to32u(name)] = defi;
+					name = tempLine;
+					defi.clear();
+					break;
+				}
+				else
+					defi += '\n' + tempLine;
+			}
+
+		}
+		addingEmo[una::utf8to32u(name)] = defi;
+	}
+	return;
+}
+static void saveInserting()
+{
+	ofstream fout;
+	fout.open(EEINSERT);
+	if (fout.is_open())
+	{
+		for (auto iter = addingEE.begin(); iter != addingEE.end();)
+		{
+			fout << "@" << una::utf32to8((*iter).first) << "\n" << (*iter).second;
+			if (++iter != addingEE.end()) fout << "\n";
+		}
+
+	}
+	fout.close(); fout.open(EVINSERT);
+	if (fout.is_open())
+	{
+		for (auto iter = addingEV.begin(); iter != addingEV.end();)
+		{
+			fout << "@" << una::utf32to8((*iter).first) << "\n" << (*iter).second;
+			if (++iter != addingEV.end()) fout << "\n";
+		}
+
+	}
+	fout.close(); fout.open(VEINSERT);
+	if (fout.is_open())
+	{
+		for (auto iter = addingVE.begin(); iter != addingVE.end();)
+		{
+			fout << "@" << una::utf32to8((*iter).first) << "\n" << (*iter).second;
+			if (++iter != addingVE.end()) fout << "\n";
+		}
+
+	}
+	fout.close(); fout.open(SLINSERT);
+	if (fout.is_open())
+	{
+		for (auto iter = addingSlang.begin(); iter != addingSlang.end();)
+		{
+			fout << "@" << una::utf32to8((*iter).first) << "\n" << (*iter).second;
+			if (++iter != addingSlang.end()) fout << "\n";
+		}
+
+	}
+	fout.close(); fout.open(EMOINSERT);
+	if (fout.is_open())
+	{
+		for (auto iter = addingEmo.begin(); iter != addingEmo.end();)
+		{
+			fout << "@" << una::utf32to8((*iter).first) << "\n" << (*iter).second;
+			if (++iter != addingEmo.end()) fout << "\n";
+		}
+
+	}
+	fout.close();
+	return;
+}
+
+
+
+
+
+
+static void loadRemoving()
+{
+	ifstream fin;
+	fin.open(EEDELETE);
+	if (fin.is_open())
+		for (std::string temp; getline(fin, temp); )
+		{
+			std::u32string real = una::utf8to32u(temp);
+			removingEE.insert(real);
+		}
+	fin.close(); fin.open(EVDELETE);
+	if (fin.is_open())
+		for (std::string temp; getline(fin, temp); )
+		{
+			std::u32string real = una::utf8to32u(temp);
+			removingEV.insert(real);
+		}
+	fin.close(); fin.open(VEDELETE);
+	if (fin.is_open())
+		for (std::string temp; getline(fin, temp); )
+		{
+			std::u32string real = una::utf8to32u(temp);
+			removingVE.insert(real);
+		}
+
+	fin.close(); fin.open(SLDELETE);
+	if (fin.is_open())
+		for (std::string temp; getline(fin, temp); )
+		{
+			std::u32string real = una::utf8to32u(temp);
+			removingSlang.insert(real);
+		}
+	fin.close(); fin.open(EMODELETE);
+	if (fin.is_open())
+		for (std::string temp; getline(fin, temp); )
+		{
+			std::u32string real = una::utf8to32u(temp);
+			removingEmo.insert(real);
+		}
+	fin.close();
+	return;
+}
+
+
+

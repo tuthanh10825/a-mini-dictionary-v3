@@ -121,7 +121,6 @@ void resPage::OnFavouriteBtnClicked(wxCommandEvent&) {
 
 SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT))
 {
-	curr_type = currLang; 
 	// Load Eng-Viet dataset
 	if (!EEtree->isLoaded())
 		EEtree->loadWord(EEDATASET);

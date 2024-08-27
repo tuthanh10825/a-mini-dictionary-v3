@@ -1,7 +1,7 @@
 #pragma once
 #include "tst.h"
 #include "suffix-array.h"
-
+#include "red-black-tree.h"
 #define EVDATASET "data/ev/data.txt"
 #define VEDATASET "data/ve/data.txt"
 #define EEDATASET "data/ee/data.txt"
@@ -42,22 +42,6 @@ extern std::vector<word> dataHisto, dataFav;
 extern std::vector<word> dataHisto, dataFav;
 extern std::u32string deleted_word;
 
-static suffixArr EEDef; 
-static suffixArr EVDef; 
-static suffixArr VEDef;
-static suffixArr SLDef; 
-static suffixArr EMODef; 
 
-static ordered_map<std::u32string, std::string> addingEE; 
-static ordered_map<std::u32string, std::string> addingEV; 
-static ordered_map<std::u32string, std::string> addingVE;
-static ordered_map<std::u32string, std::string> addingSlang;
-static ordered_map<std::u32string, std::string> addingEmo;
-
-static ordered_set<std::u32string> removingEE; 
-static ordered_set<std::u32string> removingEV; 
-static ordered_set<std::u32string> removingVE; 
-static ordered_set<std::u32string> removingSlang; 
-static ordered_set<std::u32string> removingEmo; 
 
 extern std::string& curr_type;

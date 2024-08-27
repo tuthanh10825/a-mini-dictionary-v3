@@ -11,7 +11,7 @@
 #include <cassert>
 #include <map>
 #include "red-black-tree.h"
-#include "Globals.h"
+
 
 using std::vector;
 
@@ -181,3 +181,9 @@ public:
 		text.clear(); 
 	}
 };
+
+static suffixArr EEDef;
+static suffixArr EVDef;
+static suffixArr VEDef;
+static suffixArr SLDef;
+static suffixArr EMODef;

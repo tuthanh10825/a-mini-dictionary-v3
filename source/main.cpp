@@ -7,6 +7,7 @@ public:
 	{
 		loadInserting(); 
 		loadRemoving(); 
+		removingEE.begin();
 	}
 private: 
 	virtual bool OnInit()
@@ -18,12 +19,18 @@ private:
 	}
 	~myApp()
 	{
-  
+		saveInserting();
+		saveRemoving();
 		delete EVtree;
 		delete EEtree;
 		delete VEtree;
 		delete EMOtree;
 		delete SLtree;
+		removingEE.clear(); 
+		removingEV.clear();
+		removingVE.clear(); 
+		removingSlang.clear(); 
+		removingEmo.clear();
 
 	}
 };
