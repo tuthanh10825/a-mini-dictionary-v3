@@ -48,3 +48,16 @@ static suffixArr VEDef;
 static suffixArr SLDef; 
 static suffixArr EMODef; 
 
+static ordered_map<std::u32string, std::string> addingEE; 
+static ordered_map<std::u32string, std::string> addingEV; 
+static ordered_map<std::u32string, std::string> addingVE;
+static ordered_map<std::u32string, std::string> addingSlang;
+static ordered_map<std::u32string, std::string> addingEmo;
+
+static ordered_set<std::u32string> removingEE; 
+static ordered_set<std::u32string> removingEV; 
+static ordered_set<std::u32string> removingVE; 
+static ordered_set<std::u32string> removingSlang; 
+static ordered_set<std::u32string> removingEmo; 
+
+extern std::string& curr_type;

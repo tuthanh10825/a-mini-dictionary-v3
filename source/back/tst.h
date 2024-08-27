@@ -137,10 +137,14 @@ public:
 		return;
 	}
 	
+	void clear()
+	{
+		clear(root);
+	}
 
 	~TST()
 	{
-		clear(root);
+		clear(); 
 		return;
 	}
 
@@ -208,7 +212,6 @@ public:
 					if (fin.eof()) break;
 					if (tempLine[0] == '@')
 					{
-
 						name.erase(name.begin()); 
 						while (name.back() == ' ') name.pop_back(); 
 						this->insert(name, defi);
@@ -287,9 +290,11 @@ public:
 		{
 			fout << s;
 		}
+		
 		else return;
 		fout << std::endl;
 		fout.close();
+
 	}
 
 private:

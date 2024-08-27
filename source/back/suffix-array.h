@@ -1,5 +1,6 @@
 
 #pragma once
+
 #include <vector>
 #include <string>
 #include <numeric>
@@ -10,6 +11,7 @@
 #include <cassert>
 #include <map>
 #include "red-black-tree.h"
+#include "Globals.h"
 
 using std::vector;
 
@@ -59,7 +61,7 @@ public:
 		text += static_cast<char32_t>(0);
 		this->build(); 
 	}
-	vector<std::u32string> findSubtring(std::u32string str)
+	vector<std::u32string> findSubtring(std::u32string str, std::string type)
 	{
 		int k = str.size(); 
 		vector<int> ans; 
@@ -67,7 +69,18 @@ public:
 		generate_ans(start, end, str, k, ans);
 		ordered_set<std::u32string> real_ans; 
 		for (const int& val : ans)
-			real_ans.insert(mapping[val]); 
+		{
+			if (type == "ENG/ENG" && removingEE.find(mapping[val]) == removingEE.end())
+				real_ans.insert(mapping[val]);
+			else if (type == "ENG/VIE" && removingEV.find(mapping[val]) == removingEV.end())
+				real_ans.insert(mapping[val]);
+			else if (type == "VIE/ENG" && removingVE.find(mapping[val]) == removingVE.end())
+				real_ans.insert(mapping[val]);
+			else if (type == "SLANG" && removingSlang.find(mapping[val]) == removingSlang.end())
+				real_ans.insert(mapping[val]);
+			else if (type == "EMOTICON" && removingEmo.find(mapping[val]) == removingSlang.end())
+				real_ans.insert(mapping[val]); 
+		}
 
 		/*vector<std::u32string> ans_vector; 
 		for (auto iter = real_ans.begin(); iter != real_ans.end(); ++iter)
@@ -76,7 +89,7 @@ public:
 		 
 	}
 private: 
-	void generate_ans(int start, int end, std::u32string str, int k, vector<int> & ans )
+	void generate_ans(int start, int end, std::u32string str, int k, vector<int> &ans)
 	{
 		if (start > end) return; 
 		if (text.substr(SA_index[start], k) > str || text.substr(SA_index[end], k) < str) return; 

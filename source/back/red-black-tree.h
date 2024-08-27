@@ -1,3 +1,4 @@
+#pragma once
 #include <cassert>
 #include <vector>
 #include <xutility>
@@ -167,9 +168,10 @@ public:
 		}
 		return std::move(ans); 
 	}
+	void clear() { clear(root); }
 	~ordered_set()
 	{
-		clear(root);  
+		clear(); 
 	}
 	//modifying operations
 private:
@@ -720,3 +722,8 @@ public:
 	}
 	
 };
+static void loadInserting(); 
+static void loadRemoving(); 
+
+static void saveInserting(); 
+static void saveRemoving(); 

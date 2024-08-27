@@ -46,7 +46,24 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	mainSizer->Add(subSizer, 1, wxEXPAND); 
 	this->SetSizerAndFit(mainSizer); 
 
-	
+	resetButton->Bind(wxEVT_BUTTON, [=](wxCommandEvent&)
+		{
+			removingEE.clear(); 
+			removingEV.clear(); 
+			removingVE.clear();
+			removingSlang.clear(); 
+			removingEmo.clear(); 
+			addingEE.clear(); 
+			addingEV.clear(); 
+			addingVE.clear(); 
+			addingEmo.clear(); 
+			addingSlang.clear();
+			EEtree->clear();
+			EVtree->clear(); 
+			VEtree->clear(); 
+			SLtree->clear(); 
+			EMOtree->clear();
+		});
 	return; 
 }
 
@@ -104,6 +121,7 @@ void resPage::OnFavouriteBtnClicked(wxCommandEvent&) {
 
 SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT))
 {
+	curr_type = currLang; 
 	// Load Eng-Viet dataset
 	if (!EEtree->isLoaded())
 		EEtree->loadWord(EEDATASET);
@@ -276,7 +294,7 @@ void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 			if (EMODef.text.empty()) EMODef.loadFile(EMODATASET);
 			this->defi = &EMODef;
 		}
-		vector<std::u32string> ans = this->defi->findSubtring(una::utf8to32u(this->box->findBox->GetValue().utf8_string()));
+		vector<std::u32string> ans = this->defi->findSubtring(una::utf8to32u(this->box->findBox->GetValue().utf8_string()), currLang);
 		this->res->clearScreen();
 		std::u32string total_ans; 
 		for (const auto& val : ans)
