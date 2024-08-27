@@ -216,7 +216,6 @@ public:
 				for (std::string tempLine; !fin.eof();)
 				{
 					std::getline(fin, tempLine);
-					if (fin.eof()) break;
 					if (tempLine[0] == '@')
 					{
 						name.erase(name.begin()); 

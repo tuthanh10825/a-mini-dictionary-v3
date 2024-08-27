@@ -295,10 +295,44 @@ void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 			this->defi = &EMODef;
 		}
 		vector<std::u32string> ans = this->defi->findSubtring(una::utf8to32u(this->box->findBox->GetValue().utf8_string()), currLang);
+		if (type == "ENG/ENG")
+		{
+			for (auto iter = addingEE.begin(); iter != addingEE.end(); ++iter)
+				if (una::utf8to32u((*iter).second).find(una::utf8to32u(this->box->findBox->GetValue().utf8_string())) != std::u32string::npos)
+					ans.push_back((*iter).first); 
+		}
+		else if (type == "ENG/VIE")
+		{
+			for (auto iter = addingEV.begin(); iter != addingEV.end(); ++iter)
+				if (una::utf8to32u((*iter).second).find(una::utf8to32u(this->box->findBox->GetValue().utf8_string())) != std::u32string::npos)
+					ans.push_back((*iter).first);
+		}
+		else if (type == "VIE/ENG")
+		{
+			for (auto iter = addingVE.begin(); iter != addingVE.end(); ++iter)
+				if (una::utf8to32u((*iter).second).find(una::utf8to32u(this->box->findBox->GetValue().utf8_string())) != std::u32string::npos)
+					ans.push_back((*iter).first);
+
+		}
+		else if (type == "SLANG")
+		{
+			for (auto iter = addingSlang.begin(); iter != addingSlang.end(); ++iter)
+				if (una::utf8to32u((*iter).second).find(una::utf8to32u(this->box->findBox->GetValue().utf8_string())) != std::u32string::npos)
+					ans.push_back((*iter).first);
+
+		}
+		else if (type == "EMOTICON")
+		{
+			for (auto iter = addingEmo.begin(); iter != addingEmo.end(); ++iter)
+				if (una::utf8to32u((*iter).second).find(una::utf8to32u(this->box->findBox->GetValue().utf8_string())) != std::u32string::npos)
+					ans.push_back((*iter).first);
+		}
 		this->res->clearScreen();
+
 		std::u32string total_ans; 
 		for (const auto& val : ans)
 			total_ans += (val + U"\n");
+
 		this->res->addingString(wxString(una::utf32to16(total_ans))); 
 	}
 }

@@ -116,6 +116,10 @@ void AddWindow::OnAddBtnClicked(wxCommandEvent&)
 	else if (currLang == "ENG/ENG") addingEE[una::utf8to32u(keystr)] = defistr;
 	else if (currLang == "SLANG") addingSlang[una::utf8to32u(keystr)] = defistr;
 	else if (currLang == "EMOTICON") addingEmo[una::utf8to32u(keystr)] = defistr;
+	keyword->ChangeValue(wxEmptyString);
+	type->ChangeValue(wxEmptyString); 
+	defi->ChangeValue(wxEmptyString);
+	this->Refresh();
 	/*
 	std::ofstream fout;
 	if (currLang == "ENG/VIE" || currLang == "VIE/ENG")
