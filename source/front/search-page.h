@@ -3,6 +3,7 @@
 #include <wx/bmpcbox.h>
 #include <wx/fontutil.h>
 #include "Globals.h"
+#include "edit-page.h"
 
 class searchBox : public wxWindow
 {
@@ -36,7 +37,7 @@ public:
 	void addingString(wxString); 
 	void clearScreen(); 
 	void FlipColor(); 
-	
+
 };
 
 class SearchPage : public wxWindow
@@ -44,6 +45,7 @@ class SearchPage : public wxWindow
 public: 
 	searchBox* box; 
 	resPage* res;
+	EditWindow* editwin;
 	SearchPage(wxWindow *parent);
 	void OnRandomBtnClicked(wxCommandEvent&);
 	void FlipColor();
@@ -60,5 +62,7 @@ private:
 	void OnSearchBtnClicked(wxCommandEvent&); 
 	void OnChooseLanguage(wxCommandEvent& evt); 
 	void OnRemoveBtnClicked(wxCommandEvent&);
+	void OnEditBtnClicked(wxCommandEvent&);
+	void OnEdit_WordBtnClicked(wxCommandEvent&);
 
 };
