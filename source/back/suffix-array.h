@@ -58,6 +58,33 @@ public:
 			}
 			
 		}
+		else
+		{
+			std::u32string prevWord; 
+			std::u32string defiLine; 
+			for (std::string line; std::getline(fin, line); )
+			{
+				std::u32string real_line = una::utf8to32u(line); 
+				std::u32string word = real_line.substr(0, real_line.find(U'\t'));
+				real_line = real_line.substr(real_line.find(U'\t') + 1); 
+				if (word == prevWord)
+				{
+					defiLine += U"\n" + prevWord;
+				}
+				else
+				{
+					if (!prevWord.empty())
+					{
+						text += defiLine + U"@";
+						mapping[text.size() - 1] = prevWord;
+					}
+					defiLine = real_line;
+					prevWord = word;
+				}
+			}
+			text += defiLine + U"@"; 
+			mapping[text.size() - 1] = prevWord;
+		}
 		text += static_cast<char32_t>(0);
 		this->build(); 
 	}
