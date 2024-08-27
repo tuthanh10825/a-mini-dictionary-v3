@@ -3,12 +3,13 @@
 #include <wx/bmpcbox.h>
 #include <wx/fontutil.h>
 #include "Globals.h"
+
 class searchBox : public wxWindow
 {
 public: 
 	wxFont pala;
-	wxComboBox* wordOrDefi= new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
-	wxComboBox* language = new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
+	wxComboBox* wordOrDefi= new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr);
+	wxComboBox* language = new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, nullptr);
 	wxComboBox* findBox = new wxComboBox(this, wxID_ANY);
 	wxBitmapButton* searchButton; 
 	wxBitmapButton* randomButton; 
@@ -16,6 +17,8 @@ public:
 	wxBitmapButton* addButton; 
 	searchBox(wxWindow*); 
 	bool isDropdown = false; 
+	void FlipColor(); 
+
 private: 
 };
 
@@ -32,6 +35,7 @@ public:
 	resPage(wxWindow*); 
 	void addingString(wxString); 
 	void clearScreen(); 
+	void FlipColor(); 
 	
 };
 
@@ -42,6 +46,8 @@ public:
 	resPage* res;
 	SearchPage(wxWindow *parent);
 	void OnRandomBtnClicked(wxCommandEvent&);
+	void FlipColor();
+	
 private:
 	TST* list; 
 	suffixArr* defi; 
@@ -53,6 +59,6 @@ private:
 	void OnFindBoxEnter(wxCommandEvent& evt);
 	void OnSearchBtnClicked(wxCommandEvent&); 
 	void OnChooseLanguage(wxCommandEvent& evt); 
-  void OnRemoveBtnClicked(wxCommandEvent&);
+	void OnRemoveBtnClicked(wxCommandEvent&);
 
 };

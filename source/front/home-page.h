@@ -12,7 +12,16 @@ public:
     wxBitmapButton* randomButton;
     wxBitmapButton* editButton;
     HomePage(wxWindow *parent); 
-private:
+    void FlipColor(); 
+private: 
+    wxPanel* rightPanel; 
+    wxPanel* leftPanel;
+    wxPanel* subPanel;
+    wxStaticBitmap* showLabel;
+    wxStaticBitmap* wordOfTheDay; 
+    wxStaticText* wordInfo;
+    wxStaticText* defInfo;
+
 };
 
 #endif // HOMEFRAME_H

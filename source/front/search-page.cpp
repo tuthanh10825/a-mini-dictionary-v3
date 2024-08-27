@@ -13,18 +13,22 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	language->Append(wxString("EMOTICON"));
 
 	language->SetSelection(0); 
+	language->SetEditable(false);
+	language->SetBackgroundColour(*wxWHITE);
 
 	wordOrDefi->Append(wxString("KEYWORD")); 
 	wordOrDefi->Append(wxString("DEFINITION")); 
 	wordOrDefi->SetSelection(0); 
-
+	wordOrDefi->SetEditable(false);
+	wordOrDefi->SetBackgroundColour(*wxWHITE);
 	 
 	findBox->SetFont(pala);
 	
+	std::string s = LIGHTMODE ? "" : "1"; 
 	searchButton = new wxBitmapButton(this, wxID_ANY, wxBitmap("assets/search/search-button.png", wxBITMAP_TYPE_PNG));
-	randomButton = new wxBitmapButton(this, wxID_ANY, wxBitmap("assets/search/random-button.png", wxBITMAP_TYPE_PNG));
-	addButton = new wxBitmapButton(this, wxID_ANY, wxBitmap("assets/search/add-button.png", wxBITMAP_TYPE_PNG)); 
-	resetButton = new wxBitmapButton(this, wxID_ANY, wxBitmap("assets/search/reset-button.png", wxBITMAP_TYPE_PNG));
+	randomButton = new wxBitmapButton(this, wxID_ANY, wxBitmap("assets/search/random-button" + s + ".png", wxBITMAP_TYPE_PNG));
+	addButton = new wxBitmapButton(this, wxID_ANY, wxBitmap("assets/search/add-button" + s + ".png", wxBITMAP_TYPE_PNG)); 
+	resetButton = new wxBitmapButton(this, wxID_ANY, wxBitmap("assets/search/reset-button" + s + ".png", wxBITMAP_TYPE_PNG));
 
 	
 
@@ -327,8 +331,11 @@ void SearchPage::OnRandomBtnClicked(wxCommandEvent&)
 {
 	this->res->clearScreen(); 
 	pair<std::u32string, std::string> ans = list->random();
-	this->box->findBox->ChangeValue(wxString(una::utf32to16(ans.first)));
+
+
+	this->box->findBox->ChangeValue(wxString(una::utf32to16(ans.first))); 
 	this->res->addingString(wxString(una::utf32to16(ans.first)) + wxString(una::utf8to16(ans.second))); 
+	insertHistory(list->search(ans.first)); 
 	return; 
 }
 
@@ -371,4 +378,87 @@ void SearchPage::OnRemoveBtnClicked(wxCommandEvent&)
 		deleted_word.clear();
 	}
 	return;
+}
+
+
+void SearchPage::FlipColor()
+{
+	box->FlipColor();
+	res->FlipColor();
+}
+
+void resPage::FlipColor()
+{
+	std::string s;
+	//TODO: remember to change the bitmap of the button. 
+	if (LIGHTMODE)
+	{
+		editButton->SetBackgroundColour(*wxWHITE);
+		favorButton->SetBackgroundColour(*wxWHITE);
+		removeButton->SetBackgroundColour(*wxWHITE);
+		resWord->SetBackgroundColour(*wxWHITE); 
+		resWord->SetForegroundColour(*wxBLACK); 
+		s = "";
+	}
+	else
+	{
+		editButton->SetBackgroundColour(*wxBLACK); 
+		favorButton->SetBackgroundColour(*wxBLACK); 
+		removeButton->SetBackgroundColour(*wxBLACK); 
+		resWord->SetBackgroundColour(*wxBLACK); 
+		resWord->SetForegroundColour(*wxWHITE);
+		s = "1"; 
+	}
+	editButton->SetBitmap(wxBitmap("assets/result/edit-button" + s + ".png", wxBITMAP_TYPE_PNG)); 
+	favorButton->SetBitmap(wxBitmap("assets/result/favorite-button" + s + ".png", wxBITMAP_TYPE_PNG));
+	removeButton->SetBitmap(wxBitmap("assets/result/remove-button" + s + ".png", wxBITMAP_TYPE_PNG));
+	this->Refresh();
+}
+
+void searchBox::FlipColor()
+{
+	std::string s; 
+	//TODO: remember to change all bitmap of the button
+	if (LIGHTMODE)
+	{
+		searchButton->SetBackgroundColour(*wxWHITE);
+		randomButton->SetBackgroundColour(*wxWHITE);
+		resetButton->SetBackgroundColour(*wxWHITE);
+		addButton->SetBackgroundColour(*wxWHITE);
+
+		wordOrDefi->SetBackgroundColour(*wxWHITE); 
+		wordOrDefi->SetForegroundColour(*wxBLACK); 
+
+		language->SetBackgroundColour(*wxWHITE); 
+		language->SetForegroundColour(*wxBLACK); 
+		
+		findBox->SetBackgroundColour(*wxWHITE); 
+		findBox->SetForegroundColour(*wxBLACK); 
+		this->SetBackgroundColour(*wxWHITE);
+		s = "";
+	}
+	else
+	{
+		searchButton->SetBackgroundColour(*wxBLACK);
+		randomButton->SetBackgroundColour(*wxBLACK);
+		resetButton->SetBackgroundColour(*wxBLACK);
+		addButton->SetBackgroundColour(*wxBLACK);
+
+	
+		wordOrDefi->SetBackgroundColour(*wxBLACK);
+		wordOrDefi->SetForegroundColour(*wxWHITE);
+
+		language->SetBackgroundColour(*wxBLACK);
+		language->SetForegroundColour(*wxWHITE);
+
+		findBox->SetBackgroundColour(*wxBLACK);
+		findBox->SetForegroundColour(*wxWHITE);
+		this->SetBackgroundColour(*wxBLACK);
+		s = "1";
+	}
+	randomButton->SetBitmapLabel(wxBitmap("assets/search/random-button" + s + ".png", wxBITMAP_TYPE_PNG));
+	resetButton->SetBitmapLabel(wxBitmap("assets/search/reset-button" + s + ".png", wxBITMAP_TYPE_PNG));
+	addButton->SetBitmapLabel(wxBitmap("assets/search/add-button" + s + ".png", wxBITMAP_TYPE_PNG));
+	
+	this->Refresh();
 }

@@ -16,12 +16,12 @@ HomePage::HomePage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	
 	//for rightpanel. 
 	wxBoxSizer* rightSizer = new wxBoxSizer(wxVERTICAL); 
-	wxPanel* rightPanel = new wxPanel(this, wxID_ANY); 
+	rightPanel = new wxPanel(this, wxID_ANY);
 	rightPanel->SetBackgroundColour(background);
 	
 
 	wxBitmap* label = new wxBitmap("assets/homepage/label.png", wxBITMAP_TYPE_PNG);
-	wxStaticBitmap* showLabel = new wxStaticBitmap(rightPanel, wxID_ANY, *label);
+	showLabel = new wxStaticBitmap(rightPanel, wxID_ANY, *label);
 	showLabel->SetBackgroundColour(background);
 	rightSizer->Add(showLabel, 1, wxEXPAND); 
 
@@ -58,13 +58,13 @@ HomePage::HomePage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	rightPanel->SetSizerAndFit(rightSizer); 
 	
 	// for left panel. 
-	wxPanel* leftPanel = new wxPanel(this, wxID_ANY);
+	leftPanel = new wxPanel(this, wxID_ANY);
 	leftPanel->SetBackgroundColour(background); 
 
 	wxBoxSizer* centeringSizer = new wxBoxSizer(wxVERTICAL);
 
-	wxPanel* subPanel = new wxPanel(leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize);
-	subPanel->SetBackgroundColour(background); 
+	subPanel = new wxPanel(leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+	
 	
 	centeringSizer->Add(subPanel, 1, wxALL | wxEXPAND, 100);
 	leftPanel->SetSizerAndFit(centeringSizer);
@@ -72,7 +72,7 @@ HomePage::HomePage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	wxBoxSizer* wotdSizer = new wxBoxSizer(wxVERTICAL);
 
 	wxBitmap* wotdBitmap = new wxBitmap("assets/homepage/word-of-the-day"+s+".png", wxBITMAP_TYPE_PNG); 
-	wxStaticBitmap* wordOfTheDay = new wxStaticBitmap(subPanel, wxID_ANY, *wotdBitmap); 
+	wordOfTheDay = new wxStaticBitmap(subPanel, wxID_ANY, *wotdBitmap); 
 	wotdSizer->Add(wordOfTheDay, 1); 
 
 	wordPanel = new wxPanel(subPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER);
@@ -86,12 +86,12 @@ HomePage::HomePage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	wxString wordText = wxString(una::utf32to16(randomText.first));
 	std::string defText = randomText.second;
 
-	wxStaticText* wordInfo = new wxStaticText(wordPanel, wxID_ANY, wordText, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
+	wordInfo = new wxStaticText(wordPanel, wxID_ANY, wordText, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
 	wxFont::AddPrivateFont("fonts/pala.ttf");
 	wxFont pala(40, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT, false, "Palatino Linotype");
 	wordInfo->SetFont(pala);
 
-	wxStaticText* defInfo = new wxStaticText(wordPanel, wxID_ANY, defText, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
+	defInfo= new wxStaticText(wordPanel, wxID_ANY, defText, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT);
 	wxFont pala20(20, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT, false, "Palatino Linotype");
 	defInfo->SetFont(pala20);
 
@@ -113,3 +113,50 @@ HomePage::HomePage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	return;
 
 }
+
+void HomePage::FlipColor()
+{
+
+	wxColour background, selection;
+	if (LIGHTMODE) {
+		background = LIGHTMODE_backgroundANDNaviColor;
+	}
+	else {
+		background = DARKMODE_backgroundColor;
+	}
+	showLabel->SetBackgroundColour(background);
+	std::string s;
+	if (LIGHTMODE) s = '1'; else s = "";
+	quizButton->SetBitmapLabel(wxBitmap("assets/homepage/quiz-button" + s + ".png", wxBITMAP_TYPE_PNG)); 
+	quizButton->SetBackgroundColour(background); 
+
+	favorButton->SetBitmapLabel(wxBitmap("assets/homepage/favor-button" + s + ".png", wxBITMAP_TYPE_PNG)); 
+	favorButton->SetBackgroundColour(background); 
+	
+	randomButton->SetBitmapLabel(wxBitmap("assets/homepage/random-button" + s + ".png", wxBITMAP_TYPE_PNG)); 
+	randomButton->SetBackgroundColour(background); 
+	
+	editButton->SetBitmapLabel(wxBitmap("assets/homepage/edit-button" + s + ".png", wxBITMAP_TYPE_PNG)); 
+	editButton->SetBackgroundColour(background);
+
+	wordOfTheDay->SetBackgroundColour(background); 
+	wordOfTheDay->SetBitmap(wxBitmap("assets/homepage/word-of-the-day" + s + ".png", wxBITMAP_TYPE_PNG));
+
+	
+	rightPanel->SetBackgroundColour(background); 
+	leftPanel->SetBackgroundColour(background); 
+	subPanel->SetBackgroundColour(background);
+	wordPanel->SetBackgroundColour(background); 
+	if (LIGHTMODE)
+	{
+		wordInfo->SetForegroundColour(*wxBLACK);
+		defInfo->SetForegroundColour(*wxBLACK); 
+	}
+	else
+	{
+		wordInfo->SetForegroundColour(*wxWHITE);
+		defInfo->SetForegroundColour(*wxWHITE);
+	}
+	this->Refresh();
+}
+

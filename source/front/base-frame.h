@@ -24,6 +24,17 @@ public:
     AddWindow* addpage;
 private:
 
+    wxBitmapButton* homeBtn; 
+    wxBitmapButton* dictionaryBtn;
+    wxBitmapButton* gameBtn;
+    wxBitmapButton* historyBtn;
+    wxBitmapButton* favoriteBtn;
+    wxBitmapButton* moreBtn;
+    wxPanel* leftHeaderPanel; 
+    wxPanel* rightHeaderPanel; 
+    wxPanel* naviPanel; 
+    wxStaticBitmap* logoBitmap; 
+ 
     void LoadHeader();
     void loadFooter(); 
     void LoadNavigation();
@@ -38,6 +49,9 @@ private:
     void OnFavouriteBtnClicked(wxCommandEvent&);
 
     void OnAddBtnClicked(wxCommandEvent&);
+    void OnFlipColor(wxCommandEvent&); 
+    void FlipColor();
+    
 };
 
 #endif // BASEFRAME_H

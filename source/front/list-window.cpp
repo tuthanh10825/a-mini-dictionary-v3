@@ -27,7 +27,7 @@ ListWindow::ListWindow(wxWindow* parent, int isFavor) : wxWindow(parent, wxID_AN
     }
     
     
-    wxPanel* subPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 0), wxSize(1451, 631));
+    subPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 0), wxSize(1451, 631));
     subPanel->SetBackgroundColour(backgroundColor);
     this->SetBackgroundColour(backgroundColor);
     wxInitAllImageHandlers();
@@ -112,16 +112,16 @@ ListWindow::ListWindow(wxWindow* parent, int isFavor) : wxWindow(parent, wxID_AN
     std::string s;
 
     if (LIGHTMODE) s = '0'; else s = '1';
-    wxBitmapButton* delbutton = new wxBitmapButton(subPanel, del_id, wxBitmap(DELETEICON_IMG, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(79, 79), wxBORDER_NONE);
+    delbutton = new wxBitmapButton(subPanel, del_id, wxBitmap(DELETEICON_IMG, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(79, 79), wxBORDER_NONE);
     delbutton->SetBackgroundColour(backgroundColor);
     delbutton->Bind(wxEVT_BUTTON, &ListWindow::onDelClick, this);
-    wxStaticBitmap* delText = new wxStaticBitmap(subPanel, wxID_ANY, wxBitmap("assets/histofav/delete" + s + ".png", wxBITMAP_TYPE_PNG));
+    delText = new wxStaticBitmap(subPanel, wxID_ANY, wxBitmap("assets/histofav/delete" + s + ".png", wxBITMAP_TYPE_PNG));
 
 
-    wxBitmapButton* selbutton = new wxBitmapButton(subPanel, sel_id, wxBitmap(SELECTALLICON_IMG, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(79, 79), wxBORDER_NONE);
+    selbutton = new wxBitmapButton(subPanel, sel_id, wxBitmap(SELECTALLICON_IMG, wxBITMAP_TYPE_PNG), wxDefaultPosition, wxSize(79, 79), wxBORDER_NONE);
     selbutton->SetBackgroundColour(backgroundColor);
     selbutton->Bind(wxEVT_BUTTON, &ListWindow::onSelClick, this);
-    wxStaticBitmap* selectText = new wxStaticBitmap(subPanel, wxID_ANY, wxBitmap("assets/histofav/selectall" + s + ".png", wxBITMAP_TYPE_PNG));
+    selectText = new wxStaticBitmap(subPanel, wxID_ANY, wxBitmap("assets/histofav/selectall" + s + ".png", wxBITMAP_TYPE_PNG));
 
 
     wxBoxSizer* rightControlSizer = new wxBoxSizer(wxVERTICAL);
@@ -220,6 +220,43 @@ void ListWindow::AppendRows(vector<word>& words, int isFav) {
     grid->AutoSizeColumn(0);
     grid->SetColSize(1, 810);
     grid->AutoSizeRows();
+}
+
+void ListWindow::FlipColor()
+{
+    wxColour backgroundColor = LIGHTMODE_backgroundANDNaviColor,
+        textBlackColour = LIGHTMODE_blackTextColor,
+        blueTextColor = LIGHTMODE_blueTextColor,
+        labelColor = LIGHTMODE_labelANDHeaderColor,
+        backgroundYellowColor = LIGHTMODE_backgroundYellowColor,
+        selectionCorlor = LIGHTMODE_selectionGrayCorlor;
+    if (!LIGHTMODE) {
+        backgroundColor = DARKMODE_backgroundColor;
+        textBlackColour = DARKMODE_whiteTextColor;
+        labelColor = DARKMODE_labelANDNaviColor;
+        backgroundYellowColor = DARKMODE_backgroundYellowColor;
+        selectionCorlor = DARKMODE_selectionPurpleCorlor;
+        blueTextColor = DARKMODE_whiteTextColor;
+    }
+    subPanel->SetBackgroundColour(backgroundColor);
+    this->SetBackgroundColour(backgroundColor);
+
+    std::string s;
+    if (LIGHTMODE) s = '0'; else s = '1';
+    delText->SetBitmap(wxBitmap("assets/histofav/delete" + s + ".png", wxBITMAP_TYPE_PNG));
+    selectText->SetBitmap(wxBitmap("assets/histofav/selectall" + s + ".png", wxBITMAP_TYPE_PNG));
+    delbutton->SetBackgroundColour(backgroundColor);
+    selbutton->SetBackgroundColour(backgroundColor);
+    grid->SetSelectionBackground(selectionCorlor);
+    grid->SetDefaultCellTextColour(textBlackColour);
+    grid->SetDefaultCellBackgroundColour(backgroundColor);
+    for (int i = 0; i < grid->GetNumberRows(); ++i)
+    {
+        grid->SetCellBackgroundColour(i, 0, backgroundYellowColor);
+        grid->SetCellTextColour(i, 0, blueTextColor);
+    }
+    this->Refresh();
+
 }
 
 bool ListWindow::loadData(std::string path, int isFav) {

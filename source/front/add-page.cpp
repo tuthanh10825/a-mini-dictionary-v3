@@ -6,6 +6,7 @@ AddWindow::AddWindow(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	list = EEtree;
 
 	wxInitAllImageHandlers();
+	this->SetBackgroundColour(*wxWHITE);
 	//wxPanel* right = new wxPanel(this);
 	wxFont pala(19, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT, false, "Palatino Linotype");
 	wxStaticText* key = new wxStaticText(this, wxID_ANY, "Keyword");
