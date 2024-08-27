@@ -418,13 +418,22 @@ void SearchPage::OnEdit_WordBtnClicked(wxCommandEvent&)
 	TST::TreeNode* ans = list->search(una::utf8to32u(this->box->findBox->GetValue().utf8_string()));
 	if (ans)
 	{
-		wxString s = editwin->defi->GetValue().utf8_string();
-		std::string defistr = s.ToStdString();
+		wxString s1 = editwin->keyword->GetValue().utf8_string();
+		wxString s2 = editwin->defi->GetValue().utf8_string();
+		std::string keystr = s1.ToStdString();
+		std::string defistr = s2.ToStdString();
 		size_t pos = defistr.find_first_not_of("\n");
 		if (pos != std::string::npos) {
 			defistr = defistr.substr(pos);
 		}
 		ans->defi = "\n"+ defistr;
+		std::string def = "\n" + defistr;
+
+		if (currLang == "ENG/VIE") addingEV[una::utf8to32u(keystr)] = def;
+		else if (currLang == "VIE/ENG") addingVE[una::utf8to32u(keystr)] = def;
+		else if (currLang == "ENG/ENG") addingEE[una::utf8to32u(keystr)] = def;
+		else if (currLang == "SLANG") addingSlang[una::utf8to32u(keystr)] = def;
+		else if (currLang == "EMOTICON") addingEmo[una::utf8to32u(keystr)] = def;
 
 		wxMessageBox("Edit a word successfully", "Successfully", wxOK | wxICON_INFORMATION);
 		editwin->Close(true);
