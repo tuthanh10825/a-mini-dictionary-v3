@@ -20,7 +20,7 @@
 #define DARKMODE_IMG wxT("assets/icons/darkmode-icon.png")
 #define ADD_IMG wxT("assets/icons/add-icon.png")
 #define CANCEL_IMG wxT("assets/icons/cancel-icon.png")
-
+#define EDIT_IMG wxT("assets/icons/edit-icon.png")
 
 #define WOTD_IMG "assets/world-of-the-day.png"
 
