@@ -163,6 +163,7 @@ SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultP
 
 	res = new resPage(this);
 	this->res->removeButton->Bind(wxEVT_BUTTON, &SearchPage::OnRemoveBtnClicked, this);
+	this->res->editButton->Bind(wxEVT_BUTTON, &SearchPage::OnEditBtnClicked, this);
 	wxBoxSizer* searchSizer = new wxBoxSizer(wxVERTICAL);
 	searchSizer->Add(searchPanel, 0, wxEXPAND);
 	searchSizer->Add(res, 1, wxEXPAND);
@@ -395,6 +396,40 @@ void SearchPage::OnRemoveBtnClicked(wxCommandEvent&)
 		deleted_word.clear();
 	}
 	return;
+}
+
+void SearchPage::OnEditBtnClicked(wxCommandEvent&)
+{
+	editwin = new EditWindow(this->res);
+	editwin->Show(true);
+	editwin->editbutton->Bind(wxEVT_BUTTON, &SearchPage::OnEdit_WordBtnClicked, this);
+	TST::TreeNode* ans = list->search(una::utf8to32u(this->box->findBox->GetValue().utf8_string()));
+	if (ans)
+	{
+		std::u32string key = una::utf8to32u(this->box->findBox->GetValue().utf8_string());
+		editwin->keyword->ChangeValue(wxString(una::utf32to16(key)));
+
+		std::u32string definition = una::utf8to32u(ans->defi);
+		editwin->defi->ChangeValue(wxString(una::utf32to16(definition)));
+	}
+}
+void SearchPage::OnEdit_WordBtnClicked(wxCommandEvent&)
+{
+	TST::TreeNode* ans = list->search(una::utf8to32u(this->box->findBox->GetValue().utf8_string()));
+	if (ans)
+	{
+		wxString s = editwin->defi->GetValue().utf8_string();
+		std::string defistr = s.ToStdString();
+		size_t pos = defistr.find_first_not_of("\n");
+		if (pos != std::string::npos) {
+			defistr = defistr.substr(pos);
+		}
+		ans->defi = "\n"+ defistr;
+
+		wxMessageBox("Edit a word successfully", "Successfully", wxOK | wxICON_INFORMATION);
+		editwin->Close(true);
+		this->res->clearScreen();
+	}
 }
 
 
