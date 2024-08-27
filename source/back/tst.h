@@ -9,6 +9,7 @@
 #include <chrono>
 #include <random>
 #include <cstdlib>
+#include "red-black-tree.h"
 
 using std::vector;
 using std::pair;
@@ -197,6 +198,12 @@ public:
 	void loadWord(std::string filename)
 	{
 		std::ifstream fin; fin.open(filename);
+		std::string currLang; 
+		if (filename == "data/ee/data.txt") currLang = "ENG/ENG";
+		else if (filename == "data/ev/data.txt") currLang = "ENG/VIE";
+		else if (filename == "data/ve/data.txt") currLang = "VIE/ENG";
+		else if (filename == "data/emo/data.txt") currLang = "EMOTICON";
+		else if (filename == "data/slang/data.txt") currLang = "SLANG"; 
 		if (!fin.is_open()) return;
 
 		if (filename == "data/ev/data.txt" || filename == "data/ve/data.txt" ) {
@@ -214,7 +221,15 @@ public:
 					{
 						name.erase(name.begin()); 
 						while (name.back() == ' ') name.pop_back(); 
-						this->insert(name, defi);
+						
+						if (currLang == "ENG/ENG" && removingEE.find(una::utf8to32u(name)) != removingEE.end());
+						else if (currLang == "ENG/VIE" && removingEV.find(una::utf8to32u(name)) != removingEV.end()); 
+						else if (currLang == "VIE/ENG" && removingVE.find(una::utf8to32u(name)) != removingVE.end());
+						else if (currLang == "EMOTICON" && removingEmo.find(una::utf8to32u(name)) != removingEmo.end()); 
+						else if (currLang == "SLANG" && removingSlang.find(una::utf8to32u(name)) != removingEmo.end());
+						else this->insert(name, defi);
+						
+						
 						name = tempLine;
 						defi.clear();
 						break;
@@ -226,9 +241,11 @@ public:
 			name.erase(name.begin());
 			this->insert(name, defi);
 		}
-		else {
+		else 
+		{
 			std::string name, type, def;
-			while (!fin.eof()) {
+			while (!fin.eof()) 
+			{
 				fin >> name >> type;
 				getline(fin, def);
 
@@ -236,13 +253,45 @@ public:
 				while (def[0] == ' ')
 					def.erase(0, 1);
 
-				this->insert(name, def);
+				if (currLang == "ENG/ENG" && removingEE.find(una::utf8to32u(name)) != removingEE.end());
+				else if (currLang == "ENG/VIE" && removingEV.find(una::utf8to32u(name)) != removingEV.end());
+				else if (currLang == "VIE/ENG" && removingVE.find(una::utf8to32u(name)) != removingVE.end());
+				else if (currLang == "EMOTICON" && removingEmo.find(una::utf8to32u(name)) != removingEmo.end());
+				else if (currLang == "SLANG" && removingSlang.find(una::utf8to32u(name)) != removingEmo.end());
+				else this->insert(name, def);
 			}
+		}
+
+
+		if (currLang == "ENG/ENG")
+		{
+			for (auto iter = addingEE.begin(); iter != addingEE.end(); ++iter)
+				this->insert(una::utf32to8((*iter).first), (*iter).second);
+		}
+		else if (currLang == "ENG/VIE")
+		{
+			for (auto iter = addingEV.begin(); iter != addingEV.end(); ++iter)
+				this->insert(una::utf32to8((*iter).first), (*iter).second);
+		}
+		else if (currLang == "VIE/ENG")
+		{
+			for (auto iter = addingVE.begin(); iter != addingVE.end(); ++iter)
+				this->insert(una::utf32to8((*iter).first), (*iter).second);
+		}
+		else if (currLang == "SLANG")
+		{
+			for (auto iter = addingSlang.begin(); iter != addingSlang.end(); ++iter)
+				this->insert(una::utf32to8((*iter).first), (*iter).second);
+		}
+		else if (currLang == "EMOTICON")
+		{
+			for (auto iter = addingSlang.begin(); iter != addingSlang.end(); ++iter)
+				this->insert(una::utf32to8((*iter).first), (*iter).second);
 		}
 
 		fin.close();
 	}
-
+	
 	bool isLoaded() {
 		if (root == nullptr)
 			return false;
