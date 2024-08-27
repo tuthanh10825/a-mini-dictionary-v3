@@ -108,10 +108,17 @@ void AddWindow::OnAddBtnClicked(wxCommandEvent&)
 	std::string defistr = s3.ToStdString();
 	std::string definition = defistr;
 
-	defistr = "\n - " + typestr + "\n - " + defistr;
+	if (currLang == "ENG/VIE" || currLang == "VIE/ENG") defistr = "\n* " + typestr + "\n- " + defistr;
+	else defistr = "\n- " + typestr + "\n- " + defistr;
 
 	this->list->insert(keystr, defistr);
 	wxMessageBox("Add a new word successfully", "Successfully", wxOK | wxICON_INFORMATION);
+	if (currLang == "ENG/VIE") addingEV[una::utf8to32u(keystr)] = defistr;
+	else if (currLang == "VIE/ENG") addingVE[una::utf8to32u(keystr)] = defistr;
+	else if (currLang == "ENG/ENG") addingEE[una::utf8to32u(keystr)] = defistr;
+	else if (currLang == "SLANG") addingSlang[una::utf8to32u(keystr)] = defistr;
+	else if (currLang == "EMOTICON") addingEmo[una::utf8to32u(keystr)] = defistr;
+	/*
 	std::ofstream fout;
 	if (currLang == "ENG/VIE" || currLang == "VIE/ENG")
 	{
@@ -129,4 +136,5 @@ void AddWindow::OnAddBtnClicked(wxCommandEvent&)
 		fout << keystr << " (" << typestr << ") " << definition << std::endl;
 	}
 	fout.close();
+	*/
 }

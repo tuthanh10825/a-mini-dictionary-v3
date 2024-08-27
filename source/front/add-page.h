@@ -1,6 +1,8 @@
 #include <wx/wx.h>
 #include "Globals.h"
 #include "properties.h"
+#include "red-black-tree.h"
+
 class AddWindow : public wxWindow
 {
 public:
