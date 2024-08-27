@@ -106,10 +106,8 @@ void AddWindow::OnAddBtnClicked(wxCommandEvent&)
 	std::string keystr = s1.ToStdString();
 	std::string typestr = s2.ToStdString();
 	std::string defistr = s3.ToStdString();
-	std::string definition = defistr;
 
-	if (currLang == "ENG/VIE" || currLang == "VIE/ENG") defistr = "\n* " + typestr + "\n- " + defistr;
-	else defistr = "\n- " + typestr + "\n- " + defistr;
+	defistr = "\n* " + typestr + "\n- " + defistr;
 
 	this->list->insert(keystr, defistr);
 	wxMessageBox("Add a new word successfully", "Successfully", wxOK | wxICON_INFORMATION);
