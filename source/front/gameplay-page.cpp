@@ -37,7 +37,7 @@ DefiGameWindow::DefiGameWindow(wxWindow* parent, TST* clist)
 	answerFont.SetNativeFontInfoUserDesc(Pala15);
 	for (int i = 0; i < 4; ++i) {
 		wxRadioButton* button = new wxRadioButton(answerPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, i == 0 ? wxRB_GROUP : 0);
-		answer[i] = new wxTextCtrl(answerPanel, wxID_ANY, "", wxDefaultPosition, wxSize(-1, 200), wxTE_READONLY | wxTE_MULTILINE | wxBORDER_NONE | wxTE_NO_VSCROLL);
+		answer[i] = new wxTextCtrl(answerPanel, wxID_ANY, "", wxDefaultPosition, wxSize(-1, 175), wxTE_READONLY | wxTE_MULTILINE);
 		answer[i]->SetFont(answerFont);
 		answer[i]->SetForegroundColour(LIGHTMODE ? WHITE : BLACK);
 		answer[i]->SetBackgroundColour(LIGHTMODE ? BLACK : WHITE);

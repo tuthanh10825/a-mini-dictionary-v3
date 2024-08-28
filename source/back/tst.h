@@ -264,8 +264,8 @@ public:
 				else if (currLang == "SLANG" && removingSlang.find(una::utf8to32u(name)) != removingSlang.end());
 				else this->insert(name, "\n*(" + type + ")\n-" + def);
 
-		//	}
-		//}
+		}
+		}
 		else 
 		{
 			std::string name, type, def;
