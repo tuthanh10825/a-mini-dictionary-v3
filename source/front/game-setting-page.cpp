@@ -324,39 +324,3 @@ void GameSettingPage::FlipColor()
 	numberText->SetBitmap(wxBitmap("assets/game/setting/number-text" + s + ".png", wxBITMAP_TYPE_PNG));
 	infiniteText->SetBitmap(wxBitmap("assets/game/setting/endlessly-text" + s + ".png", wxBITMAP_TYPE_PNG));
 }
-
-
-
-
-//void GameSettingPage::StartGameRound(wxFrame* gameFrame, int totalRounds, int currentRound)
-//{
-//	if (currentRound > totalRounds) {
-//		wxMessageBox("Game Over!", "Result", wxOK | wxICON_INFORMATION);
-//		return;
-//	}
-//
-//	if (chooseDefi->IsChecked())
-//	{
-//		pair<std::u32string, std::string> ans = list->random();
-//		wxString ques = wxString(una::utf32to16(ans.first));
-//		wxString ans1 = wxString::FromUTF8(ans.second);
-//		wxString ans2 = wxString::FromUTF8(list->random().second);
-//		wxString ans3 = wxString::FromUTF8(list->random().second);
-//		wxString ans4 = wxString::FromUTF8(list->random().second);
-//
-//		Question tempQ(ques, ans1, ans2, ans3, ans4, 0);
-//
-//		DefiGameWindow* gamePlay = new DefiGameWindow(gameFrame, tempQ);
-//
-//		gamePlay->Bind(wxEVT_CLOSE_WINDOW, [=](wxCloseEvent&) {
-//
-//			StartGameRound(gameFrame, totalRounds, currentRound + 1);
-//			});
-//
-//		gamePlay->Show();
-//	}
-//	else
-//	{
-//		// Your existing logic for wordGameWindow...
-//	}
-//}

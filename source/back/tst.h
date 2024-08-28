@@ -197,6 +197,7 @@ public:
 	}
 	void loadWord(std::string filename)
 	{
+
 		std::ifstream fin; fin.open(filename);
 		std::string currLang; 
 		if (filename == "data/ee/data.txt") currLang = "ENG/ENG";
@@ -222,10 +223,10 @@ public:
 						while (name.back() == ' ') name.pop_back(); 
 						
 						if (currLang == "ENG/ENG" && removingEE.find(una::utf8to32u(name)) != removingEE.end());
-						else if (currLang == "ENG/VIE" && removingEV.find(una::utf8to32u(name)) != removingEV.end()); 
+						else if (currLang == "ENG/VIE" && removingEV.find(una::utf8to32u(name)) != removingEV.end());
 						else if (currLang == "VIE/ENG" && removingVE.find(una::utf8to32u(name)) != removingVE.end());
-						else if (currLang == "EMOTICON" && removingEmo.find(una::utf8to32u(name)) != removingEmo.end()); 
-						else if (currLang == "SLANG" && removingSlang.find(una::utf8to32u(name)) != removingEmo.end());
+						else if (currLang == "EMOTICON" && removingEmo.find(una::utf8to32u(name)) != removingEmo.end());
+						else if (currLang == "SLANG" && removingSlang.find(una::utf8to32u(name)) != removingSlang .end());
 						else this->insert(name, defi);
 						
 						
@@ -239,7 +240,32 @@ public:
 			}
 			name.erase(name.begin());
 			this->insert(name, defi);
-		}
+			}
+		else if (filename == "data/ee/data.txt") {
+			std::string name, type, def;
+			std::string line;
+
+			while (std::getline(fin, line)) {
+				size_t pos = line.find("\t(");
+				if (pos != std::string::npos) {
+					name = line.substr(0, pos); 
+					size_t type_start = pos;
+					size_t type_end = line.find(")", type_start);
+					if (type_end != std::string::npos) {
+						type = line.substr(type_start + 1, type_end - type_start - 1); 
+						type.erase(type.begin());
+						def = line.substr(type_end + 1);
+					}
+				}
+				if (currLang == "ENG/ENG" && removingEE.find(una::utf8to32u(name)) != removingEE.end());
+				else if (currLang == "ENG/VIE" && removingEV.find(una::utf8to32u(name)) != removingEV.end());
+				else if (currLang == "VIE/ENG" && removingVE.find(una::utf8to32u(name)) != removingVE.end());
+				else if (currLang == "EMOTICON" && removingEmo.find(una::utf8to32u(name)) != removingEmo.end());
+				else if (currLang == "SLANG" && removingSlang.find(una::utf8to32u(name)) != removingSlang.end());
+				else this->insert(name, "\n*(" + type + ")\n-" + def);
+
+		//	}
+		//}
 		else 
 		{
 			std::string name, type, def;
@@ -256,7 +282,7 @@ public:
 				else if (currLang == "ENG/VIE" && removingEV.find(una::utf8to32u(name)) != removingEV.end());
 				else if (currLang == "VIE/ENG" && removingVE.find(una::utf8to32u(name)) != removingVE.end());
 				else if (currLang == "EMOTICON" && removingEmo.find(una::utf8to32u(name)) != removingEmo.end());
-				else if (currLang == "SLANG" && removingSlang.find(una::utf8to32u(name)) != removingEmo.end());
+				else if (currLang == "SLANG" && removingSlang.find(una::utf8to32u(name)) != removingSlang.end());
 				else this->insert(name, def);
 			}
 		}

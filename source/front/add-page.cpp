@@ -1,6 +1,8 @@
 #include "add-page.h"
 AddWindow::AddWindow(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
+	FlipColor();
+
 	if (!EEtree->isLoaded())
 		EEtree->loadWord(EEDATASET);
 	list = EEtree;
@@ -9,11 +11,9 @@ AddWindow::AddWindow(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	this->SetBackgroundColour(*wxWHITE);
 	//wxPanel* right = new wxPanel(this);
 	wxFont pala(19, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT, false, "Palatino Linotype");
-	wxStaticText* key = new wxStaticText(this, wxID_ANY, "Keyword");
 	key->SetFont(pala);
-	wxStaticText* ty = new wxStaticText(this, wxID_ANY, "Type");
+
 	ty->SetFont(pala);
-	wxStaticText* def = new wxStaticText(this, wxID_ANY, "Definition");
 	def->SetFont(pala);
 
 	keyword->SetFont(pala);
@@ -57,6 +57,24 @@ AddWindow::AddWindow(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	mainsizer->Add(rightsizer, 1, wxEXPAND | wxALL, 50);
 	mainsizer->Add(rightbot, 0, wxEXPAND | wxALL, 20);
 	this->SetSizerAndFit(mainsizer);
+}
+void AddWindow::FlipColor()
+{
+
+	if (LIGHTMODE) {
+		this->SetBackgroundColour(LIGHTMODE_backgroundANDNaviColor);
+
+		this->key->SetForegroundColour(BLACK);
+		this->ty->SetForegroundColour(BLACK);
+		this->def->SetForegroundColour(BLACK);
+	}
+	else {
+
+		this->SetBackgroundColour(DARKMODE_backgroundColor);
+		this->key->SetForegroundColour(WHITE);
+		this->ty->SetForegroundColour(WHITE);
+		this->def->SetForegroundColour(WHITE);
+	}
 }
 void AddWindow::OnChooseLanguage(wxCommandEvent& evt)
 {

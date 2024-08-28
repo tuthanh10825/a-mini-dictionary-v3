@@ -235,7 +235,7 @@ void BaseFrame::OnFlipColor(wxCommandEvent&)
     this->historyPage->FlipColor(); 
     this->searchPage->FlipColor();
     this->gameSettingPage->FlipColor();
-
+    this->addpage->FlipColor();
 }
 
 void BaseFrame::FlipColor()

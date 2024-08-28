@@ -1,13 +1,28 @@
 #include "edit-page.h"
 EditWindow::EditWindow(wxWindow* parent) : wxFrame(parent, wxID_ANY, "Edit", wxDefaultPosition, wxDefaultSize)
 {
+	if (LIGHTMODE) {
+		this->background = LIGHTMODE_backgroundANDNaviColor;
+		this->textColor = LIGHTMODE_blackTextColor;
+	}
+	else {
+		this->background = DARKMODE_backgroundColor;
+		this->textColor = DARKMODE_whiteTextColor;
+	}
+	this->SetBackgroundColour(background);
+
+	this->Refresh();
+
 	wxInitAllImageHandlers();
 
 	wxFont pala(19, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT, false, "Palatino Linotype");
 	wxStaticText* key = new wxStaticText(this, wxID_ANY, "Keyword");
 	key->SetFont(pala);
+	key->SetForegroundColour(textColor);
+
 	wxStaticText* def = new wxStaticText(this, wxID_ANY, "Definition");
 	def->SetFont(pala);
+	def->SetForegroundColour(textColor);
 
 	keyword->SetFont(pala);
 
@@ -36,4 +51,9 @@ EditWindow::EditWindow(wxWindow* parent) : wxFrame(parent, wxID_ANY, "Edit", wxD
 	mainsizer->Add(rightsizer, 1, wxEXPAND | wxALL, 50);
 	mainsizer->Add(rightbot, 0, wxEXPAND | wxALL, 20);
 	this->SetSizerAndFit(mainsizer);
+}
+
+void EditWindow::FlipColor()
+{
+
 }
