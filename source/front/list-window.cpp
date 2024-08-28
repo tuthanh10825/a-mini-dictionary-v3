@@ -7,9 +7,8 @@ enum butID {
 };
 
 
-
 ListWindow::ListWindow(wxWindow* parent, int isFavor) : wxWindow(parent, wxID_ANY) {
-
+    if (!isFavor) isFav = isFavor;
 
     wxColour backgroundColor = LIGHTMODE_backgroundANDNaviColor, 
         textBlackColour = LIGHTMODE_blackTextColor, 
@@ -84,15 +83,16 @@ ListWindow::ListWindow(wxWindow* parent, int isFavor) : wxWindow(parent, wxID_AN
         std::string s = "";
         if (isFavor) {
             if (dataFav[numberOfWords].type != "") s = " (" + dataFav[numberOfWords].type + ")";
-
             grid->SetCellValue(numberOfWords, 0, wxString(una::utf8to16("  " + dataFav[numberOfWords].word + s)));
             grid->SetCellValue(numberOfWords, 1, wxString(una::utf8to16(" " + dataFav[numberOfWords].definition)));
+            data.push_back(dataFav[numberOfWords]);
             dataFav.pop_back();
         }
         else {
             if (dataHisto[numberOfWords].type != "") s = " (" + dataHisto[numberOfWords].type + ")";
             grid->SetCellValue(numberOfWords, 0, wxString(una::utf8to16("  " + dataHisto[numberOfWords].word + s)));
             grid->SetCellValue(numberOfWords, 1, wxString(una::utf8to16(" " + dataHisto[numberOfWords].definition)));
+            data.push_back(dataHisto[numberOfWords]);
             dataHisto.pop_back();
         }
         grid->SetCellRenderer(numberOfWords, 1, new wxGridCellAutoWrapStringRenderer());
@@ -159,16 +159,20 @@ ListWindow::ListWindow(wxWindow* parent, int isFavor) : wxWindow(parent, wxID_AN
 }
 
 
-
 void ListWindow::deleteSelectedRows() {
     int rows = grid->GetNumberRows();
     for (int i = 0; i < rows; ++i) {
         if (grid->IsInSelection(i, 0)) {
             grid->DeleteRows(i, 1, false);
+            data.erase(data.begin() + rows - i - 1);
             --i;
             --rows;
         }
     }
+    if (isFav) {
+        saveData2File("data/favorite.txt");
+    }
+    else saveData2File("data/history.txt");
 }
 
 void ListWindow::SelectAllRows() {
@@ -190,6 +194,7 @@ void ListWindow::OnSizeChange(wxSizeEvent&) {
     return;
 }
 
+/*
 
 void ListWindow::AppendRows(vector<word>& words, int isFav) {
     if (!isLoaded) {
@@ -205,6 +210,7 @@ void ListWindow::AppendRows(vector<word>& words, int isFav) {
         }
     }
     int size = words.size();
+
     grid->InsertRows(0,size);
     for (int i = size - 1; i >= 0; --i) {
         std::string s = "";
@@ -214,12 +220,133 @@ void ListWindow::AppendRows(vector<word>& words, int isFav) {
         grid->SetCellRenderer(i, 1, new wxGridCellAutoWrapStringRenderer());
         grid->SetCellBackgroundColour(i, 0, wxColour(255, 221, 173));
         grid->SetCellTextColour(i, 0, wxColour(4, 73, 153));
+        data.push_back(words[i]);
     }
     words.clear();
     grid->SetMargins(0 - wxSYS_VSCROLL_X, 0 - wxSYS_HSCROLL_Y);
     grid->AutoSizeColumn(0);
     grid->SetColSize(1, 810);
     grid->AutoSizeRows();
+}
+
+
+
+
+
+
+
+
+void ListWindow::AppendRows(vector<word>& words, int isFav) {
+    if (!isLoaded) {
+        if (isFav) {
+            loadData("data/favorite.txt", 1);
+            isLoaded = true;
+        }
+    }
+    else {
+        if (!isLoaded) {
+            loadData("data/history.txt", 0);
+            isLoaded = true;
+        }
+    }
+
+
+    int size = words.size();
+    int rows = data.size();
+    for (int i = size - 1; i >=0; --i) {
+        bool INFLAG = true;
+        for (int j = 0; j < rows; ++j) {
+            if (words[i].word == data[j].word) {
+                INFLAG = false;
+                break;
+            }
+        }
+
+        if (INFLAG) {
+            rows++;
+            grid->InsertRows(0, 1);
+            std::string s = "";
+            if (words[i].type != "") s = " (" + words[i].type + ")";
+            grid->SetCellValue(i, 0, wxString(una::utf8to16("  " + words[i].word + s)));
+            grid->SetCellValue(i, 1, wxString(una::utf8to16(" " + words[i].definition)));
+            grid->SetCellRenderer(i, 1, new wxGridCellAutoWrapStringRenderer());
+            grid->SetCellBackgroundColour(i, 0, wxColour(255, 221, 173));
+            grid->SetCellTextColour(i, 0, wxColour(4, 73, 153));
+            data.push_back(words[i]);
+        }
+    }
+
+
+    words.clear();
+    grid->SetMargins(0 - wxSYS_VSCROLL_X, 0 - wxSYS_HSCROLL_Y);
+    grid->AutoSizeColumn(0);
+    grid->SetColSize(1, 810);
+    grid->AutoSizeRows();
+}
+
+*/
+
+
+
+void ListWindow::AppendRows(vector<word>& words, int isFav) {
+    if (!isLoaded) {
+        if (isFav) {
+            loadData("data/favorite.txt", 1);
+            isLoaded = true;
+        }
+    }
+    else {
+        if (!isLoaded) {
+            loadData("data/history.txt", 0);
+            isLoaded = true;
+        }
+    }
+
+
+    int size = words.size(), rows = data.size(), count = 0;
+    for (int i = 0; i < size; ++i) {
+        bool INFLAG = true;
+        for (int j = rows - 1; j >= 0; --j) {
+            if (words[i].word == data[j].word) {
+                INFLAG = false;
+                break;
+            }
+        }
+        if (INFLAG) {
+            rows++;
+            data.push_back(words[i]);
+            ++count;
+        }
+        
+    }
+
+    if (count != 0) {
+        grid->InsertRows(0, count);
+        for (int i = 0; i < count; ++i) {
+            std::string s = "";
+            if (data[rows - i - 1].type != "") s = " (" + data[rows - i - 1].type + ")";
+            grid->SetCellValue(i, 0, wxString(una::utf8to16("  " + data[rows- i - 1].word + s)));
+            grid->SetCellValue(i, 1, wxString(una::utf8to16(" " + data[rows - i - 1].definition)));
+            grid->SetCellRenderer(i, 1, new wxGridCellAutoWrapStringRenderer());
+            grid->SetCellBackgroundColour(i, 0, LIGHTMODE_backgroundYellowColor);   
+            grid->SetCellTextColour(i, 0, wxColour(4, 73, 153));
+            if (!LIGHTMODE) {
+                grid->SetCellBackgroundColour(i, 0, DARKMODE_backgroundYellowColor);
+                grid->SetCellTextColour(i, 0, DARKMODE_whiteTextColor);
+            }
+        }
+
+        words.clear();
+        grid->SetMargins(0 - wxSYS_VSCROLL_X, 0 - wxSYS_HSCROLL_Y);
+        grid->AutoSizeColumn(0);
+        grid->SetColSize(1, 810);
+        grid->AutoSizeRows();
+        if (isFav) {
+            saveData2File("data/favorite.txt");
+        }
+        else saveData2File("data/history.txt");
+    }
+    
 }
 
 void ListWindow::FlipColor()
@@ -259,6 +386,57 @@ void ListWindow::FlipColor()
 
 }
 
+
+bool ListWindow::loadData(std::string path, int isFav) {
+    std::ifstream fin(path);
+    if (fin.is_open()) {
+        word aWord;
+        getline(fin, aWord.word, '#');
+        while (!fin.eof()) {
+            getline(fin, aWord.type, '#');
+            getline(fin, aWord.definition, '~');
+            fin.get();
+            while (aWord.definition[0] == ' ') aWord.definition.erase(0, 1);
+            if (isFav) {
+                dataFav.push_back(aWord);
+            }
+            else dataHisto.push_back(aWord);
+            getline(fin, aWord.word, '#');
+        }
+        fin.close();
+        return true;
+    }
+    fin.close();
+    return false;
+}
+
+/*
+* 
+bool ListWindow::loadData(std::string path, int isFav) {
+    std::ifstream fin(path);
+    if (fin.is_open()) {
+        word aWord;
+        getline(fin, aWord.word, '#');
+        while (!fin.eof()) {
+            getline(fin, aWord.word, '#');
+            getline(fin, aWord.type, '#');
+            getline(fin, aWord.definition, '~');
+            fin.get();
+            while (aWord.definition[0] == ' ') aWord.definition.erase(0, 1);
+            if (isFav) {
+                dataFav.push_back(aWord);
+            }
+            else dataHisto.push_back(aWord);
+            getline(fin, aWord.word, '#');
+        }
+        fin.close();
+        return true;
+    }
+    fin.close();
+    return false;
+}
+
+
 bool ListWindow::loadData(std::string path, int isFav) {
     std::ifstream fin(path);
     if (fin.is_open()) {
@@ -277,5 +455,21 @@ bool ListWindow::loadData(std::string path, int isFav) {
         return true;
     }
     fin.close();
+    return false;
+}
+*/
+
+
+bool ListWindow::saveData2File(std::string path) {
+    std::ofstream fout(path);
+    if (fout.is_open()) {
+        int size = data.size();
+        for (int i = size-1; i >=0; --i) {
+            fout << data[i].word << "#" << data[i].type << "#" << data[i].definition << "~\n";
+        }
+        fout.close();
+        return true;
+    }
+    fout.close();
     return false;
 }

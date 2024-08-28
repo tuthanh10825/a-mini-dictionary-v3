@@ -1,18 +1,4 @@
--ances	(pl. ) of Discrepancy
--ancies	(pl. ) of Discrepancy
--ancy	() A suffix expressing more strongly than -ance the idea of quality or state; as, constancy, buoyancy, infancy.
--ant	() A suffix sometimes marking the agent for action; as, merchant, covenant, servant, pleasant, etc. Cf. -ent.
--arch	(a.) A suffix meaning a ruler, as in monarch (a sole ruler).
--ard	() Alt. of -art
--art	() The termination of many English words; as, coward, reynard, drunkard, mostly from the French, in which language this ending is of German origin, being orig. the same word as English hard. It usually has the sense of one who has to a high or excessive degree the quality expressed by the root; as, braggart, sluggard.
--ate	() As an ending of participles or participial adjectives it is equivalent to -ed; as, situate or situated; animate or animated.
--ate	() As the ending of a verb, it means to make, to cause, to act, etc.; as, to propitiate (to make propitious); to animate (to give life to).
--ate	() As a noun suffix, it marks the agent; as, curate, delegate. It also sometimes marks the office or dignity; as, tribunate.
--ate	() In chemistry it is used to denote the salts formed from those acids whose names end -ic (excepting binary or halogen acids); as, sulphate from sulphuric acid, nitrate from nitric acid, etc. It is also used in the case of certain basic salts.
--ation	() A suffix forming nouns of action, and often equivalent to the verbal substantive in -ing. It sometimes has the further meanings of state, and that which results from the action. Many of these nouns have verbs in -ate; as, alliterate -ation, narrate -ation; many are derived through the French; as, alteration, visitation; and many are formed on verbs ending in the Greek formative -ize (Fr. -ise); as, civilization, demoralization.
--barrelled	(a.) Having two barrels; -- applied to a gun.
--blast	() A suffix or terminal formative, used principally in biological terms, and signifying growth, formation; as, bioblast, epiblast, mesoblast, etc.
--cae	(pl. ) of Hierotheca
--ces	(pl. ) of Inadvertence
--cies	(pl. ) of Inadvertency
--cies	(pl. ) of Superintendency
+3:]#Verb#Pet smiley.~
+4AYN#Verb#For all you know~
+4COL#Verb#For crying out loud~
+4SALE#Verb#For sale~

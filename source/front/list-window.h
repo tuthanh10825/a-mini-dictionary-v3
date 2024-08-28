@@ -18,8 +18,10 @@ public:
 	wxGrid* grid;
 	void FlipColor(); 
 private:
-	bool isLoaded = false;
+	bool isLoaded = false, isFav = true;
 	// Need to implement
+	vector<word> data;
+	bool saveData2File(std::string path);
 	// Finished
 	bool loadData(std::string path, int isFav);
 	void deleteSelectedRows();
