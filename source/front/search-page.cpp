@@ -237,7 +237,10 @@ void SearchPage::insertHistory(TST::TreeNode* ans) {
 			//deleted_word = una::utf8to32u(newWord.word);
 			dataHisto.push_back(newWord);
 		}
-
+		if (defi != '\0') {
+			newWord.definition = defi;
+			dataHisto.push_back(newWord);
+		}
 
 	}
 	else if (currLang == "EMOTICON") {
