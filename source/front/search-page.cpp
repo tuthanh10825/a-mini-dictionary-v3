@@ -67,8 +67,6 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	return; 
 }
 
-
-
 resPage::resPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
 	wxFont::AddPrivateFont(wxString("./fonts/pala.ttf"));
