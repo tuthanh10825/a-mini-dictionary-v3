@@ -1,5 +1,6 @@
 ﻿#include "search-page.h"
 #include <sstream>
+#include "Globals.h"
 searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 {
 	wxFont::AddPrivateFont("fonts/pala.ttf"); 
@@ -48,7 +49,7 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 
 	resetButton->Bind(wxEVT_BUTTON, [=](wxCommandEvent&)
 		{
-			
+		
 			if (!removingEE.clear() && !addingEE.clear()) isRebuildEE = false; 
 			if (!removingEV.clear() && !addingEV.clear()) isRebuildEV = false; 
 			if (!removingVE.clear() && !addingVE.clear()) isRebuildVE = false; 
@@ -91,11 +92,13 @@ resPage::resPage(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 void resPage::addingString(wxString total)
 {
 	resWord->SetValue(total);
+	resWord->Refresh();
 }
 
 void resPage::clearScreen()
 {
 	resWord->Clear();
+	resWord->Refresh();
 }
 
 
@@ -155,8 +158,22 @@ SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultP
 
 	box->searchButton->Bind(wxEVT_BUTTON, &SearchPage::OnSearchBtnClicked, this);
 	box->randomButton->Bind(wxEVT_BUTTON, &SearchPage::OnRandomBtnClicked, this);
-
-
+	
+	box->wordOrDefi->Bind(wxEVT_COMBOBOX, [=](wxCommandEvent& evt)
+		{
+			if (evt.GetString().utf8_string() == "KEYWORD")
+			{
+				res->editButton->Enable(); 
+				res->removeButton->Enable(); 
+				res->favorButton->Enable(); 
+			}
+			else
+			{
+				res->editButton->Disable(); 
+				res->removeButton->Disable(); 
+				res->favorButton->Disable(); 
+			}
+		}); 
 	res = new resPage(this);
 	this->res->removeButton->Bind(wxEVT_BUTTON, &SearchPage::OnRemoveBtnClicked, this);
 	this->res->editButton->Bind(wxEVT_BUTTON, &SearchPage::OnEditBtnClicked, this);
@@ -252,6 +269,9 @@ void SearchPage::insertHistory(TST::TreeNode* ans) {
 
 void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 {
+	vector<std::u32string> t; 
+	for (auto iter = addingEE.begin(); iter != addingEE.end(); ++iter)
+		t.push_back((*iter).first); 
 	if (this->box->wordOrDefi -> GetValue().utf8_string() == "KEYWORD")
 	{
 		this->res->clearScreen();
@@ -261,6 +281,7 @@ void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 			insertHistory(ans);
 			this->res->addingString(wxString(una::utf8to16(this->box->findBox->GetValue().utf8_string())) + wxString(una::utf8to16(ans->defi)));
 		}
+		this->Refresh();
 	}
 	else
 	{
@@ -370,6 +391,7 @@ void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 		this->res->addingString(wxString(una::utf32to16(total_ans))); 
 		this->Refresh();
 	}
+	
 }
 
 
@@ -408,9 +430,9 @@ void SearchPage::OnChooseLanguage(wxCommandEvent& evt)
 
 		list = SLtree;
 	}
-	
 	currLang = type; 
 	return;
+
 }
 
 
@@ -444,30 +466,35 @@ void SearchPage::OnRemoveBtnClicked(wxCommandEvent&)
 			addingEV[deleted_word] = "";
 			this->list->delete_word(list->root, str);
 			removingEV.insert(deleted_word);
+			isRebuildEV = true; 
 		}
 		else if (this->currLang == "VIE/ENG")
 		{
 			addingVE[deleted_word] = "";
 			this->list->delete_word(list->root, str);
 			removingVE.insert(deleted_word);
+			isRebuildVE = true; 
 		}
 		else if (this->currLang == "ENG/ENG")
 		{
 			addingEE[deleted_word] = "";
 			this->list->delete_word(list->root, str);
 			removingEE.insert(deleted_word);
+			isRebuildEE = true; 
 		}
 		else if (this->currLang == "EMOTICON")
 		{
 			addingEmo[deleted_word] = "";
 			this->list->delete_word(list->root, str);
 			removingEmo.insert(deleted_word);
+			isRebuildEmo = true; 
 		}
 		else if (this->currLang == "SLANG")
 		{
 			addingSlang[deleted_word] = "";
 			this->list->delete_word(list->root, str);
 			removingSlang.insert(deleted_word);
+			isRebuildSlang = true; 
 		}
 		wxMessageBox("Delete successfully", "Successfully", wxOK | wxICON_INFORMATION);
 		this->box->findBox->Clear();
@@ -508,11 +535,31 @@ void SearchPage::OnEdit_WordBtnClicked(wxCommandEvent&)
 		ans->defi = "\n"+ defistr;
 		std::string def = "\n" + defistr;
 
-		if (currLang == "ENG/VIE") addingEV[una::utf8to32u(keystr)] = def;
-		else if (currLang == "VIE/ENG") addingVE[una::utf8to32u(keystr)] = def;
-		else if (currLang == "ENG/ENG") addingEE[una::utf8to32u(keystr)] = def;
-		else if (currLang == "SLANG") addingSlang[una::utf8to32u(keystr)] = def;
-		else if (currLang == "EMOTICON") addingEmo[una::utf8to32u(keystr)] = def;
+		if (currLang == "ENG/VIE")
+		{
+			isRebuildEV = true;
+			addingEV[una::utf8to32u(keystr)] = def;
+		}
+		else if (currLang == "VIE/ENG")
+		{
+			addingVE[una::utf8to32u(keystr)] = def;
+			isRebuildVE = true;
+		}
+		else if (currLang == "ENG/ENG")
+		{
+			addingEE[una::utf8to32u(keystr)] = def;
+			isRebuildEE = true;
+		}
+		else if (currLang == "SLANG")
+		{
+			addingSlang[una::utf8to32u(keystr)] = def;
+			isRebuildSlang = true;
+		}
+		else if (currLang == "EMOTICON")
+		{
+			addingEmo[una::utf8to32u(keystr)] = def;
+			isRebuildEmo = true;
+		}
 
 		wxMessageBox("Edit a word successfully", "Successfully", wxOK | wxICON_INFORMATION);
 		editwin->Close(true);

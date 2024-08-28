@@ -46,8 +46,8 @@ extern std::u32string deleted_word;
 
 extern std::string& curr_type;
 
-static bool isRebuildEE = false;
-static bool isRebuildEV = false;
-static bool isRebuildVE = false; 
-static bool isRebuildSlang = false;
-static bool isRebuildEmo = false;
+extern bool isRebuildEE;
+extern bool isRebuildEV;
+extern bool isRebuildVE;
+extern bool isRebuildSlang;
+extern bool isRebuildEmo;

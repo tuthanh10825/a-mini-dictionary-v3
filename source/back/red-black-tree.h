@@ -39,10 +39,11 @@ private:
 	};
 
 	//global constant variable
-	inline static TreeNode* const nil = new TreeNode();
+	
 	bool red = 1, black = 0;
 	//querying operator, the same as bst
-	inline static TreeNode* root = nil;
+	inline static TreeNode* const nil = new TreeNode();
+	TreeNode* root = nil;
 
 	TreeNode* search(T key)
 	{
@@ -53,7 +54,7 @@ private:
 			else if (curr->val < key) curr = curr->right;
 			else return curr;
 		}
-		return (curr -> val == key) ? curr : nil;
+		return curr;
 	}
 	TreeNode* maximum()
 	{
@@ -95,6 +96,7 @@ private:
 		return curr->p;
 	}
 public:
+	
 	bool remove(T val)
 	{
 		TreeNode* z = search(val);
@@ -499,7 +501,7 @@ class ordered_map
 	inline static TreeNode* const nil = new TreeNode();
 	bool red = 1, black = 0;
 	//querying operator, the same as bst
-	inline static TreeNode* root = nil;
+	TreeNode* root = nil;
 
 	TreeNode* search(in key)
 	{
@@ -510,7 +512,7 @@ class ordered_map
 			else if (curr->val.first < key) curr = curr->right;
 			else return curr;
 		}
-		return (curr -> val.first == key) ? curr : nil;
+		return curr;
 	}
 
 	void insert(in val)
@@ -747,17 +749,17 @@ public:
 };
 
 
-static ordered_map<std::u32string, std::string> addingEE;
-static ordered_map<std::u32string, std::string> addingEV;
-static ordered_map<std::u32string, std::string> addingVE;
-static ordered_map<std::u32string, std::string> addingSlang;
-static ordered_map<std::u32string, std::string> addingEmo;
+extern ordered_map<std::u32string, std::string> addingEE;
+extern ordered_map<std::u32string, std::string> addingEV;
+extern ordered_map<std::u32string, std::string> addingVE;
+extern ordered_map<std::u32string, std::string> addingSlang;
+extern ordered_map<std::u32string, std::string> addingEmo;
 
-static ordered_set<std::u32string> removingEE;
-static ordered_set<std::u32string> removingEV;
-static ordered_set<std::u32string> removingVE;
-static ordered_set<std::u32string> removingSlang;
-static ordered_set<std::u32string> removingEmo;
+extern ordered_set<std::u32string> removingEE;
+extern ordered_set<std::u32string> removingEV;
+extern ordered_set<std::u32string> removingVE;
+extern ordered_set<std::u32string> removingSlang;
+extern ordered_set<std::u32string> removingEmo;
 
 static void saveRemoving()
 {

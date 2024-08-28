@@ -25,7 +25,7 @@ public:
 	void loadText(std::string filename)
 	{
 		std::ifstream fin; fin.open(filename);
-		if (!fin.is_open()) return;
+ 		if (!fin.is_open()) return;
 
 		if (filename == "data/ev/data.txt" || filename == "data/ve/data.txt") 
 		{
@@ -113,21 +113,15 @@ public:
 			{
 				std::u32string real_line = una::utf8to32u(line);
 				std::u32string word = real_line.substr(0, real_line.find(U'\t'));
-				if (filename == "data/ee/data.txt" && 
-					((addingEE.find(word) != addingEE.end() && !(*addingEE.find(word)).second.empty()) || removingEE.find(word) != removingEE.end()))
-				{
-					std::cerr << "Error";
-				}
+				if (filename == "data/ee/data.txt" &&
+					((addingEE.find(word) != addingEE.end() && !(*addingEE.find(word)).second.empty()) || removingEE.find(word) != removingEE.end()));
+
 				if (filename == "data/emo/data.txt" &&
-					((addingEmo.find(word) != addingEmo.end() && !(*addingEmo.find(word)).second.empty()) || removingEmo.find(word) != removingEmo.end()))
-				{
-					std::cerr << "Error";
-				}
+					((addingEmo.find(word) != addingEmo.end() && !(*addingEmo.find(word)).second.empty()) || removingEmo.find(word) != removingEmo.end()));
+
 				if (filename == "data/slang/data.txt" &&
-					((addingSlang.find(word) != addingSlang.end() && !(*addingSlang.find(word)).second.empty()) || removingSlang.find(word) != removingSlang.end()))
-				{
-					std::cerr << "Error";
-				}
+					((addingSlang.find(word) != addingSlang.end() && !(*addingSlang.find(word)).second.empty()) || removingSlang.find(word) != removingSlang.end()));
+				
 				else
 				{
 					real_line = real_line.substr(real_line.find(U'\t') + 1);
@@ -143,7 +137,7 @@ public:
 					if ((*iter).second.empty()) continue;
 					std::u32string totalDefi = una::utf8to32u((*iter).second);
 					u32stringstream sin(totalDefi);
-					for (std::u32string ltext; sin >> text;)
+					for (std::u32string ltext; std::getline(sin, ltext);)
 					{
 						if (ltext[0] == U'-')
 						{
@@ -189,6 +183,10 @@ public:
 			}
 		}
 		text += static_cast<char32_t>(0);
+		//vector <std::u32string> t; 
+		/*for (auto iter = removingEE.begin(); iter != removingEE.end(); ++iter)
+			t.push_back(*iter); */
+		return;
 	}
 	void serialize(std::string lang)
 	{
@@ -233,8 +231,14 @@ public:
 		int k = str.size(); 
 		vector<int> ans; 
 		int start = 0, end = SA_index.size() - 1; 
+		/*vector<std::u32string> t;
+		for (auto iter = removingEE.begin(); iter != removingEE.end(); ++iter)
+			t.push_back(*iter);*/
 		generate_ans(start, end, str, k, ans);
 		ordered_set<std::u32string> real_ans; 
+		
+		/*for (auto iter = removingEE.begin(); iter != removingEE.end(); ++iter)
+			t.push_back(*iter);*/
 		for (const int& val : ans)
 		{
 			if (type == "ENG/ENG" && removingEE.find(mapping[val]) == removingEE.end())
@@ -245,10 +249,13 @@ public:
 				real_ans.insert(mapping[val]);
 			else if (type == "SLANG" && removingSlang.find(mapping[val]) == removingSlang.end())
 				real_ans.insert(mapping[val]);
-			else if (type == "EMOTICON" && removingEmo.find(mapping[val]) == removingSlang.end())
+			else if (type == "EMOTICON" && removingEmo.find(mapping[val]) == removingEmo.end())
 				real_ans.insert(mapping[val]); 
-		}
 
+			
+		} 
+		/*for (auto iter = removingEE.begin(); iter != removingEE.end(); ++iter)
+			t.push_back(*iter);*/
 		/*vector<std::u32string> ans_vector; 
 		for (auto iter = real_ans.begin(); iter != real_ans.end(); ++iter)
 			ans_vector.push_back(*iter);  */

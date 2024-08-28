@@ -20,12 +20,7 @@ private:
 	{
 		saveInserting();
 		saveRemoving();
-		delete EVtree;
-		delete EEtree;
-		delete VEtree;
-		delete EMOtree;
-		delete SLtree;
-
+		
 		if (isRebuildEE)
 		{
 			EEDef.loadText("data/ee/data.txt"); 
@@ -95,6 +90,12 @@ private:
 		addingVE.clear(); 
 		addingEmo.clear(); 
 		addingSlang.clear(); 
+		delete EVtree;
+		delete EEtree;
+		delete VEtree;
+		delete EMOtree;
+		delete SLtree;
+
 	}
 };
 wxIMPLEMENT_APP(myApp);
