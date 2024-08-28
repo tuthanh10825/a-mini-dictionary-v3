@@ -10,8 +10,9 @@
 #include <uni_algo/all.h>
 #include <cassert>
 #include <map>
+#include <sstream>
 #include "red-black-tree.h"
-
+typedef std::basic_stringstream<char32_t> u32stringstream;
 
 using std::vector;
 
@@ -21,7 +22,7 @@ public:
 	std::u32string text;
 	vector<int> SA_index;
 	ordered_map <int, std::u32string> mapping;
-	void loadFile(std::string filename)
+	void loadText(std::string filename)
 	{
 		std::ifstream fin; fin.open(filename);
 		if (!fin.is_open()) return;
@@ -34,14 +35,10 @@ public:
 				for (std::string tempLine; !fin.eof();)
 				{
 					std::getline(fin, tempLine);
-					if (fin.eof()) break;
 					if (!una::is_valid_utf8(tempLine)) assert("String error");
-
 					std::u32string line = una::utf8to32u(tempLine); 
-					if (line[0] == '@')
+					if (line[0] == U'@')
 					{
-
-						
 						name = line; 
 						name.erase(name.begin());
 						while (name.back() == ' ') name.pop_back();
@@ -49,44 +46,187 @@ public:
 					}
 					else
 					{
-						
-						if (line[0] == '-') text += (line + U"@");
-						mapping[text.size() - 1] = name; 
+						if (filename == "data/ev/data.txt" &&
+							((addingEV.find(name) != addingEV.end() && !(*addingEV.find(name)).second.empty()) || removingEV.find(name) != removingEV.end()))
+						{
+							std::cerr << "Error"; 
+						}
+						if (filename == "data/ve/data.txt" &&
+							((addingVE.find(name) != addingVE.end() && !(*addingVE.find(name)).second.empty()) || removingVE.find(name) != removingVE.end()))
+						{
+							std::cerr << "Error";
+						}
+						else
+						{
+							if (line.find(U"universe") != std::u32string::npos)
+								std::u32string word = name; 
+							if (line[0] == U'-')
+							{
+								text += (line + U"@");
+								mapping[text.size() - 1] = name;
+							}
+						}
 					}
 						
 				}
 			}
-			
+			if (filename == "data/ev/data.txt")
+			{
+				for (auto iter = addingEV.begin(); iter != addingEV.end(); ++iter)
+				{
+					if ((*iter).second.empty()) continue; 
+					std::u32string totalDefi = una::utf8to32u((*iter).second);
+					u32stringstream sin(totalDefi);
+					for (std::u32string ltext; sin >> text;)
+					{
+						if (ltext[0] == U'-')
+						{
+							text += ltext + U"@";
+							mapping[text.size() - 1] = (*iter).first;
+						}
+					}
+				}
+			}
+			else if (filename == "data/ve/data.txt")
+			{
+				for (auto iter = addingVE.begin(); iter != addingVE.end(); ++iter)
+				{
+					if ((*iter).second.empty()) continue;
+					std::u32string totalDefi = una::utf8to32u((*iter).second);
+					u32stringstream sin(totalDefi);
+					for (std::u32string ltext; sin >> text;)
+					{
+						if (ltext[0] == U'-')
+						{
+							text += ltext + U"@";
+							mapping[text.size() - 1] = (*iter).first;
+						}
+					}
+				}
+			}
 		}
 		else
 		{
-			std::u32string prevWord; 
-			std::u32string defiLine; 
+			std::u32string prevWord;
+			std::u32string defiLine;
 			for (std::string line; std::getline(fin, line); )
 			{
-				std::u32string real_line = una::utf8to32u(line); 
+				std::u32string real_line = una::utf8to32u(line);
 				std::u32string word = real_line.substr(0, real_line.find(U'\t'));
-				real_line = real_line.substr(real_line.find(U'\t') + 1); 
-				if (word == prevWord)
+				if (filename == "data/ee/data.txt" && 
+					((addingEE.find(word) != addingEE.end() && !(*addingEE.find(word)).second.empty()) || removingEE.find(word) != removingEE.end()))
 				{
-					defiLine += U"\n" + prevWord;
+					std::cerr << "Error";
+				}
+				if (filename == "data/emo/data.txt" &&
+					((addingEmo.find(word) != addingEmo.end() && !(*addingEmo.find(word)).second.empty()) || removingEmo.find(word) != removingEmo.end()))
+				{
+					std::cerr << "Error";
+				}
+				if (filename == "data/slang/data.txt" &&
+					((addingSlang.find(word) != addingSlang.end() && !(*addingSlang.find(word)).second.empty()) || removingSlang.find(word) != removingSlang.end()))
+				{
+					std::cerr << "Error";
 				}
 				else
 				{
-					if (!prevWord.empty())
-					{
-						text += defiLine + U"@";
-						mapping[text.size() - 1] = prevWord;
-					}
-					defiLine = real_line;
-					prevWord = word;
+					real_line = real_line.substr(real_line.find(U'\t') + 1);
+					real_line = real_line.substr(real_line.find(U')') + 1);
+					text += real_line + U'@';
+					mapping[text.size() - 1] = word;
 				}
 			}
-			text += defiLine + U"@"; 
-			mapping[text.size() - 1] = prevWord;
+			if (filename == "data/ee/data.txt")
+			{
+				for (auto iter = addingEE.begin(); iter != addingEE.end();++iter)
+				{
+					if ((*iter).second.empty()) continue;
+					std::u32string totalDefi = una::utf8to32u((*iter).second);
+					u32stringstream sin(totalDefi);
+					for (std::u32string ltext; sin >> text;)
+					{
+						if (ltext[0] == U'-')
+						{
+							text += ltext + U"@";
+							mapping[text.size() - 1] = (*iter).first;
+						}
+					}
+				}
+			}
+			else if (filename == "data/slang/data.txt")
+			{
+				for (auto iter = addingSlang.begin(); iter != addingSlang.end();++iter)
+				{
+					if ((*iter).second.empty()) continue;
+					std::u32string totalDefi = una::utf8to32u((*iter).second);
+					u32stringstream sin(totalDefi);
+					for (std::u32string ltext; sin >> text;)
+					{
+						if (ltext[0] == U'-')
+						{
+							text += ltext + U"@";
+							mapping[text.size() - 1] = (*iter).first;
+						}
+					}
+				}
+			}
+			else if (filename == "data/emo/data.txt")
+			{
+				for (auto iter = addingEmo.begin(); iter != addingEmo.end(); ++iter)
+				{
+					if ((*iter).second.empty()) continue;
+					std::u32string totalDefi = una::utf8to32u((*iter).second);
+					u32stringstream sin(totalDefi);
+					for (std::u32string ltext; sin >> text;)
+					{
+						if (ltext[0] == U'-')
+						{
+							text += ltext + U"@";
+							mapping[text.size() - 1] = (*iter).first;
+						}
+					}
+				}
+			}
 		}
 		text += static_cast<char32_t>(0);
-		this->build(); 
+	}
+	void serialize(std::string lang)
+	{
+		std::fstream fout;
+		if (lang == "ENG/ENG") fout.open("data/ee/index.bin", std::ios::binary | std::ios::out);
+		else if (lang == "ENG/VIE") fout.open("data/ev/index.bin", std::ios::binary | std::ios::out);
+		else if (lang == "VIE/ENG") fout.open("data/ve/index.bin", std::ios::binary | std::ios::out);
+		else if (lang == "SLANG") fout.open("data/slang/index.bin", std::ios::binary | std::ios::out);
+		else if (lang == "EMOTICON") fout.open("data/emo/index.bin", std::ios::binary | std::ios::out);
+	
+		
+		fout.write((char*)SA_index.data(), SA_index.size() * sizeof(int)); 
+		fout.close(); 
+		return; 
+	}
+	void deserialize(std::string lang)
+	{
+		std::fstream fin;
+		if (lang == "ENG/ENG") 
+			fin.open("data/ee/index.bin", std::ios::binary | std::ios::in);
+		else if (lang == "ENG/VIE") 
+			fin.open("data/ev/index.bin", std::ios::binary | std::ios::in);
+		else if (lang == "VIE/ENG") 
+			fin.open("data/ve/index.bin", std::ios::binary | std::ios::in);
+		else if (lang == "SLANG") 
+			fin.open("data/slang/index.bin", std::ios::binary | std::ios::in);
+		else if (lang == "EMOTICON") 
+			fin.open("data/emo/index.bin", std::ios::binary | std::ios::in);
+		
+		if (!fin)
+		{
+			std::cerr << "wtf?";
+		}
+		SA_index.resize(text.size()); 
+		fin.read((char*)SA_index.data(), text.size() * sizeof(int)); 
+		fin.close(); 
+		return; 
+
 	}
 	vector<std::u32string> findSubtring(std::u32string str, std::string type)
 	{
@@ -123,7 +263,9 @@ private:
 		int mid = (start + end) / 2;
 		if (text.substr(SA_index[mid], k) == str)
 		{
+			std::u32string a = text.substr(SA_index[mid], k); 
 			ans.push_back(text.find(U"@", SA_index[mid]));
+			std::u32string word = mapping[ans.back()];
 			generate_ans(start, mid - 1, str, k, ans); 
 			generate_ans(mid + 1, end, str, k, ans);
 		}
@@ -133,6 +275,7 @@ private:
 			generate_ans(mid + 1, end, str, k, ans); 
 	
 	}
+	public: 
 	void build()
 	{
 		int n = text.size();
@@ -199,8 +342,7 @@ private:
 			if (nkey == n) break;
 			k *= 2;
 		}
-	}
-public: 
+	} 
 	~suffixArr()
 	{
 		mapping.clear(); 

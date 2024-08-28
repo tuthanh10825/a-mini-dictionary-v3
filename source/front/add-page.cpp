@@ -111,11 +111,31 @@ void AddWindow::OnAddBtnClicked(wxCommandEvent&)
 
 	this->list->insert(keystr, defistr);
 	wxMessageBox("Add a new word successfully", "Successfully", wxOK | wxICON_INFORMATION);
-	if (currLang == "ENG/VIE") addingEV[una::utf8to32u(keystr)] = defistr;
-	else if (currLang == "VIE/ENG") addingVE[una::utf8to32u(keystr)] = defistr;
-	else if (currLang == "ENG/ENG") addingEE[una::utf8to32u(keystr)] = defistr;
-	else if (currLang == "SLANG") addingSlang[una::utf8to32u(keystr)] = defistr;
-	else if (currLang == "EMOTICON") addingEmo[una::utf8to32u(keystr)] = defistr;
+	if (currLang == "ENG/VIE")
+	{
+		addingEV[una::utf8to32u(keystr)] = defistr;
+		isRebuildEV = true; 
+	}
+	else if (currLang == "VIE/ENG")
+	{
+		addingVE[una::utf8to32u(keystr)] = defistr;
+		isRebuildVE = true;
+	}
+	else if (currLang == "ENG/ENG")
+	{
+		addingEE[una::utf8to32u(keystr)] = defistr;
+		isRebuildEE = true;
+	}
+	else if (currLang == "SLANG")
+	{
+		addingSlang[una::utf8to32u(keystr)] = defistr;
+		isRebuildSlang = true;
+	}
+	else if (currLang == "EMOTICON")
+	{
+		addingEmo[una::utf8to32u(keystr)] = defistr;
+		isRebuildEmo = true;
+	}
 	keyword->ChangeValue(wxEmptyString);
 	type->ChangeValue(wxEmptyString); 
 	defi->ChangeValue(wxEmptyString);

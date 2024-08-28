@@ -53,7 +53,7 @@ private:
 			else if (curr->val < key) curr = curr->right;
 			else return curr;
 		}
-		return curr;
+		return (curr -> val == key) ? curr : nil;
 	}
 	TreeNode* maximum()
 	{
@@ -183,7 +183,12 @@ public:
 		}
 		return std::move(ans); 
 	}
-	void clear() { clear(root); }
+	bool clear()
+	{ 
+		if (root == nil) return false; 
+		clear(root); 
+		return true; 
+	}
 	
 	//modifying operations
 private:
@@ -505,7 +510,7 @@ class ordered_map
 			else if (curr->val.first < key) curr = curr->right;
 			else return curr;
 		}
-		return curr;
+		return (curr -> val.first == key) ? curr : nil;
 	}
 
 	void insert(in val)
@@ -656,7 +661,12 @@ private:
 	}
 
 public:
-	void clear() { clear(root);  }
+	bool clear()
+	{ 
+		if (root == nil) return false; 
+		clear(root);
+		return true; 
+	}
 	out& operator[] (in key)
 	{
 		insert(key);
@@ -730,7 +740,10 @@ public:
 	{
 		return iterator(nil);
 	}
-	
+	iterator find(in val)
+	{
+		return iterator(search(val));
+	}
 };
 
 

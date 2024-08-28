@@ -48,16 +48,12 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 
 	resetButton->Bind(wxEVT_BUTTON, [=](wxCommandEvent&)
 		{
-			removingEE.clear(); 
-			removingEV.clear(); 
-			removingVE.clear();
-			removingSlang.clear(); 
-			removingEmo.clear(); 
-			addingEE.clear(); 
-			addingEV.clear(); 
-			addingVE.clear(); 
-			addingEmo.clear(); 
-			addingSlang.clear();
+			
+			if (!removingEE.clear() && !addingEE.clear()) isRebuildEE = false; 
+			if (!removingEV.clear() && !addingEV.clear()) isRebuildEV = false; 
+			if (!removingVE.clear() && !addingVE.clear()) isRebuildVE = false; 
+			if (!removingSlang.clear() && !addingSlang.clear()) isRebuildSlang = false; 
+			if (!removingEmo.clear() && !addingEmo.clear()) isRebuildEmo = false; 
 			EEtree->clear();
 			EVtree->clear(); 
 			VEtree->clear(); 
@@ -271,69 +267,108 @@ void SearchPage::OnSearchBtnClicked(wxCommandEvent&)
 		std::string type = box->language->GetValue().utf8_string();
 		if (type == "ENG/ENG")
 		{
-			if (EEDef.text.empty()) EEDef.loadFile(EEDATASET);
+			if (!isRebuildEE)
+			{
+				if (EEDef.SA_index.empty())
+				{
+					EEDef.loadText(EEDATASET);
+					EEDef.deserialize(type);
+				}
+			}
+			else
+			{
+				EEDef.loadText("data/ee/data.txt");
+				EEDef.build(); 
+				isRebuildEE = false; 
+
+			}
 			this->defi = &EEDef;
 		}
 		else if (type == "ENG/VIE")
 		{
-			if (EVDef.text.empty()) EVDef.loadFile(EVDATASET);
+			if (!isRebuildEV)
+			{
+				if (EVDef.SA_index.empty())
+				{
+					EVDef.loadText(EVDATASET); 
+					EVDef.deserialize(type); 
+				}
+			}
+			else
+			{
+				EVDef.loadText("data/ev/data.txt");
+				EVDef.build();
+				isRebuildEV = false;
+
+			}
 			this->defi = &EVDef;
 		}
 		else if (type == "VIE/ENG")
 		{
-			if (VEDef.text.empty()) VEDef.loadFile(VEDATASET);
+			if (!isRebuildVE)
+			{
+				if (VEDef.SA_index.empty())
+				{
+					VEDef.loadText(VEDATASET);
+					VEDef.deserialize(type);
+				}
+			}
+			else
+			{
+				VEDef.loadText("data/ve/data.txt");
+				VEDef.build();
+				isRebuildVE = false;
+
+			}
 			this->defi = &VEDef;
 		}
 		else if (type == "SLANG")
 		{
-			if (SLDef.text.empty()) SLDef.loadFile(SLDATASET);
+			if (!isRebuildSlang)
+			{
+				if (SLDef.SA_index.empty())
+				{
+					SLDef.loadText(SLDATASET);
+					SLDef.deserialize(type);
+				}
+			}
+			else
+			{
+				SLDef.loadText("data/slang/data.txt");
+				SLDef.build();
+				isRebuildSlang = false;
+
+			}
 			this->defi = &SLDef;
 		}
 		else if (type == "EMOTICON")
 		{
-			if (EMODef.text.empty()) EMODef.loadFile(EMODATASET);
+			if (!isRebuildEmo)
+			{
+				if (EMODef.SA_index.empty())
+				{
+					EMODef.loadText(EMODATASET); 
+					EMODef.deserialize(type); 
+				}
+			}
+			else
+			{
+				EMODef.loadText("data/emo/data.txt");
+				EMODef.build();
+				isRebuildEmo = false;
+
+			}
 			this->defi = &EMODef;
 		}
 		vector<std::u32string> ans = this->defi->findSubtring(una::utf8to32u(this->box->findBox->GetValue().utf8_string()), currLang);
-		if (type == "ENG/ENG")
-		{
-			for (auto iter = addingEE.begin(); iter != addingEE.end(); ++iter)
-				if (una::utf8to32u((*iter).second).find(una::utf8to32u(this->box->findBox->GetValue().utf8_string())) != std::u32string::npos)
-					ans.push_back((*iter).first); 
-		}
-		else if (type == "ENG/VIE")
-		{
-			for (auto iter = addingEV.begin(); iter != addingEV.end(); ++iter)
-				if (una::utf8to32u((*iter).second).find(una::utf8to32u(this->box->findBox->GetValue().utf8_string())) != std::u32string::npos)
-					ans.push_back((*iter).first);
-		}
-		else if (type == "VIE/ENG")
-		{
-			for (auto iter = addingVE.begin(); iter != addingVE.end(); ++iter)
-				if (una::utf8to32u((*iter).second).find(una::utf8to32u(this->box->findBox->GetValue().utf8_string())) != std::u32string::npos)
-					ans.push_back((*iter).first);
-
-		}
-		else if (type == "SLANG")
-		{
-			for (auto iter = addingSlang.begin(); iter != addingSlang.end(); ++iter)
-				if (una::utf8to32u((*iter).second).find(una::utf8to32u(this->box->findBox->GetValue().utf8_string())) != std::u32string::npos)
-					ans.push_back((*iter).first);
-
-		}
-		else if (type == "EMOTICON")
-		{
-			for (auto iter = addingEmo.begin(); iter != addingEmo.end(); ++iter)
-				if (una::utf8to32u((*iter).second).find(una::utf8to32u(this->box->findBox->GetValue().utf8_string())) != std::u32string::npos)
-					ans.push_back((*iter).first);
-		}
 		this->res->clearScreen();
 
 		std::u32string total_ans; 
 		for (const auto& val : ans)
 			total_ans += (val + U"\n");
-
+		
 		this->res->addingString(wxString(una::utf32to16(total_ans))); 
+		this->Refresh();
 	}
 }
 
