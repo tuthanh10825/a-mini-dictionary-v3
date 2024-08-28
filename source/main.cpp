@@ -95,6 +95,12 @@ private:
 		delete VEtree;
 		delete EMOtree;
 		delete SLtree;
+		EEDef.clear(); 
+		EVDef.clear(); 
+		VEDef.clear(); 
+		SLDef.clear(); 
+		EMODef.clear();
+		
 
 	}
 };

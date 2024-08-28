@@ -24,6 +24,8 @@ public:
 	ordered_map <int, std::u32string> mapping;
 	void loadText(std::string filename)
 	{
+		text.clear();
+		mapping.clear();
 		std::ifstream fin; fin.open(filename);
  		if (!fin.is_open()) return;
 
@@ -285,6 +287,7 @@ private:
 	public: 
 	void build()
 	{
+		SA_index.clear();
 		int n = text.size();
 		SA_index.resize(n);
 
@@ -350,7 +353,7 @@ private:
 			k *= 2;
 		}
 	} 
-	~suffixArr()
+void clear()
 	{
 		mapping.clear(); 
 		SA_index.clear(); 

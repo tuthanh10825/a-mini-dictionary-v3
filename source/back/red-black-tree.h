@@ -983,7 +983,11 @@ static void saveInserting()
 	{
 		for (auto iter = addingEE.begin(); iter != addingEE.end();)
 		{	
-			if ((*iter).second.empty()) continue; 
+			if ((*iter).second.empty())
+			{
+				++iter;
+				continue;
+			}
 			fout << "@" << una::utf32to8((*iter).first) << (*iter).second;
 			if (++iter != addingEE.end()) fout << "\n";
 		}
@@ -994,7 +998,11 @@ static void saveInserting()
 	{
 		for (auto iter = addingEV.begin(); iter != addingEV.end();)
 		{
-			if ((*iter).second.empty()) continue;
+			if ((*iter).second.empty())
+			{
+				++iter;
+				continue;
+			}
 			fout << "@" << una::utf32to8((*iter).first) << (*iter).second;
 			if (++iter != addingEV.end()) fout << "\n";
 		}
@@ -1005,7 +1013,11 @@ static void saveInserting()
 	{
 		for (auto iter = addingVE.begin(); iter != addingVE.end();)
 		{
-			if ((*iter).second.empty()) continue;
+			if ((*iter).second.empty())
+			{
+				++iter;
+				continue;
+			}
 			fout << "@" << una::utf32to8((*iter).first) << (*iter).second;
 			if (++iter != addingVE.end()) fout << "\n";
 		}
@@ -1016,7 +1028,11 @@ static void saveInserting()
 	{
 		for (auto iter = addingSlang.begin(); iter != addingSlang.end();)
 		{
-			if ((*iter).second.empty()) continue;
+			if ((*iter).second.empty())
+			{
+				++iter;
+				continue;
+			}
 			fout << "@" << una::utf32to8((*iter).first) << (*iter).second;
 			if (++iter != addingSlang.end()) fout << "\n";
 		}
@@ -1027,7 +1043,11 @@ static void saveInserting()
 	{
 		for (auto iter = addingEmo.begin(); iter != addingEmo.end();)
 		{
-			if ((*iter).second.empty()) continue;
+			if ((*iter).second.empty())
+			{
+				++iter;
+				continue;
+			}
 			fout << "@" << una::utf32to8((*iter).first)<< (*iter).second;
 			if (++iter != addingEmo.end()) fout << "\n";
 		}
