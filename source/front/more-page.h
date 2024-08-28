@@ -12,6 +12,5 @@ private:
 	wxPanel* descriptionPanel = new wxPanel(this, wxID_ANY);
 	wxBitmapButton* userManualButton = new wxBitmapButton(descriptionPanel, wxID_ANY, wxBitmap("assets/more/user-manual-button.png", wxBITMAP_TYPE_PNG));
 	void OnUserManualClicked(wxCommandEvent&); 
-	
-	//void refreshAllPage();
+
 };
