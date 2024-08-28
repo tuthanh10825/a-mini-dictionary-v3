@@ -241,30 +241,30 @@ public:
 			name.erase(name.begin());
 			this->insert(name, defi);
 			}
-		else if (filename == "data/ee/data.txt") {
-			std::string name, type, def;
-			std::string line;
+		//else if (filename == "data/ee/data.txt") {
+		//	std::string name, type, def;
+		//	std::string line;
 
-			while (std::getline(fin, line)) {
-				size_t pos = line.find(" (");
-				if (pos != std::string::npos) {
-					name = line.substr(0, pos); 
-					size_t type_start = pos + 1;
-					size_t type_end = line.find(")", type_start);
-					if (type_end != std::string::npos) {
-						type = line.substr(type_start + 1, type_end - type_start - 1); 
-						def = line.substr(type_end + 2);
-					}
-				}
-				if (currLang == "ENG/ENG" && removingEE.find(una::utf8to32u(name)) != removingEE.end());
-				else if (currLang == "ENG/VIE" && removingEV.find(una::utf8to32u(name)) != removingEV.end());
-				else if (currLang == "VIE/ENG" && removingVE.find(una::utf8to32u(name)) != removingVE.end());
-				else if (currLang == "EMOTICON" && removingEmo.find(una::utf8to32u(name)) != removingEmo.end());
-				else if (currLang == "SLANG" && removingSlang.find(una::utf8to32u(name)) != removingSlang.end());
-				else this->insert(name, def);
+		//	while (std::getline(fin, line)) {
+		//		size_t pos = line.find(" (");
+		//		if (pos != std::string::npos) {
+		//			name = line.substr(0, pos); 
+		//			size_t type_start = pos + 1;
+		//			size_t type_end = line.find(")", type_start);
+		//			if (type_end != std::string::npos) {
+		//				type = line.substr(type_start + 1, type_end - type_start - 1); 
+		//				def = line.substr(type_end + 2);
+		//			}
+		//		}
+		//		if (currLang == "ENG/ENG" && removingEE.find(una::utf8to32u(name)) != removingEE.end());
+		//		else if (currLang == "ENG/VIE" && removingEV.find(una::utf8to32u(name)) != removingEV.end());
+		//		else if (currLang == "VIE/ENG" && removingVE.find(una::utf8to32u(name)) != removingVE.end());
+		//		else if (currLang == "EMOTICON" && removingEmo.find(una::utf8to32u(name)) != removingEmo.end());
+		//		else if (currLang == "SLANG" && removingSlang.find(una::utf8to32u(name)) != removingSlang.end());
+		//		else this->insert(name, def);
 
-			}
-		}
+		//	}
+		//}
 		else 
 		{
 			std::string name, type, def;
