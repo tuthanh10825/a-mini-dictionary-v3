@@ -441,23 +441,33 @@ void SearchPage::OnRemoveBtnClicked(wxCommandEvent&)
 	{
 		if (this->currLang == "ENG/VIE")
 		{
-			this->list->delete_word(list->root, str, EVDELETE);
+			addingEV[deleted_word] = "";
+			this->list->delete_word(list->root, str);
+			removingEV.insert(deleted_word);
 		}
 		else if (this->currLang == "VIE/ENG")
 		{
-			this->list->delete_word(list->root, str, VEDELETE);
+			addingVE[deleted_word] = "";
+			this->list->delete_word(list->root, str);
+			removingVE.insert(deleted_word);
 		}
 		else if (this->currLang == "ENG/ENG")
 		{
-			this->list->delete_word(list->root, str, EEDELETE);
+			addingEE[deleted_word] = "";
+			this->list->delete_word(list->root, str);
+			removingEE.insert(deleted_word);
 		}
 		else if (this->currLang == "EMOTICON")
 		{
-			this->list->delete_word(list->root, str, EMODELETE);
+			addingEmo[deleted_word] = "";
+			this->list->delete_word(list->root, str);
+			removingEmo.insert(deleted_word);
 		}
 		else if (this->currLang == "SLANG")
 		{
-			this->list->delete_word(list->root, str, SLDELETE);
+			addingSlang[deleted_word] = "";
+			this->list->delete_word(list->root, str);
+			removingSlang.insert(deleted_word);
 		}
 		wxMessageBox("Delete successfully", "Successfully", wxOK | wxICON_INFORMATION);
 		this->box->findBox->Clear();

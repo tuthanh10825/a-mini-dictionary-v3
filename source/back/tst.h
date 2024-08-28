@@ -329,20 +329,8 @@ public:
 		return node;
 	}
 
-	void delete_word(TreeNode*& root, std::u32string& word, std::string filename) {
+	void delete_word(TreeNode*& root, std::u32string& word) {
 		root = deleteHelper(root, word, 0);
-		std::ofstream fout;
-		fout.open(filename, std::ios::app);
-		std::string s = una::utf32to8(word);
-		if (fout.is_open()) 
-		{
-			fout << s;
-		}
-		
-		else return;
-		fout << std::endl;
-		fout.close();
-
 	}
 
 private:
