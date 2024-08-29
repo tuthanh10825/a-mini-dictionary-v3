@@ -11,8 +11,7 @@ public:
 	wxColour background;
 	wxColour textColor;
 private:
-	void OnChooseLanguage(wxCommandEvent& evt);
-	void OnAddBtnClicked(wxCommandEvent&);
+	void OnEditBtnClicked(wxCommandEvent&); 
 	void OnCancelBtnClicked(wxCommandEvent&);
 	void FlipColor();
 };

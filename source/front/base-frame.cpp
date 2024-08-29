@@ -30,6 +30,7 @@ BaseFrame::BaseFrame(const wxString& title)
 
     addpage = new AddWindow(workingPage);
     workingPage->AddPage(addpage, wxString("Add"));
+    addpage->cancelbutton->Bind(wxEVT_BUTTON, &BaseFrame::OnCancelBtnClicked, this);
 
     LoadNavigation(); 
     mainSizer->Add(workingPage, 1, wxEXPAND); 
@@ -224,7 +225,11 @@ void BaseFrame::OnAddBtnClicked(wxCommandEvent&)
 {
     workingPage->ChangeSelection(6);
 }
-
+void BaseFrame::OnCancelBtnClicked(wxCommandEvent&)
+{
+    searchPage->res->clearScreen();
+    workingPage->ChangeSelection(1);
+}
 void BaseFrame::OnFlipColor(wxCommandEvent&)
 {
     LIGHTMODE = !LIGHTMODE; 

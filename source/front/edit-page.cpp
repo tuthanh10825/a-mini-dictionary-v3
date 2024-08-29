@@ -34,6 +34,7 @@ EditWindow::EditWindow(wxWindow* parent) : wxFrame(parent, wxID_ANY, "Edit", wxD
 
 	wxBitmap cancel(CANCEL_IMG, wxBITMAP_TYPE_PNG);
 	wxBitmapButton* cancelbutton = new wxBitmapButton(this, wxID_ANY, cancel, wxDefaultPosition, wxSize(251, 57));
+	cancelbutton->Bind(wxEVT_BUTTON, &EditWindow::OnCancelBtnClicked, this);
 
 	wxBoxSizer* rightbot = new wxBoxSizer(wxVERTICAL);
 
@@ -52,7 +53,10 @@ EditWindow::EditWindow(wxWindow* parent) : wxFrame(parent, wxID_ANY, "Edit", wxD
 	mainsizer->Add(rightbot, 0, wxEXPAND | wxALL, 20);
 	this->SetSizerAndFit(mainsizer);
 }
-
+void EditWindow::OnCancelBtnClicked(wxCommandEvent&)
+{
+	this->Close(true);
+}
 void EditWindow::FlipColor()
 {
 
