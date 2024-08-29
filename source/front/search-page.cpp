@@ -60,6 +60,33 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 			VEtree->clear(); 
 			SLtree->clear(); 
 			EMOtree->clear();
+
+			std::string curr_type = language->GetValue().utf8_string();
+			if (curr_type == "ENG/ENG")
+			{
+				if (!EEtree->isLoaded())
+					EEtree->loadWord(EEDATASET);
+			}
+			else if (curr_type == "ENG/VIE")
+			{
+				if (!EVtree->isLoaded())
+					EEtree->loadWord(EVDATASET);
+			}
+			else if (curr_type == "VIE/ENG")
+			{
+				if (!VEtree->isLoaded())
+					VEtree->loadWord(VEDATASET);
+			}
+			else if (curr_type == "SLANG")
+			{
+				if (!SLtree->isLoaded())
+					SLtree->loadWord(SLDATASET);
+			}
+			else if (curr_type == "EMOTICON")
+			{
+				if (!EMOtree->isLoaded())
+					EMOtree->loadWord(EMODATASET);
+			}
 		});
 	return; 
 }
