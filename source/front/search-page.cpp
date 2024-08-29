@@ -47,47 +47,6 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	mainSizer->Add(subSizer, 1, wxEXPAND); 
 	this->SetSizerAndFit(mainSizer); 
 
-	resetButton->Bind(wxEVT_BUTTON, [=](wxCommandEvent&)
-		{
-		
-			if (!removingEE.clear() && !addingEE.clear()) isRebuildEE = false; 
-			if (!removingEV.clear() && !addingEV.clear()) isRebuildEV = false; 
-			if (!removingVE.clear() && !addingVE.clear()) isRebuildVE = false; 
-			if (!removingSlang.clear() && !addingSlang.clear()) isRebuildSlang = false; 
-			if (!removingEmo.clear() && !addingEmo.clear()) isRebuildEmo = false; 
-			EEtree->clear();
-			EVtree->clear(); 
-			VEtree->clear(); 
-			SLtree->clear(); 
-			EMOtree->clear();
-
-			std::string curr_type = language->GetValue().utf8_string();
-			if (curr_type == "ENG/ENG")
-			{
-				if (!EEtree->isLoaded())
-					EEtree->loadWord(EEDATASET);
-			}
-			else if (curr_type == "ENG/VIE")
-			{
-				if (!EVtree->isLoaded())
-					EEtree->loadWord(EVDATASET);
-			}
-			else if (curr_type == "VIE/ENG")
-			{
-				if (!VEtree->isLoaded())
-					VEtree->loadWord(VEDATASET);
-			}
-			else if (curr_type == "SLANG")
-			{
-				if (!SLtree->isLoaded())
-					SLtree->loadWord(SLDATASET);
-			}
-			else if (curr_type == "EMOTICON")
-			{
-				if (!EMOtree->isLoaded())
-					EMOtree->loadWord(EMODATASET);
-			}
-		});
 	return; 
 }
 
@@ -202,6 +161,7 @@ SearchPage::SearchPage(wxWindow* parent) : wxWindow(parent, wxID_ANY, wxDefaultP
 	res = new resPage(this);
 	this->res->removeButton->Bind(wxEVT_BUTTON, &SearchPage::OnRemoveBtnClicked, this);
 	this->res->editButton->Bind(wxEVT_BUTTON, &SearchPage::OnEditBtnClicked, this);
+	this->box->resetButton->Bind(wxEVT_BUTTON, &SearchPage::OnResetBtnClicked, this);
 	wxBoxSizer* searchSizer = new wxBoxSizer(wxVERTICAL);
 	searchSizer->Add(searchPanel, 0, wxEXPAND);
 	searchSizer->Add(res, 1, wxEXPAND);
@@ -594,7 +554,51 @@ void SearchPage::OnEdit_WordBtnClicked(wxCommandEvent&)
 		this->res->clearScreen();
 	}
 }
+void SearchPage::OnResetBtnClicked(wxCommandEvent&)
+{
+	if (!removingEE.clear() && !addingEE.clear()) isRebuildEE = false;
+	if (!removingEV.clear() && !addingEV.clear()) isRebuildEV = false;
+	if (!removingVE.clear() && !addingVE.clear()) isRebuildVE = false;
+	if (!removingSlang.clear() && !addingSlang.clear()) isRebuildSlang = false;
+	if (!removingEmo.clear() && !addingEmo.clear()) isRebuildEmo = false;
+	EEtree->clear();
+	EVtree->clear();
+	VEtree->clear();
+	SLtree->clear();
+	EMOtree->clear();
 
+	std::string curr_type = this->box->language->GetValue().utf8_string();
+	if (curr_type == "ENG/ENG")
+	{
+		if (!EEtree->isLoaded())
+			EEtree->loadWord(EEDATASET);
+		list = EEtree;
+	}
+	else if (curr_type == "ENG/VIE")
+	{
+		if (!EVtree->isLoaded())
+			EVtree->loadWord(EVDATASET);
+		list = EVtree;
+	}
+	else if (curr_type == "VIE/ENG")
+	{
+		if (!VEtree->isLoaded())
+			VEtree->loadWord(VEDATASET);
+		list = VEtree;
+	}
+	else if (curr_type == "SLANG")
+	{
+		if (!SLtree->isLoaded())
+			SLtree->loadWord(SLDATASET);
+		list = SLtree;
+	}
+	else if (curr_type == "EMOTICON")
+	{
+		if (!EMOtree->isLoaded())
+			EMOtree->loadWord(EMODATASET);
+		list = EMOtree;
+	}
+}
 
 void SearchPage::FlipColor()
 {

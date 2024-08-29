@@ -65,5 +65,5 @@ private:
 	void OnRemoveBtnClicked(wxCommandEvent&);
 	void OnEditBtnClicked(wxCommandEvent&);
 	void OnEdit_WordBtnClicked(wxCommandEvent&);
-
+	void OnResetBtnClicked(wxCommandEvent&);
 };
