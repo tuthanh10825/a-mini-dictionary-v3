@@ -254,20 +254,6 @@ void wordGameWindow::OnSubmitBtnClicked(wxCommandEvent&)
 		wxString ans4 = wxString(una::utf32to16(list->random().first));
 		this->SetVal(Question(ques, ans1, ans2, ans3, ans4, 1));
 
-		wxString ans2 = wxString(una::utf32to16(list->random().first));
-		wxString ans3 = wxString(una::utf32to16(list->random().first));
-		wxString ans4 = wxString(una::utf32to16(list->random().first));
-		this->SetVal(Question(ques, ans1, ans2, ans3, ans4, 1));
-
-		wxString ans_2 = wxString(una::utf32to16(list->random().first));
-		wxString ans_3 = wxString(una::utf32to16(list->random().first));
-		wxString ans_4 = wxString(una::utf32to16(list->random().first));
-		this->SetVal(Question(ques, ans1, ans2, ans3, ans4, 1));
-
-		wxString _ans4 = wxString(una::utf32to16(list->random().first));
-		wxString _ans3 = wxString(una::utf32to16(list->random().first));
-		wxString _ans2 = wxString(una::utf32to16(list->random().first));
-		this->SetVal(Question(ques, ans1, ans2, ans3, ans4, 1));
 	}
 	
 }
@@ -298,4 +284,8 @@ void wordGameWindow::SetVal(Question ques)
 	ques.detail.erase(ques.detail.begin()); 
 	word->SetValue(ques.detail); 
 	this->ques = ques; 
+
+	wxToggleButton* is_selected = dynamic_cast<wxToggleButton*>(event.GetEventObject());
+
+	wxToggleButton* is_unselected = dynamic_cast<wxToggleButton*>(event.GetEventObject());
 }
