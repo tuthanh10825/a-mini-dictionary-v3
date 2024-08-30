@@ -13,11 +13,11 @@ std::u32string deleted_word;
 bool LIGHTMODE = true; 
 std::vector<word> dataHisto, dataFav;
 
-bool isRebuildEE = false; 
-bool isRebuildEV = false; 
-bool isRebuildVE = false; 
-bool isRebuildEmo = false; 
-bool isRebuildSlang = false; 
+bool isRebuildEE = 0; 
+bool isRebuildEV = 0; 
+bool isRebuildVE = 0; 
+bool isRebuildEmo = 0; 
+bool isRebuildSlang = 0; 
 
 ordered_map<std::u32string, std::string> addingEE = ordered_map<std::u32string, std::string>();
 ordered_map<std::u32string, std::string> addingEV = ordered_map<std::u32string, std::string>();

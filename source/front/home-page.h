@@ -11,7 +11,8 @@ public:
     wxBitmapButton* favorButton;
     wxBitmapButton* randomButton;
     wxBitmapButton* editButton;
-    HomePage(wxWindow *parent); 
+    HomePage(wxWindow *parent);
+
     void FlipColor(); 
 private: 
     wxPanel* rightPanel; 
