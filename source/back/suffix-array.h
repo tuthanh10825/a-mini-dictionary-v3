@@ -60,8 +60,6 @@ public:
 						}
 						else
 						{
-							if (line.find(U"universe") != std::u32string::npos)
-								std::u32string word = name; 
 							if (line[0] == U'-')
 							{
 								text += (line + U"@");
