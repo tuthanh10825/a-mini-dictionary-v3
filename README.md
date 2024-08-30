@@ -3,7 +3,6 @@
 </h1>
 
 
-![To get started with our Dictionary](Link to report here?)
 
 ## Introduction
 Welcome to the `Mini Dictionary Project`! 
