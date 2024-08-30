@@ -202,13 +202,11 @@ void SearchPage::insertHistory(TST::TreeNode* ans) {
 	std::stringstream ss(defi);
 	if (currLang == "ENG/VIE" or currLang == "VIE/ENG") {
 		defi.erase(0, 1);
-		cout << "Test: " << currLang << endl;
-
 		while (defi[0] == '*') {
 			defi.erase(0, 1);
 			auto pos = defi.find_first_of("\n");
 			if (pos != std::string::npos) {
-				newWord.type = defi.substr(1, pos);
+				newWord.type = defi.substr(0, pos);
 				defi = defi.substr(pos + 1);
 				pos = defi.find_first_of("*");
 				if (pos != std::string::npos) {
@@ -230,7 +228,6 @@ void SearchPage::insertHistory(TST::TreeNode* ans) {
 			newWord.definition = defi;
 			dataHisto.push_back(newWord);
 		}
-
 	}
 	else if (currLang == "EMOTICON") {
 		auto pos = defi.find_first_of("(");
@@ -449,49 +446,6 @@ void SearchPage::OnRemoveBtnClicked(wxCommandEvent&)
 		"Delete?",            
 		wxYES_NO | wxNO_DEFAULT | wxICON_WARNING
 	);
-	if (confirmDialog.ShowModal() == wxID_YES)
-	{
-		if (this->currLang == "ENG/VIE")
-		{
-			addingEV[deleted_word] = "";
-			this->list->delete_word(list->root, str);
-			removingEV.insert(deleted_word);
-			isRebuildEV = true; 
-		}
-		else if (this->currLang == "VIE/ENG")
-		{
-			addingVE[deleted_word] = "";
-			this->list->delete_word(list->root, str);
-			removingVE.insert(deleted_word);
-			isRebuildVE = true; 
-		}
-		else if (this->currLang == "ENG/ENG")
-		{
-			addingEE[deleted_word] = "";
-			this->list->delete_word(list->root, str);
-			removingEE.insert(deleted_word);
-			isRebuildEE = true; 
-		}
-		else if (this->currLang == "EMOTICON")
-		{
-			addingEmo[deleted_word] = "";
-			this->list->delete_word(list->root, str);
-			removingEmo.insert(deleted_word);
-			isRebuildEmo = true; 
-		}
-		else if (this->currLang == "SLANG")
-		{
-			addingSlang[deleted_word] = "";
-			this->list->delete_word(list->root, str);
-			removingSlang.insert(deleted_word);
-			isRebuildSlang = true; 
-		}
-		wxMessageBox("Delete successfully", "Successfully", wxOK | wxICON_INFORMATION);
-		this->box->findBox->Clear();
-		this->res->clearScreen();
-		deleted_word.clear();
-	}
-	return;
 }
 
 void SearchPage::OnEditBtnClicked(wxCommandEvent&)
