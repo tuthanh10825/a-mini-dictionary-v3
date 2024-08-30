@@ -285,7 +285,4 @@ void wordGameWindow::SetVal(Question ques)
 	word->SetValue(ques.detail); 
 	this->ques = ques; 
 
-	wxToggleButton* is_selected = dynamic_cast<wxToggleButton*>(event.GetEventObject());
-
-	wxToggleButton* is_unselected = dynamic_cast<wxToggleButton*>(event.GetEventObject());
 }
