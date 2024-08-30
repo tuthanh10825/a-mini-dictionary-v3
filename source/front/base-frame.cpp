@@ -276,14 +276,6 @@ void BaseFrame::FlipColor()
     
     logoBitmap->SetBitmap(wxBitmap("assets/logo" + s + ".png", wxBITMAP_TYPE_PNG));
 
-    wxBitmap homeBtnBitmap("assets/icons/xl/home-icon" + s + ".png", wxBITMAP_TYPE_PNG);
-    wxBitmap dictionaryBtnBitmap("assets/icons/xl/search-icon" + s + ".png", wxBITMAP_TYPE_PNG);
-    wxBitmap gameBtnBitmap("assets/icons/l/game-icon" + s + ".png", wxBITMAP_TYPE_PNG);
-    wxBitmap historyBtnBitmap("assets/icons/m/history-icon" + s + ".png", wxBITMAP_TYPE_PNG);
-
-    wxBitmap favoriteBtnBitmap("assets/icons/m/favourite-icon" + s + ".png", wxBITMAP_TYPE_PNG);
-    wxBitmap moreBtnBitmap("assets/icons/xm/more-icon" + s + ".png", wxBITMAP_TYPE_PNG);
-
     homeBtn->SetBitmapLabel(homeBtnBitmap);
     homeBtn->SetBackgroundColour(background);
     homeBtn->Refresh();

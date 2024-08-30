@@ -202,11 +202,13 @@ void SearchPage::insertHistory(TST::TreeNode* ans) {
 	std::stringstream ss(defi);
 	if (currLang == "ENG/VIE" or currLang == "VIE/ENG") {
 		defi.erase(0, 1);
+		cout << "Test: " << currLang << endl;
+
 		while (defi[0] == '*') {
 			defi.erase(0, 1);
 			auto pos = defi.find_first_of("\n");
 			if (pos != std::string::npos) {
-				newWord.type = defi.substr(0, pos);
+				newWord.type = defi.substr(1, pos);
 				defi = defi.substr(pos + 1);
 				pos = defi.find_first_of("*");
 				if (pos != std::string::npos) {
