@@ -599,6 +599,7 @@ void SearchPage::OnResetBtnClicked(wxCommandEvent&)
 			EMOtree->loadWord(EMODATASET);
 		list = EMOtree;
 	}
+	wxMessageBox("Reset successfully", "Notification", wxOK | wxICON_INFORMATION);
 }
 
 void SearchPage::FlipColor()

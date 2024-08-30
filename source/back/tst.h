@@ -294,7 +294,7 @@ public:
 			for (auto iter = addingEE.begin(); iter != addingEE.end(); ++iter)
 			{
 				TreeNode* node = this->search((*iter).first); 
-				if (node != nullptr)
+				if (node != nullptr && !(*iter).second.empty())
 					node->defi = (*iter).second; 
 				else
 					this->insert(una::utf32to8((*iter).first), (*iter).second);
@@ -305,7 +305,7 @@ public:
 			for (auto iter = addingEV.begin(); iter != addingEV.end(); ++iter)
 			{
 				TreeNode* node = this->search((*iter).first);
-				if (node != nullptr)
+				if (node != nullptr && !(*iter).second.empty())
 					node->defi = (*iter).second;
 				else
 					this->insert(una::utf32to8((*iter).first), (*iter).second);
@@ -316,7 +316,7 @@ public:
 			for (auto iter = addingVE.begin(); iter != addingVE.end(); ++iter)
 			{
 				TreeNode* node = this->search((*iter).first);
-				if (node != nullptr)
+				if (node != nullptr && !(*iter).second.empty())
 					node->defi = (*iter).second;
 				else
 					this->insert(una::utf32to8((*iter).first), (*iter).second);
@@ -327,7 +327,7 @@ public:
 			for (auto iter = addingSlang.begin(); iter != addingSlang.end(); ++iter)
 			{
 				TreeNode* node = this->search((*iter).first);
-				if (node != nullptr)
+				if (node != nullptr && !(*iter).second.empty())
 					node->defi = (*iter).second;
 				else
 					this->insert(una::utf32to8((*iter).first), (*iter).second);
@@ -338,7 +338,7 @@ public:
 			for (auto iter = addingSlang.begin(); iter != addingSlang.end(); ++iter)
 			{
 				TreeNode* node = this->search((*iter).first);
-				if (node != nullptr)
+				if (node != nullptr&&!(*iter).second.empty())
 					node->defi = (*iter).second;
 				else
 					this->insert(una::utf32to8((*iter).first), (*iter).second);
