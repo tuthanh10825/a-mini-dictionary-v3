@@ -228,7 +228,6 @@ void SearchPage::insertHistory(TST::TreeNode* ans) {
 			newWord.definition = defi;
 			dataHisto.push_back(newWord);
 		}
-
 	}
 	else if (currLang == "EMOTICON") {
 		auto pos = defi.find_first_of("(");
@@ -454,35 +453,35 @@ void SearchPage::OnRemoveBtnClicked(wxCommandEvent&)
 			addingEV[deleted_word] = "";
 			this->list->delete_word(list->root, str);
 			removingEV.insert(deleted_word);
-			isRebuildEV = true; 
+			isRebuildEV = true;
 		}
 		else if (this->currLang == "VIE/ENG")
 		{
 			addingVE[deleted_word] = "";
 			this->list->delete_word(list->root, str);
 			removingVE.insert(deleted_word);
-			isRebuildVE = true; 
+			isRebuildVE = true;
 		}
 		else if (this->currLang == "ENG/ENG")
 		{
 			addingEE[deleted_word] = "";
 			this->list->delete_word(list->root, str);
 			removingEE.insert(deleted_word);
-			isRebuildEE = true; 
+			isRebuildEE = true;
 		}
 		else if (this->currLang == "EMOTICON")
 		{
 			addingEmo[deleted_word] = "";
 			this->list->delete_word(list->root, str);
 			removingEmo.insert(deleted_word);
-			isRebuildEmo = true; 
+			isRebuildEmo = true;
 		}
 		else if (this->currLang == "SLANG")
 		{
 			addingSlang[deleted_word] = "";
 			this->list->delete_word(list->root, str);
 			removingSlang.insert(deleted_word);
-			isRebuildSlang = true; 
+			isRebuildSlang = true;
 		}
 		wxMessageBox("Delete successfully", "Successfully", wxOK | wxICON_INFORMATION);
 		this->box->findBox->Clear();
@@ -505,6 +504,8 @@ void SearchPage::OnEditBtnClicked(wxCommandEvent&)
 
 		std::u32string definition = una::utf8to32u(ans->defi);
 		editwin->defi->ChangeValue(wxString(una::utf32to16(definition)));
+		ans->defi = una::utf32to8(definition); 
+
 	}
 }
 void SearchPage::OnEdit_WordBtnClicked(wxCommandEvent&)

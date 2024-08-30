@@ -57,7 +57,3 @@ void EditWindow::OnCancelBtnClicked(wxCommandEvent&)
 {
 	this->Close(true);
 }
-void EditWindow::FlipColor()
-{
-
-}
