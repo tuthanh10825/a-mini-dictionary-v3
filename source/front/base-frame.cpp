@@ -45,6 +45,14 @@ BaseFrame::BaseFrame(const wxString& title)
         });
     this->searchPage->box->addButton->Bind(wxEVT_BUTTON, &BaseFrame::OnAddBtnClicked, this);
     this->moreWindow->darkmodeButton->Bind(wxEVT_BUTTON, &BaseFrame::OnFlipColor, this);
+    this->Bind(wxEVT_CLOSE_WINDOW, [=](wxCloseEvent&)
+        {
+            historyPage->AppendRows(dataHisto, 0);
+            favouritePage->AppendRows(dataFav, 1);
+            historyPage->saveData2File(HISTOFILE);
+            favouritePage->saveData2File(FAVFILE);
+            this->Destroy();
+        });
     this->SetSizerAndFit(mainSizer); 
     // 155 x 37
    

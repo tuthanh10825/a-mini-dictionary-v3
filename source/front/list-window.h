@@ -16,12 +16,12 @@ public:
 	ListWindow(wxWindow* parent, int isFavor);
 	void AppendRows(vector<word>& words, int isFav);
 	wxGrid* grid;
-	void FlipColor(); 
+	void FlipColor();
+	bool saveData2File(std::string path);
 private:
 	bool isLoaded = false, isFav = true;
 	// Need to implement
 	vector<word> data;
-	bool saveData2File(std::string path);
 	// Finished
 	bool loadData(std::string path, int isFav);
 	void deleteSelectedRows();
