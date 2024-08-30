@@ -45,7 +45,6 @@ DefiGameWindow::DefiGameWindow(wxWindow* parent, TST* clist)
 		answerSizer->Add(button, 0, wxLEFT, 60);
 		answerSizer->Add(answer[i], 1, wxRIGHT, 60);
 
-		wxStaticBitmap* markDisplay = new wxStaticBitmap(quizPanel, wxID_ANY, wxBitmap(wxString("assets/game/play/mark-image" + s + ".png"), wxBITMAP_TYPE_PNG));
 
 		totalAnswerSizer->Add(answerSizer, 1, wxEXPAND);
 		choiceButton.push_back(button);
