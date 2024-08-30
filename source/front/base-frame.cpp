@@ -55,14 +55,7 @@ void BaseFrame::LoadHeader()
 
     leftHeaderPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 0), wxSize(1156.5, 154.5));
     LoadImage(NAME_IMG, leftHeaderPanel);
-    if (LIGHTMODE) {
-        leftHeaderPanel->SetBackgroundColour(LIGHTMODE_labelANDHeaderColor);
-    }
-    else leftHeaderPanel->SetBackgroundColour(DARKMODE_HeaderColor);
-
-    rightHeaderPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 1156.5), wxSize(1451.25 - 1156.5, 154.5));
-    std::string s = LIGHTMODE ? "" : "1"; 
-    logoBitmap = new wxStaticBitmap(rightHeaderPanel, wxID_ANY, wxBitmap("assets/logo" + s + ".png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
+   
 
     if (LIGHTMODE) {
 
@@ -99,15 +92,26 @@ void BaseFrame::LoadNavigation()
     else background = (DARKMODE_backgroundColor);
     naviPanel->SetBackgroundColour(background);
    
+    if (LIGHTMODE) {
+        leftHeaderPanel->SetBackgroundColour(LIGHTMODE_labelANDHeaderColor);
+    }
+    else leftHeaderPanel->SetBackgroundColour(DARKMODE_HeaderColor);
+
+    rightHeaderPanel = new wxPanel(this, wxID_ANY, wxPoint(0, 1156.5), wxSize(1451.25 - 1156.5, 154.5));
+    std::string s = LIGHTMODE ? "" : "1";
+    logoBitmap = new wxStaticBitmap(rightHeaderPanel, wxID_ANY, wxBitmap("assets/logo" + s + ".png", wxBITMAP_TYPE_PNG), wxDefaultPosition, wxDefaultSize);
     
+
+
     std::string s;
     if (LIGHTMODE) s = ""; else s = '1';
     wxBitmap homeBtnBitmap("assets/icons/home-icon" + s + ".png", wxBITMAP_TYPE_PNG);
-    wxBitmap dictionaryBtnBitmap("assets/icons/search-icon"+s+".png", wxBITMAP_TYPE_PNG);
+    wxBitmap dictionaryBtnBitmap("assets/icons/search-icon" + s + ".png", wxBITMAP_TYPE_PNG);
     wxBitmap gameBtnBitmap("assets/icons/game-icon" + s + ".png", wxBITMAP_TYPE_PNG);
     wxBitmap historyBtnBitmap("assets/icons/history-icon" + s + ".png", wxBITMAP_TYPE_PNG);
-    wxBitmap favoriteBtnBitmap("assets/icons/favourite-icon"+s+".png", wxBITMAP_TYPE_PNG);
-    wxBitmap moreBtnBitmap("assets/icons/more-icon"+s+".png", wxBITMAP_TYPE_PNG);
+    wxBitmap favoriteBtnBitmap("assets/icons/favourite-icon" + s + ".png", wxBITMAP_TYPE_PNG);
+
+    wxBitmap moreBtnBitmap("assets/icons/more-icon" + s + ".png", wxBITMAP_TYPE_PNG);
     //wxBitmap homeBtnBitmap(HOMEICON_IMG, wxBITMAP_TYPE_PNG);
 
 
