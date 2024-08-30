@@ -87,6 +87,7 @@ searchBox::searchBox(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 				if (!EMOtree->isLoaded())
 					EMOtree->loadWord(EMODATASET);
 			}
+			wxMessageBox("Reset successfully", "Successfully", wxOK | wxICON_INFORMATION);
 		});
 	return; 
 }
@@ -545,6 +546,8 @@ void SearchPage::OnEditBtnClicked(wxCommandEvent&)
 
 		std::u32string definition = una::utf8to32u(ans->defi);
 		editwin->defi->ChangeValue(wxString(una::utf32to16(definition)));
+		ans->defi = una::utf32to8(definition); 
+
 	}
 }
 void SearchPage::OnEdit_WordBtnClicked(wxCommandEvent&)

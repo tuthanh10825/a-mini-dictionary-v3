@@ -222,12 +222,13 @@ public:
 						name.erase(name.begin()); 
 						while (name.back() == ' ') name.pop_back(); 
 						
-						if (currLang == "ENG/ENG" && removingEE.find(una::utf8to32u(name)) != removingEE.end());
+						if (currLang == "ENG/ENG" && removingEE.find(una::utf8to32u(name)) != removingEE.end()); 
 						else if (currLang == "ENG/VIE" && removingEV.find(una::utf8to32u(name)) != removingEV.end());
 						else if (currLang == "VIE/ENG" && removingVE.find(una::utf8to32u(name)) != removingVE.end());
 						else if (currLang == "EMOTICON" && removingEmo.find(una::utf8to32u(name)) != removingEmo.end());
-						else if (currLang == "SLANG" && removingSlang.find(una::utf8to32u(name)) != removingSlang .end());
-						else this->insert(name, defi);
+						else if (currLang == "SLANG" && removingSlang.find(una::utf8to32u(name)) != removingSlang.end());
+						else 
+							this->insert(name, defi);
 						
 						
 						name = tempLine;
@@ -291,27 +292,57 @@ public:
 		if (currLang == "ENG/ENG")
 		{
 			for (auto iter = addingEE.begin(); iter != addingEE.end(); ++iter)
-				this->insert(una::utf32to8((*iter).first), (*iter).second);
+			{
+				TreeNode* node = this->search((*iter).first); 
+				if (node != nullptr)
+					node->defi = (*iter).second; 
+				else
+					this->insert(una::utf32to8((*iter).first), (*iter).second);
+			}
 		}
 		else if (currLang == "ENG/VIE")
 		{
 			for (auto iter = addingEV.begin(); iter != addingEV.end(); ++iter)
-				this->insert(una::utf32to8((*iter).first), (*iter).second);
+			{
+				TreeNode* node = this->search((*iter).first);
+				if (node != nullptr)
+					node->defi = (*iter).second;
+				else
+					this->insert(una::utf32to8((*iter).first), (*iter).second);
+			}
 		}
 		else if (currLang == "VIE/ENG")
 		{
 			for (auto iter = addingVE.begin(); iter != addingVE.end(); ++iter)
-				this->insert(una::utf32to8((*iter).first), (*iter).second);
+			{
+				TreeNode* node = this->search((*iter).first);
+				if (node != nullptr)
+					node->defi = (*iter).second;
+				else
+					this->insert(una::utf32to8((*iter).first), (*iter).second);
+			}
 		}
 		else if (currLang == "SLANG")
 		{
 			for (auto iter = addingSlang.begin(); iter != addingSlang.end(); ++iter)
-				this->insert(una::utf32to8((*iter).first), (*iter).second);
+			{
+				TreeNode* node = this->search((*iter).first);
+				if (node != nullptr)
+					node->defi = (*iter).second;
+				else
+					this->insert(una::utf32to8((*iter).first), (*iter).second);
+			}
 		}
 		else if (currLang == "EMOTICON")
 		{
 			for (auto iter = addingSlang.begin(); iter != addingSlang.end(); ++iter)
-				this->insert(una::utf32to8((*iter).first), (*iter).second);
+			{
+				TreeNode* node = this->search((*iter).first);
+				if (node != nullptr)
+					node->defi = (*iter).second;
+				else
+					this->insert(una::utf32to8((*iter).first), (*iter).second);
+			}
 		}
 
 		fin.close();
