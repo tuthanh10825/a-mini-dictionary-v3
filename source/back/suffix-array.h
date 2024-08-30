@@ -79,7 +79,7 @@ public:
 					if ((*iter).second.empty()) continue; 
 					std::u32string totalDefi = una::utf8to32u((*iter).second);
 					u32stringstream sin(totalDefi);
-					for (std::u32string ltext; sin >> text;)
+					for (std::u32string ltext; std::getline(sin, ltext);)
 					{
 						if (ltext[0] == U'-')
 						{
@@ -96,7 +96,7 @@ public:
 					if ((*iter).second.empty()) continue;
 					std::u32string totalDefi = una::utf8to32u((*iter).second);
 					u32stringstream sin(totalDefi);
-					for (std::u32string ltext; sin >> text;)
+					for (std::u32string ltext; std::getline(sin, ltext);)
 					{
 						if (ltext[0] == U'-')
 						{
@@ -156,7 +156,7 @@ public:
 					if ((*iter).second.empty()) continue;
 					std::u32string totalDefi = una::utf8to32u((*iter).second);
 					u32stringstream sin(totalDefi);
-					for (std::u32string ltext; sin >> text;)
+					for(std::u32string ltext; std::getline(sin, ltext);)
 					{
 						if (ltext[0] == U'-')
 						{
@@ -173,7 +173,7 @@ public:
 					if ((*iter).second.empty()) continue;
 					std::u32string totalDefi = una::utf8to32u((*iter).second);
 					u32stringstream sin(totalDefi);
-					for (std::u32string ltext; sin >> text;)
+					for (std::u32string ltext; std::getline(sin, ltext);)
 					{
 						if (ltext[0] == U'-')
 						{
