@@ -307,7 +307,7 @@ void ListWindow::AppendRows(vector<word>& words, int isFav) {
     for (int i = 0; i < size; ++i) {
         bool INFLAG = true;
         for (int j = rows - 1; j >= 0; --j) {
-            if (words[i].word == data[j].word) {
+            if (words[i].word == data[j].word and words[i].type==data[j].type) {
                 INFLAG = false;
                 break;
             }
