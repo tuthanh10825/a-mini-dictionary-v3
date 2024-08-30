@@ -130,16 +130,9 @@ void DefiGameWindow::SetVal(Question ques)
 
 wordGameWindow::wordGameWindow(wxWindow* parent, TST* clist) : wxFrame(parent, wxID_ANY, "Play"), list(clist)
 {
-	// Panel to load image
-	wxPanel* quizPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition);
-	wxPanel* answerPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition);
-	quizPanel->SetBackgroundColour(LIGHTMODE ? WHITE : BLACK);
-	answerPanel->SetBackgroundColour(LIGHTMODE ? WHITE : BLACK);
-
-
 	// Load image for topPanel
 	std::string s = LIGHTMODE ? "" : "1";
-	wxStaticBitmap* markDisplay = new wxStaticBitmap(quizPanel, wxID_ANY, wxBitmap(wxString("assets/game/play/mark-image" + s  +  ".png"), wxBITMAP_TYPE_PNG));
+	wxStaticBitmap* markDisplay = new wxStaticBitmap(quizPanel, wxID_ANY, wxBitmap(wxString("assets/game/play/mark-image" + s + ".png"), wxBITMAP_TYPE_PNG));
 
 	wxStaticBitmap* guesswordDisplay = new wxStaticBitmap(quizPanel, wxID_ANY, wxBitmap(wxString("assets/game/play/guess-word-text" + s + ".png"), wxBITMAP_TYPE_PNG)
 		, wxDefaultPosition);
@@ -147,21 +140,30 @@ wordGameWindow::wordGameWindow(wxWindow* parent, TST* clist) : wxFrame(parent, w
 	word = new wxTextCtrl(quizPanel, wxID_ANY, "",
 		wxDefaultPosition, wxSize(1100, 88), wxTE_READONLY | wxBORDER_NONE | wxTE_MULTILINE | wxTE_NO_VSCROLL);
 	word->SetBackgroundColour(LIGHTMODE ? WHITE : BLACK);
-	word->SetForegroundColour(LIGHTMODE ? BLACK : WHITE); 
-	wxFont defiQuizFont; defiQuizFont.SetNativeFontInfoUserDesc("Palatino Linotype 20 WINDOWS-1252"); 
+	word->SetForegroundColour(LIGHTMODE ? BLACK : WHITE);
+	wxFont defiQuizFont; defiQuizFont.SetNativeFontInfoUserDesc("Palatino Linotype 20 WINDOWS-1252");
 	word->SetFont(defiQuizFont);
-	wxBoxSizer* firstSizer = new wxBoxSizer(wxVERTICAL); 
+	wxBoxSizer* firstSizer = new wxBoxSizer(wxVERTICAL);
 	firstSizer->Add(guesswordDisplay, 0, wxALIGN_LEFT | wxBOTTOM, 10);
-	firstSizer->Add(word, 1, wxEXPAND | wxTOP, 10); 
+	firstSizer->Add(word, 1, wxEXPAND | wxTOP, 10);
 
-	wxBoxSizer* secondSizer = new wxBoxSizer(wxHORIZONTAL); 
+	wxBoxSizer* secondSizer = new wxBoxSizer(wxHORIZONTAL);
 	secondSizer->Add(markDisplay, 0, wxALL, 20);
-	secondSizer->Add(firstSizer, 1, wxALL, 20); 
-	quizPanel->SetSizerAndFit(secondSizer); 
+	secondSizer->Add(firstSizer, 1, wxALL, 20);
+	quizPanel->SetSizerAndFit(secondSizer);
+
+	wxBoxSizer* leftAnswerSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer* rightAnswerSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer* totalAnswerSizer = new wxBoxSizer(wxHORIZONTAL);
+
+	// Panel to load image
+	wxPanel* quizPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition);
+	wxPanel* answerPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition);
+	quizPanel->SetBackgroundColour(LIGHTMODE ? WHITE : BLACK);
+	answerPanel->SetBackgroundColour(LIGHTMODE ? WHITE : BLACK);
+
+
 	
-	wxBoxSizer* leftAnswerSizer = new wxBoxSizer(wxVERTICAL); 
-	wxBoxSizer* rightAnswerSizer = new wxBoxSizer(wxVERTICAL); 
-	wxBoxSizer* totalAnswerSizer = new wxBoxSizer(wxHORIZONTAL); 
 
 	wxFont answerFont; answerFont.SetNativeFontInfoUserDesc("Palatino Linotype 30 WINDOWS-1252"); 
 	

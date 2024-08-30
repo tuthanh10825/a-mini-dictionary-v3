@@ -310,7 +310,12 @@ void GameSettingPage::FlipColor()
 		s = "1"; 
 	}
 	logo->SetBitmap(wxBitmap("assets/game/setting/logo" + s + ".png", wxBITMAP_TYPE_PNG));
-	
+	chooseGameText->SetBitmap(wxBitmap("assets/game/setting/choose-game-text" + s + ".png", wxBITMAP_TYPE_PNG));
+	chooseWordText->SetBitmap(wxBitmap("assets/game/setting/choose-word-text" + s + ".png", wxBITMAP_TYPE_PNG));
+	chooseDefiText->SetBitmap(wxBitmap("assets/game/setting/choose-defi-text" + s + ".png", wxBITMAP_TYPE_PNG));
+
+
+	chooseLangText->SetBitmap(wxBitmap("assets/game/setting/choose-lang-text" + s + ".png", wxBITMAP_TYPE_PNG));
 
 	chooseEngEngText->SetBitmap(wxBitmap("assets/game/setting/choose-ee-text" + s + ".png", wxBITMAP_TYPE_PNG));
 	chooseEngVieText->SetBitmap(wxBitmap("assets/game/setting/choose-ev-text" + s + ".png", wxBITMAP_TYPE_PNG));
@@ -319,11 +324,7 @@ void GameSettingPage::FlipColor()
 	chooseEmoticonText->SetBitmap(wxBitmap("assets/game/setting/choose-emo-text" + s + ".png", wxBITMAP_TYPE_PNG));
 	chooseSlangText->SetBitmap(wxBitmap("assets/game/setting/choose-slang-text" + s + ".png", wxBITMAP_TYPE_PNG));
 
-	chooseGameText->SetBitmap(wxBitmap("assets/game/setting/choose-game-text" + s + ".png", wxBITMAP_TYPE_PNG));
-	chooseWordText->SetBitmap(wxBitmap("assets/game/setting/choose-word-text" + s + ".png", wxBITMAP_TYPE_PNG));
-	chooseDefiText->SetBitmap(wxBitmap("assets/game/setting/choose-defi-text" + s + ".png", wxBITMAP_TYPE_PNG));
-
-	chooseLangText->SetBitmap(wxBitmap("assets/game/setting/choose-lang-text" + s + ".png", wxBITMAP_TYPE_PNG));
+	
 
 	numberText->SetBitmap(wxBitmap("assets/game/setting/number-text" + s + ".png", wxBITMAP_TYPE_PNG));
 	infiniteText->SetBitmap(wxBitmap("assets/game/setting/endlessly-text" + s + ".png", wxBITMAP_TYPE_PNG));
