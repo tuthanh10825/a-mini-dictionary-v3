@@ -263,10 +263,12 @@ void GameSettingPage::OnPlayButtonClicked(wxCommandEvent&)
 			SLtree->loadWord(SLDATASET);
 		list = SLtree;
 	}
+
+
 	
 	if (chooseDefi->IsChecked())
 	{ 
-		DefiGameWindow* playFrame1 = new DefiGameWindow(this, list); 
+		DefiGameWindow* playFrame1 = new  DefiGameWindow(this, list); 
 		playFrame1->numberOfQues = infinite->IsChecked() ? -1 : value->GetValue();
 		playFrame1->Show(true);
 		if (!playFrame1->IsShown()) return; 
@@ -312,6 +314,7 @@ void GameSettingPage::FlipColor()
 	chooseWordText->SetBitmap(wxBitmap("assets/game/setting/choose-word-text" + s + ".png", wxBITMAP_TYPE_PNG));
 	chooseDefiText->SetBitmap(wxBitmap("assets/game/setting/choose-defi-text" + s + ".png", wxBITMAP_TYPE_PNG));
 
+
 	chooseLangText->SetBitmap(wxBitmap("assets/game/setting/choose-lang-text" + s + ".png", wxBITMAP_TYPE_PNG));
 
 	chooseEngEngText->SetBitmap(wxBitmap("assets/game/setting/choose-ee-text" + s + ".png", wxBITMAP_TYPE_PNG));
@@ -320,6 +323,8 @@ void GameSettingPage::FlipColor()
 	chooseVieEngText->SetBitmap(wxBitmap("assets/game/setting/choose-ve-text" + s + ".png", wxBITMAP_TYPE_PNG));
 	chooseEmoticonText->SetBitmap(wxBitmap("assets/game/setting/choose-emo-text" + s + ".png", wxBITMAP_TYPE_PNG));
 	chooseSlangText->SetBitmap(wxBitmap("assets/game/setting/choose-slang-text" + s + ".png", wxBITMAP_TYPE_PNG));
+
+	
 
 	numberText->SetBitmap(wxBitmap("assets/game/setting/number-text" + s + ".png", wxBITMAP_TYPE_PNG));
 	infiniteText->SetBitmap(wxBitmap("assets/game/setting/endlessly-text" + s + ".png", wxBITMAP_TYPE_PNG));
