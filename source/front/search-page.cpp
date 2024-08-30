@@ -446,6 +446,49 @@ void SearchPage::OnRemoveBtnClicked(wxCommandEvent&)
 		"Delete?",            
 		wxYES_NO | wxNO_DEFAULT | wxICON_WARNING
 	);
+	if (confirmDialog.ShowModal() == wxID_YES)
+	{
+		if (this->currLang == "ENG/VIE")
+		{
+			addingEV[deleted_word] = "";
+			this->list->delete_word(list->root, str);
+			removingEV.insert(deleted_word);
+			isRebuildEV = true;
+		}
+		else if (this->currLang == "VIE/ENG")
+		{
+			addingVE[deleted_word] = "";
+			this->list->delete_word(list->root, str);
+			removingVE.insert(deleted_word);
+			isRebuildVE = true;
+		}
+		else if (this->currLang == "ENG/ENG")
+		{
+			addingEE[deleted_word] = "";
+			this->list->delete_word(list->root, str);
+			removingEE.insert(deleted_word);
+			isRebuildEE = true;
+		}
+		else if (this->currLang == "EMOTICON")
+		{
+			addingEmo[deleted_word] = "";
+			this->list->delete_word(list->root, str);
+			removingEmo.insert(deleted_word);
+			isRebuildEmo = true;
+		}
+		else if (this->currLang == "SLANG")
+		{
+			addingSlang[deleted_word] = "";
+			this->list->delete_word(list->root, str);
+			removingSlang.insert(deleted_word);
+			isRebuildSlang = true;
+		}
+		wxMessageBox("Delete successfully", "Successfully", wxOK | wxICON_INFORMATION);
+		this->box->findBox->Clear();
+		this->res->clearScreen();
+		deleted_word.clear();
+	}
+	return;
 }
 
 void SearchPage::OnEditBtnClicked(wxCommandEvent&)

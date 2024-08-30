@@ -243,16 +243,7 @@ void GameSettingPage::OnPlayButtonClicked(wxCommandEvent&)
 			EVtree->loadWord(EVDATASET);
 		list = EVtree;
 	}
-	else if (chooseEngEng->IsChecked()) {
-		if (!EEtree->isLoaded())
-			EEtree->loadWord(EEDATASET);
-		list = EEtree;
-	}
-	else if (chooseEmoticon->IsChecked()) {
-		if (!EMOtree->isLoaded())
-			EMOtree->loadWord(EMODATASET);
-		list = EMOtree;
-	}
+	
 	else if (chooseVieEng->IsChecked()) {
 		if (!VEtree->isLoaded())
 			VEtree->loadWord(VEDATASET);
@@ -263,10 +254,21 @@ void GameSettingPage::OnPlayButtonClicked(wxCommandEvent&)
 			SLtree->loadWord(SLDATASET);
 		list = SLtree;
 	}
+
+	else if (chooseEngEng->IsChecked()) {
+		if (!EEtree->isLoaded())
+			EEtree->loadWord(EEDATASET);
+		list = EEtree;
+	}
+	else if (chooseEmoticon->IsChecked()) {
+		if (!EMOtree->isLoaded())
+			EMOtree->loadWord(EMODATASET);
+		list = EMOtree;
+	}
 	
 	if (chooseDefi->IsChecked())
 	{ 
-		DefiGameWindow* playFrame1 = new DefiGameWindow(this, list); 
+		DefiGameWindow* playFrame1 = new  DefiGameWindow(this, list); 
 		playFrame1->numberOfQues = infinite->IsChecked() ? -1 : value->GetValue();
 		playFrame1->Show(true);
 		if (!playFrame1->IsShown()) return; 
