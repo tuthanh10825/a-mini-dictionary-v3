@@ -37,13 +37,14 @@ DefiGameWindow::DefiGameWindow(wxWindow* parent, TST* clist)
 	answerFont.SetNativeFontInfoUserDesc(Pala15);
 	for (int i = 0; i < 4; ++i) {
 		wxRadioButton* button = new wxRadioButton(answerPanel, wxID_ANY, "", wxDefaultPosition, wxDefaultSize, i == 0 ? wxRB_GROUP : 0);
-		answer[i] = new wxTextCtrl(answerPanel, wxID_ANY, "", wxDefaultPosition, wxSize(-1, 200), wxTE_READONLY | wxTE_MULTILINE | wxBORDER_NONE | wxTE_NO_VSCROLL);
+		answer[i] = new wxTextCtrl(answerPanel, wxID_ANY, "", wxDefaultPosition, wxSize(-1, 175), wxTE_READONLY | wxTE_MULTILINE);
 		answer[i]->SetFont(answerFont);
 		answer[i]->SetForegroundColour(LIGHTMODE ? WHITE : BLACK);
 		answer[i]->SetBackgroundColour(LIGHTMODE ? BLACK : WHITE);
 		wxBoxSizer* answerSizer = new wxBoxSizer(wxHORIZONTAL);
 		answerSizer->Add(button, 0, wxLEFT, 60);
 		answerSizer->Add(answer[i], 1, wxRIGHT, 60);
+
 
 		totalAnswerSizer->Add(answerSizer, 1, wxEXPAND);
 		choiceButton.push_back(button);
@@ -207,7 +208,57 @@ wordGameWindow::wordGameWindow(wxWindow* parent, TST* clist) : wxFrame(parent, w
 	return;
 	
 }
+/*
+BaseFrame::BaseFrame(const wxString& title)
+	: wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition) {
 
+	wxInitAllImageHandlers();
+	LoadHeader();
+	workingPage = new wxSimplebook(this, wxID_ANY, wxDefaultPosition, wxSize(WIDTH, HEIGHT));
+
+
+	homePage = new HomePage(workingPage);
+	workingPage->AddPage(homePage, wxString("Homepage"));
+
+
+	searchPage = new SearchPage(workingPage);
+	workingPage->AddPage(searchPage, wxString("Searchpage"));
+
+	gameSettingPage = new GameSettingPage(workingPage);
+	workingPage->AddPage(gameSettingPage, wxString("GameSettingpage"));
+
+	moreWindow = new MoreWindow(workingPage);
+	workingPage->AddPage(moreWindow, wxString("more"));
+
+	historyPage = new ListWindow(workingPage, 0);
+	workingPage->AddPage(historyPage, wxString("History"));
+
+	favouritePage = new ListWindow(workingPage, 1);
+	workingPage->AddPage(favouritePage, wxString("Favourite"));
+
+	addpage = new AddWindow(workingPage);
+	workingPage->AddPage(addpage, wxString("Add"));
+	addpage->cancelbutton->Bind(wxEVT_BUTTON, &BaseFrame::OnCancelBtnClicked, this);
+
+	LoadNavigation();
+	mainSizer->Add(workingPage, 1, wxEXPAND);
+	loadFooter();
+
+	this->homePage->quizButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) {this->workingPage->ChangeSelection(2); });
+	this->homePage->favorButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) {this->workingPage->ChangeSelection(5); });
+	this->homePage->randomButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent& evt)
+		{
+			this->searchPage->OnRandomBtnClicked(evt);
+			this->workingPage->ChangeSelection(1);
+		});
+	this->searchPage->box->addButton->Bind(wxEVT_BUTTON, &BaseFrame::OnAddBtnClicked, this);
+	this->moreWindow->darkmodeButton->Bind(wxEVT_BUTTON, &BaseFrame::OnFlipColor, this);
+	this->SetSizerAndFit(mainSizer);
+	// 155 x 37
+
+}
+
+*/
 void wordGameWindow::OnSubmitBtnClicked(wxCommandEvent&)
 {
 	bool isCorrect = false; 
@@ -220,9 +271,11 @@ void wordGameWindow::OnSubmitBtnClicked(wxCommandEvent&)
 	}
 	if (!isCorrect)
 	{
+
 		wxMessageBox("You lose!!!");
 		this->Close(true);
 		return; 
+
 	}
 	else if (numberOfQues >= 0)
 	{
@@ -281,7 +334,9 @@ void wordGameWindow::SetVal(Question ques)
 	{
 		answer[i]->SetLabelText(ques.choices[i]); 
 	}
+
 	ques.detail.erase(ques.detail.begin()); 
 	word->SetValue(ques.detail); 
 	this->ques = ques; 
+
 }

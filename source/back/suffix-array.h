@@ -272,9 +272,7 @@ private:
 		int mid = (start + end) / 2;
 		if (text.substr(SA_index[mid], k) == str)
 		{
-			std::u32string a = text.substr(SA_index[mid], k); 
 			ans.push_back(text.find(U"@", SA_index[mid]));
-			std::u32string word = mapping[ans.back()];
 			generate_ans(start, mid - 1, str, k, ans); 
 			generate_ans(mid + 1, end, str, k, ans);
 		}

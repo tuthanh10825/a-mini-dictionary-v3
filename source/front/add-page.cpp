@@ -37,7 +37,7 @@ AddWindow::AddWindow(wxWindow* parent) : wxWindow(parent, wxID_ANY)
 	addbutton->Bind(wxEVT_BUTTON, &AddWindow::OnAddBtnClicked, this);
 
 	wxBitmap cancel(CANCEL_IMG, wxBITMAP_TYPE_PNG);
-	wxBitmapButton* cancelbutton = new wxBitmapButton(this, wxID_ANY, cancel, wxDefaultPosition, wxSize(251, 57));
+    cancelbutton = new wxBitmapButton(this, wxID_ANY, cancel, wxDefaultPosition, wxSize(251, 57));
 
 	wxBoxSizer* rightbot = new wxBoxSizer(wxVERTICAL);
 	
@@ -158,23 +158,4 @@ void AddWindow::OnAddBtnClicked(wxCommandEvent&)
 	type->ChangeValue(wxEmptyString); 
 	defi->ChangeValue(wxEmptyString);
 	this->Refresh();
-	/*
-	std::ofstream fout;
-	if (currLang == "ENG/VIE" || currLang == "VIE/ENG")
-	{
-		if (currLang == "ENG/VIE") fout.open(EVINSERT, std::ios::app);
-		else if(currLang == "VIE/ENG") fout.open(VEINSERT, std::ios::app);
-		fout << '@' << keystr << std::endl;
-		fout << "*  " << typestr <<std::endl;
-		fout << "- " << definition <<std::endl;
-	}
-	else
-	{
-		if (currLang == "ENG/ENG") fout.open(EEINSERT, std::ios::app);
-		if (currLang == "EMOTICON") fout.open(EMOINSERT, std::ios::app);
-		if (currLang == "SLANG") fout.open(SLINSERT, std::ios::app);
-		fout << keystr << " (" << typestr << ") " << definition << std::endl;
-	}
-	fout.close();
-	*/
 }

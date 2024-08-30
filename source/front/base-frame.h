@@ -52,6 +52,7 @@ private:
     void OnFlipColor(wxCommandEvent&); 
     void FlipColor();
     
+    void OnCancelBtnClicked(wxCommandEvent&);
 };
 
 #endif // BASEFRAME_H
