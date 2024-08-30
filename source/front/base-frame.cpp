@@ -45,6 +45,14 @@ BaseFrame::BaseFrame(const wxString& title)
         });
     this->searchPage->box->addButton->Bind(wxEVT_BUTTON, &BaseFrame::OnAddBtnClicked, this);
     this->moreWindow->darkmodeButton->Bind(wxEVT_BUTTON, &BaseFrame::OnFlipColor, this);
+    this->Bind(wxEVT_CLOSE_WINDOW, [=](wxCloseEvent&)
+        {
+            historyPage->AppendRows(dataHisto, 0);
+            favouritePage->AppendRows(dataFav, 1);
+            historyPage->saveData2File(HISTOFILE);
+            favouritePage->saveData2File(FAVFILE);
+            this->Destroy();
+        });
     this->SetSizerAndFit(mainSizer); 
     // 155 x 37
    
@@ -207,7 +215,7 @@ void BaseFrame::OnMoreBtnClicked(wxCommandEvent&)
 
 void BaseFrame::OnHistoryBtnClicked(wxCommandEvent& evt) {
     historyPage->AppendRows(dataHisto, 0);
- 
+    favouritePage->AppendRows(dataFav, 1);
     int trueSize = historyPage -> grid->GetVirtualSize().x - historyPage -> grid->GetColSize(0) - 85;
     historyPage -> grid->SetColSize(1, trueSize);
     historyPage -> grid->ForceRefresh();
@@ -216,6 +224,7 @@ void BaseFrame::OnHistoryBtnClicked(wxCommandEvent& evt) {
 
 void BaseFrame::OnFavouriteBtnClicked(wxCommandEvent&) {
     favouritePage->AppendRows(dataFav, 1);
+    historyPage->AppendRows(dataHisto, 0);
     int trueSize = favouritePage->grid->GetVirtualSize().x - favouritePage->grid->GetColSize(0) - 85;
     favouritePage->grid->SetColSize(1, trueSize);
     favouritePage->grid->ForceRefresh();

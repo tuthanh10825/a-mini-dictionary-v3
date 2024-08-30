@@ -100,7 +100,6 @@ private:
 		VEDef.clear(); 
 		SLDef.clear(); 
 		EMODef.clear();
-		
 
 	}
 };
