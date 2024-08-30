@@ -93,10 +93,16 @@ void resPage::OnFavouriteBtnClicked(wxCommandEvent&) {
 		temp.pop_back();
 		while (!temp.empty()) {
 			if (temp.back().word != dataFav.back().word) return;
-			dataFav.push_back(temp.back());
-			temp.pop_back();
+			if (temp.back().definition != "") {
+				dataFav.push_back(temp.back());
+				temp.pop_back();
+			}
 		}
+		
 	}
+
+
+
 
 	wxString message = "Add success!";
 	wxMessageBox(message, "Notification", wxOK | wxICON_INFORMATION);
@@ -224,7 +230,7 @@ void SearchPage::insertHistory(TST::TreeNode* ans) {
 			//deleted_word = una::utf8to32u(newWord.word);
 			dataHisto.push_back(newWord);
 		}
-		if (defi != '\0') {
+		if (defi != '\0' and defi!="") {
 			newWord.definition = defi;
 			dataHisto.push_back(newWord);
 		}
